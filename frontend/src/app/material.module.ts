@@ -13,7 +13,7 @@ import {
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
-    MatListModule,
+    MatListModule
   ],
   exports: [
     MatSidenavModule,

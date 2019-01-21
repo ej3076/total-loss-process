@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 
 import {
   LyThemeModule,
-  LY_THEME
+  LY_THEME,
+  LY_THEME_GLOBAL_VARIABLES
 } from '@alyle/ui';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -15,9 +16,23 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LyButtonModule } from '@alyle/ui/button';
 import { LyToolbarModule } from '@alyle/ui/toolbar';
 import { LyResizingCroppingImageModule } from '@alyle/ui/resizing-cropping-images';
-import { MinimaLight } from '@alyle/ui/themes/minima';
-//import {FlexLayoutModule} from '@angular/flex-layout';
+import { MinimaLight, MinimaDark } from '@alyle/ui/themes/minima';import { CommonModule } from '@angular/common';
+import { LyTabsModule } from '@alyle/ui/tabs';
+import { LyTypographyModule } from '@alyle/ui/typography';
 
+
+/*export class GlobalVariables implements PartialThemeVariables {
+  SublimeLight = {
+    default: `linear-gradient(135deg, ${'#FC5C7D'} 0%,${'#6A82FB'} 100%)`,
+    contrast: '#fff',
+    shadow: '#B36FBC'
+  }; // demo: <button ly-button raised bg="SublimeLight">Button</button>
+  button = {
+    root: {
+      borderRadius: '2em'
+    }
+  };
+}*/
 
 @NgModule({
   declarations: [
@@ -33,9 +48,15 @@ import { MinimaLight } from '@alyle/ui/themes/minima';
     LyThemeModule.setTheme('minima-light'),
     LyButtonModule,
     LyToolbarModule,
+    CommonModule,
+    LyTabsModule,
+    LyTypographyModule,
     LyResizingCroppingImageModule
   ],
-  providers: [{ provide: LY_THEME, useClass: MinimaLight, multi: true }],
+  providers: [
+    { provide: LY_THEME, useClass: MinimaLight, multi: true },
+    { provide: LY_THEME, useClass: MinimaDark, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
