@@ -29,7 +29,6 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.auth.handleAuthentication();
     if (localStorage.getItem('isLoggedIn') === 'true') {
       this.auth.renewTokens();
     }

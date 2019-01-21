@@ -25,6 +25,8 @@ import { LyCardModule } from '@alyle/ui/card';
 import { AuthService } from './auth/auth.service';
 import { LyGridModule } from '@alyle/ui/grid';
 import { LyBadgeModule } from '@alyle/ui/badge';
+import { CallbackComponent } from './callback/callback.component';
+import { CookieService } from 'ngx-cookie-service';
 //import {FlexLayoutModule} from '@angular/flex-layout';
 
 
@@ -46,7 +48,8 @@ import { LyBadgeModule } from '@alyle/ui/badge';
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    CallbackComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +71,9 @@ import { LyBadgeModule } from '@alyle/ui/badge';
   ],
   providers: [
     { provide: LY_THEME, useClass: MinimaLight, multi: true },
-    { provide: LY_THEME, useClass: MinimaDark, multi: true }
+    { provide: LY_THEME, useClass: MinimaDark, multi: true },
+    AuthService,
+    CookieService
   ],
   bootstrap: [AppComponent]
 })

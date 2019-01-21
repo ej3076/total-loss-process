@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable()
 export class AuthService {
@@ -20,19 +21,32 @@ export class AuthService {
     scope: 'openid'
   });
 
-  constructor(public router: Router) {
+  constructor(public router: Router, public cookieService: CookieService) {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
+
+    this.setFromCookie();
+  }
+
+  private setFromCookie(): void {
+
+    if (
+      this.cookieService.check('access_token') &&
+      this.cookieService.check('id_token') &&
+      this.cookieService.check('expires_at')
+      ) {
+        this._idToken = this.cookieService.get('id_token');
+        this._accessToken = this.cookieService.get('access_token');
+        this._expiresAt = +this.cookieService.get('expires_at');
+      }
   }
 
   get accessToken(): string {
-    console.log(this._accessToken);
     return this._accessToken;
   }
 
   get idToken(): string {
-    console.log(this._accessToken);
     return this._idToken;
   }
 
@@ -79,6 +93,11 @@ export class AuthService {
     this._accessToken = '';
     this._idToken = '';
     this._expiresAt = 0;
+
+    this.cookieService.delete('access_token');
+    this.cookieService.delete('id_token');
+    this.cookieService.delete('expires_at');
+
     // Remove isLoggedIn flag from localStorage
     localStorage.removeItem('isLoggedIn');
     // Go back to the home route
@@ -88,7 +107,15 @@ export class AuthService {
   public isAuthenticated(): boolean {
     // Check whether the current time is past the
     // access token's expiry time
-    console.log(new Date().getTime() < this._expiresAt);
+    
     return new Date().getTime() < this._expiresAt;
+  }
+
+  public saveUserSession(): void {
+    var now = new Date('tomorrow');
+
+    this.cookieService.set('access_token', this._accessToken, now);
+    this.cookieService.set('id_token', this._idToken, now);
+    this.cookieService.set('expires_at', this._expiresAt.toString(), now);
   }
 }

@@ -9,6 +9,14 @@ html {
   margin: auto;
 }
 
+head {
+  max-width: 1000px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 
 // General Styles
 
@@ -29,4 +37,14 @@ html {
 
 .mls {
   margin-left: 4px !important;
+}
+.mlm {
+  margin-left: 8px !important;
+}
+.mll {
+  margin-left: 16px !important;
+}
+
+.auto-height {
+  height: auto !important;
 }
