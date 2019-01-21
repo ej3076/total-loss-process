@@ -1,6 +1,50 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-body {
-  margin: 0;
+html {
+  height: auto;
+}
+.page {
+  max-width: 1000px;
+  margin: auto;
+}
+
+head {
+  max-width: 1000px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+// General Styles
+
+.float-left {
+  float: left !important;
+}
+
+.float-right {
+  float: right !important;
+}
+
+.center-text {
+  text-align: center;
+}
+.right-text {
+  text-align: right;
+}
+
+.mls {
+  margin-left: 4px !important;
+}
+.mlm {
+  margin-left: 8px !important;
+}
+.mll {
+  margin-left: 16px !important;
+}
+
+.auto-height {
+  height: auto !important;
 }

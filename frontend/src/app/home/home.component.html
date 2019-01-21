@@ -1,1 +1,6 @@
-I am the home page
+<div class="center-text">
+    <h1 lyTyp="display2" gutterBottom>Ford - Total Loss Process Homepage</h1>
+
+    <h2 lyTyp="display2" gutterBottom *ngIf="isAuthenticated()">You are logged in!</h2>
+    <h2 lyTyp="display2" gutterBottom *ngIf="!isAuthenticated()">You are not logged in!</h2>
+</div>

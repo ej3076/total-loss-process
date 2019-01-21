@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LyTheme2, ThemeVariables } from '@alyle/ui';
+import { AuthService } from './auth/auth.service';
 
 const STYLES = (theme: ThemeVariables) => ({
   '@global': {
@@ -21,8 +22,15 @@ const STYLES = (theme: ThemeVariables) => ({
 export class AppComponent {
   readonly classes = this.theme.addStyleSheet(STYLES);
 
-  title = 35;
+  auth: AuthService = null;
 
-  constructor(private theme: LyTheme2) { }
+  constructor(private theme: LyTheme2, private AuthService: AuthService) { 
+    this.auth = AuthService;
+  }
 
+  ngOnInit() {
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      this.auth.renewTokens();
+    }
+  }
 }

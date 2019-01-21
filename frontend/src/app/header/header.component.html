@@ -1,3 +1,36 @@
-<p>
-    I'm a header!
-</p>
+<header class="head nav-bar">
+    <ly-toolbar position="relative" bg="primary" [elevation]="5" class="auto-height toolbar-override">
+        <h6 [lyTyp]="'title'">Total Loss Process</h6>
+        <ly-grid container [spacing]="6">
+            <ly-grid item col>
+                <button ly-button raised bg="accent" [lyMenuTriggerFor]="menu" class="float-right">Menu</button>
+                <ng-template #menu let-M>
+                  <ly-menu [ref]="M">
+                    <button ly-button ly-menu-item *ngFor="let item of [null, null, null]; index as i">
+                      <span>Item {{ i + 1 }}</span>
+                    </button>
+                  </ly-menu>
+                </ng-template>
+
+                <button 
+                  ly-button color="accent" 
+                  class="mll float-right" 
+                  *ngIf="authService.isAuthenticated()"
+                  (click)="authService.logout()"
+                  >
+                    Log Out
+                </button>
+                <button 
+                  ly-button color="accent" 
+                  class="mll float-right" 
+                  *ngIf="!authService.isAuthenticated()"
+                  (click)="authService.login()"
+                  >
+                    Log In
+                </button>
+            </ly-grid>
+        </ly-grid>
+    </ly-toolbar>
+    
+    
+</header>

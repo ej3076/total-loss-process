@@ -19,6 +19,15 @@ import { LyResizingCroppingImageModule } from '@alyle/ui/resizing-cropping-image
 import { MinimaLight, MinimaDark } from '@alyle/ui/themes/minima';import { CommonModule } from '@angular/common';
 import { LyTabsModule } from '@alyle/ui/tabs';
 import { LyTypographyModule } from '@alyle/ui/typography';
+import { LyMenuModule } from '@alyle/ui/menu';
+import { LyIconModule } from '@alyle/ui/icon';
+import { LyCardModule } from '@alyle/ui/card';
+import { AuthService } from './auth/auth.service';
+import { LyGridModule } from '@alyle/ui/grid';
+import { LyBadgeModule } from '@alyle/ui/badge';
+import { CallbackComponent } from './callback/callback.component';
+import { CookieService } from 'ngx-cookie-service';
+//import {FlexLayoutModule} from '@angular/flex-layout';
 
 
 /*export class GlobalVariables implements PartialThemeVariables {
@@ -39,23 +48,32 @@ import { LyTypographyModule } from '@alyle/ui/typography';
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    CallbackComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    LyThemeModule.setTheme('minima-light'),
+    LyThemeModule.setTheme('minima-dark'),
     LyButtonModule,
     LyToolbarModule,
     CommonModule,
     LyTabsModule,
     LyTypographyModule,
-    LyResizingCroppingImageModule
+    LyResizingCroppingImageModule,
+    LyTypographyModule,
+    LyMenuModule,
+    LyIconModule,
+    LyCardModule,
+    LyGridModule,
+    LyBadgeModule
   ],
   providers: [
     { provide: LY_THEME, useClass: MinimaLight, multi: true },
-    { provide: LY_THEME, useClass: MinimaDark, multi: true }
+    { provide: LY_THEME, useClass: MinimaDark, multi: true },
+    AuthService,
+    CookieService
   ],
   bootstrap: [AppComponent]
 })
