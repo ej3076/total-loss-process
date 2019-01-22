@@ -4,8 +4,14 @@
 
     <ly-toolbar position = "static" bg = "primary" [elevation]="3">
       
-      <button ly-button raised (click)="toggleTheme()"> {{ changetheme }} </button>
-    
+      <div dir = "rtl">
+        <button ly-button raised (click)="toggleTheme()"> {{ changetheme }} </button>
+      </div>
+
+      <div class = "authors">
+        Byrd, Sifford, Bartalino, Sloan. 2019.
+      </div>
+
     </ly-toolbar>
   
   </footer>

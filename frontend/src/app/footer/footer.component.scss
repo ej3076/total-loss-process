@@ -5,10 +5,13 @@
         position: absolute;
         bottom: 0;
         width: 100%;
-        direction: rtl;
 
         .theme-button{
             align-content: right;
+        }
+
+        .authors{
+            float: center;
         }
         
     }
