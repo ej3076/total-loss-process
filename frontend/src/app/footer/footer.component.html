@@ -1,19 +1,16 @@
-<div class = "container">
+<footer class = "foot">
 
-  <footer class = "footer">
+  <ly-toolbar position="relative" bg="primary" [elevation]="5" class="auto-height toolbar-override-footer">
+    <span lyTyp="caption" gutterBottom class = "authors">Byrd, Sifford, Bartalino, Sloan. 2019.</span>
+    <ly-grid container [spacing]="6">
+        <ly-grid item col>
+          <button ly-button bg = "accent" raised (click)="toggleTheme()" class="mll float-right"> {{ changetheme }} </button>
+        </ly-grid>
+    </ly-grid>
+</ly-toolbar>
 
-    <ly-toolbar position = "static" bg = "primary" [elevation]="3">
-      
-      <div dir = "rtl">
-        <button ly-button raised (click)="toggleTheme()"> {{ changetheme }} </button>
-      </div>
 
-      <div class = "authors">
-        Byrd, Sifford, Bartalino, Sloan. 2019.
-      </div>
 
-    </ly-toolbar>
-  
-  </footer>
 
-</div>
+
+</footer>
