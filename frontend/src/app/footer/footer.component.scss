@@ -1,16 +1,14 @@
-.container{
-    height: 100%;
-    
-    .footer{
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        direction: rtl;
-
-        .theme-button{
-            align-content: right;
-        }
-        
-    }
+.foot{
+    position: absolute;
+    bottom: 0;
+}
+.authors{
+    vertical-align: middle;
+    padding-top: 8px;
 }
 
+
+.toolbar-override-footer {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
