@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const { addressFromVIN } = require("./constants");
+const { addressFromVIN } = require('./constants');
 
 /**
  * @typedef {import('sawtooth-sdk/processor/context')} Context Sawtooth context.
@@ -26,7 +26,7 @@ module.exports = class VehicleState {
    * Retrieves and deserlializes a vehicle's data.
    *
    * @param {string} vin The VIN number of the vehicle.
-   * @returns {Data[]}
+   * @returns {Promise<Data[]>}
    */
   async getVehicle(vin) {
     return this._loadVehicle(vin);
@@ -37,16 +37,16 @@ module.exports = class VehicleState {
    *
    * @param {string} vin The VIN number of the vehicle.
    * @param {Data[]} data
-   * @returns {string[]} The address(es) successfully set.
+   * @returns {Promise<string[]>} The address(es) successfully set.
    */
   async setVehicle(vin, data) {
     const address = addressFromVIN(vin);
     const vehicle = await this._loadVehicle(vin);
     return this.context.setState(
       {
-        [address]: this._serialize(data)
+        [address]: this._serialize(data),
       },
-      this.timeout
+      this.timeout,
     );
   }
 

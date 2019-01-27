@@ -2,6 +2,9 @@
     "private": true,
     "version": "1.0.0",
     "main": "src/index.js",
+    "scripts": {
+      "start": "node ./src/index.js"
+    },
     "dependencies": {
         "sawtooth-sdk": "^1.0.5"
     }
