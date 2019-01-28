@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
-const { TransactionHandler } = require("sawtooth-sdk/processor/handler");
-const { InvalidTransaction } = require("sawtooth-sdk/processor/exceptions");
-const exceptions = require("sawtooth-sdk/processor/exceptions");
+const { TransactionHandler } = require('sawtooth-sdk/processor/handler');
+const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
+const exceptions = require('sawtooth-sdk/processor/exceptions');
 
-const { VEHICLE_FAMILY, VEHICLE_NAMESPACE } = require("./constants");
-const VehicleState = require("./state");
+const { VEHICLE_FAMILY, VEHICLE_NAMESPACE } = require('./constants');
+const VehicleState = require('./state');
 
 /**
  * @typedef {import('sawtooth-sdk/processor/context')} Context Sawtooth context.
@@ -13,7 +13,7 @@ const VehicleState = require("./state");
 
 module.exports = class VehicleHandler extends TransactionHandler {
   constructor() {
-    super(VEHICLE_FAMILY, ["1.0"], [VEHICLE_NAMESPACE]);
+    super(VEHICLE_FAMILY, ['1.0'], [VEHICLE_NAMESPACE]);
   }
 
   /**
@@ -24,6 +24,6 @@ module.exports = class VehicleHandler extends TransactionHandler {
    */
   apply(transactionProcessRequest, context) {
     const state = new VehicleState(context);
-    throw new Error("Need to finish implementation...");
+    throw new Error('Need to finish implementation...');
   }
 };

@@ -3,7 +3,7 @@ const express_handlebar = require('express-handlebars');
 const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
-const port = process.env.port || 4200;
+const port = process.env.port || 8080;
 
 // Database variable
 const sequelize = require('./config/database');
@@ -18,7 +18,7 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-// Show message on localhost:4200
+// Show message on localhost:8080
 //app.get('/', (req, res) => res.send(`Test localhost:${port}`));
 app.get('/', function (req, res) {
     res.send(`GET request homepage - localhost:${port}`)

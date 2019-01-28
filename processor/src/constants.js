@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-const { createHash } = require("crypto");
+const { createHash } = require('crypto');
 
-const VEHICLE_FAMILY = "vechicle";
+const VEHICLE_FAMILY = 'vechicle';
 
 const VEHICLE_NAMESPACE = hash(VEHICLE_FAMILY).substring(0, 6);
 
@@ -17,7 +17,7 @@ module.exports = {
    */
   addressFromVIN(vin) {
     return `${VEHICLE_FAMILY}${hash(vin)}`;
-  }
+  },
 };
 
 /**
@@ -27,9 +27,9 @@ module.exports = {
  * @returns {string} A trimmed substring of length 64 of the hash.
  */
 function hash(str) {
-  return createHash("sha512")
+  return createHash('sha512')
     .update(str)
-    .digest("hex")
+    .digest('hex')
     .toLowerCase()
     .substring(0, 64);
 }
