@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpErrorResponse, HttpClientModule } from '@angular/common/http';
 
 //Created Components
 import { AppRoutingModule } from './app-routing.module';
@@ -29,7 +30,6 @@ import { LyThemeModule, LyCommonModule, PartialThemeVariables, LY_THEME, LY_THEM
 import { CallbackComponent } from './callback/callback.component';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth/auth.service';
-
 
 export class CustomMinimaLight extends MinimaLight {
   primary = {
@@ -93,7 +93,8 @@ export class CustomMinimaDark extends MinimaDark {
     LyIconModule,
     LyCardModule,
     LyGridModule,
-    LyBadgeModule
+    LyBadgeModule,
+    HttpClientModule
   ],
   providers: [
     { provide: LY_THEME, useClass: CustomMinimaLight, multi: true },
