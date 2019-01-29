@@ -11,6 +11,7 @@ const routes: Routes = [
   {path: 'footer', component: FooterComponent},
   {path: 'callback', component: CallbackComponent},
   {path: '**', component: HomeComponent},
+  {path: './', component: HomeComponent},
 ];
 
 @NgModule({
