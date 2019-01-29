@@ -18,22 +18,31 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept',
+  );
+  next();
+});
+
 // Show message on localhost:8080
 //app.get('/', (req, res) => res.send(`Test localhost:${port}`));
-app.get('/', function (req, res) {
-    res.send(`GET request homepage - localhost:${port}`)
+app.get('/', function(req, res) {
+  res.send(`GET request homepage - localhost:${port}`);
 });
 
-app.post('/', function (req, res) {
-    res.send(`POST request homepage - localhost:${port}`)
+app.post('/', function(req, res) {
+  res.send(`POST request homepage - localhost:${port}`);
 });
 
-app.put('/', function (req, res) {
-    res.send(`PUT request homepage - localhost:${port}`)
+app.put('/', function(req, res) {
+  res.send(`PUT request homepage - localhost:${port}`);
 });
 
-app.delete('/', function (req, res) {
-    res.send(`DELETE request homepage - localhost:${port}`)
+app.delete('/', function(req, res) {
+  res.send(`DELETE request homepage - localhost:${port}`);
 });
 
 // Customer routes - query to pull results from customer table
