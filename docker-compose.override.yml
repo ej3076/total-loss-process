@@ -5,13 +5,26 @@ version: '3.7'
 
 services:
   # Consensus Engine using a simplified random-leader algorithm
-  devmode-engine:
+  engine-devmode:
     image: hyperledger/sawtooth-devmode-engine-rust:1.1
     depends_on:
       - validator
     entrypoint: >-
       devmode-engine-rust
       --connect tcp://validator:5050
+
+  middleware:
+    image: node:11
+    command: npm run dev
+    working_dir: /usr/src/app
+    ports:
+      - 8080:80
+    volumes:
+      - ./middleware:/usr/src/app
+
+  middleware-db:
+    environment:
+      MYSQL_ROOT_PASSWORD: root
 
   # XO Transaction Processor (Useful for testing)
   tp-xo:
