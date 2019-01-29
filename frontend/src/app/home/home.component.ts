@@ -12,7 +12,6 @@ export class HomeComponent implements OnInit {
   midObj: Object = null;
 
   constructor(private auth: AuthService, private midware: MidwareService) { 
-    this.midObj = midware;
   }
 
   ngOnInit() {
@@ -30,7 +29,7 @@ export class HomeComponent implements OnInit {
       this.midObj = midware;
       console.log(this.midObj);
     })
-   }
+   }   
   post(): void { 
     this.midware.checkPost().subscribe(midware => {
       this.midObj = midware;

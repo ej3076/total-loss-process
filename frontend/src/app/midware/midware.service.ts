@@ -9,7 +9,8 @@ export class MidwareService {
   constructor(private http: HttpClient) { }
 
   checkGet(){
-    return this.http.get('https://reqres.in/api/users');
+    //return this.http.get('https://reqres.in/api/users');
+    return this.http.get('http://localhost:8080');
   }
 
   checkPost(){
@@ -17,10 +18,10 @@ export class MidwareService {
   }
 
   checkPut(){
-    return this.http.put('/home', 'any');
+    return this.http.put('http://localhost:8080', 'any');
   }
 
   checkDelete(){
-    return this.http.delete('/home');
+    return this.http.delete('http://localhost:8080');
   }
 }
