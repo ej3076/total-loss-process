@@ -3,24 +3,27 @@ const express_handlebar = require('express-handlebars');
 const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
-const port = process.env.port || 4200;
+const port = process.env.port || 8080;
+const cors = require('cors');
+
+app.use(cors());
 
 // Database variable
-const sequelize = require('./config/database');
+//const sequelize = require('./config/database');
 
 // Test database connection
-sequelize
+/*sequelize
   .authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);
-  });
+  });*/
 
 // Show message on localhost:4200
 //app.get('/', (req, res) => res.send(`Test localhost:${port}`));
-app.get('/', function (req, res) {
+app.get('', function (req, res) {
     res.send(`GET request homepage - localhost:${port}`)
 });
 
