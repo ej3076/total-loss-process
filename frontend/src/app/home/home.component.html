@@ -4,7 +4,6 @@
     <h2 lyTyp="display2" gutterBottom *ngIf="isAuthenticated()">You are logged in!</h2>
     <h2 lyTyp="display2" gutterBottom *ngIf="!isAuthenticated()">You are not logged in!</h2>
 
-
     <button ly-button bg = "primary" raised (click)="generateKeypair()"> Primary Color (Generate Keypair) </button>
     <button ly-button bg = "primary" raised (click)="get()"> Primary Color (GET) </button>
     <button ly-button bg = "accent" raised (click)="post()"> Accent Color (POST)</button>
