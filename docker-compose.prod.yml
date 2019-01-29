@@ -9,12 +9,16 @@ services:
   middleware:
     image: fordtotalloss/middleware
     build: ./middleware
-    ports:
-      - 80:80
-      - 443:443
     environment:
       DB_PASS: ${DB_PASS:?DB_PASS must be specified in a .env file}
 
   middleware-db:
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASS:?DB_PASS must be specified in a .env file}
+
+  web:
+    image: fordtotalloss/web
+    build: ./frontend
+    ports:
+      - 80:80
+      - 443:443

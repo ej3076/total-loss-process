@@ -49,6 +49,7 @@ services:
   middleware:
     depends_on:
       - middleware-db
+      - rest-api
     command: npm start
     environment:
       DB_NAME: fordtotalloss
@@ -62,6 +63,11 @@ services:
       MYSQL_DATABASE: fordtotalloss
     volumes:
       - middleware-db:/var/lib/mysql
+
+  # Static web server for frontend app
+  web:
+    depends_on:
+      - middleware
 
   # Our custom vehicle transaction processor
   tp-vehicle:

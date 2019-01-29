@@ -47,5 +47,3 @@ const interval = setInterval(async () => {
     return;
   }
 }, 1000);
-
-console.log(process.env);

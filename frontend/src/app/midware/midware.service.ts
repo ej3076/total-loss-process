@@ -2,26 +2,24 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MidwareService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  checkGet(){
-    //return this.http.get('https://reqres.in/api/users');
-    return this.http.get('http://localhost:8080');
+  checkGet() {
+    return this.http.get('http://localhost:8080', { responseType: 'text' });
   }
 
-  checkPost(){
+  checkPost() {
     return this.http.post('http://localhost:8080', 'any');
   }
 
-  checkPut(){
+  checkPut() {
     return this.http.put('http://localhost:8080', 'any');
   }
 
-  checkDelete(){
+  checkDelete() {
     return this.http.delete('http://localhost:8080');
   }
 }
