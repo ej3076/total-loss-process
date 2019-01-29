@@ -1,0 +1,60 @@
+version: '3.7'
+
+services:
+  validator:
+    image: hyperledger/sawtooth-validator:1.1
+    ports:
+      - '4004:4004'
+    # start the validator with an empty genesis batch
+    entrypoint: >-
+      bash -c "
+      sawadm keygen &&
+      sawtooth keygen id_ecdsa &&
+      sawset genesis --key /root/.sawtooth/keys/id_ecdsa.priv &&
+      sawadm genesis config-genesis.batch &&
+      sawtooth-validator -vv
+      --endpoint tcp://validator:8800
+      --bind component:tcp://eth0:4004
+      --bind network:tcp://eth0:8800
+      --bind consensus:tcp://eth0:5050
+      "
+
+  rest-api:
+    image: hyperledger/sawtooth-rest-api:1.1
+    ports:
+      - '8008:8008'
+    depends_on:
+      - validator
+    entrypoint: >-
+      sawtooth-rest-api
+      --connect tcp://validator:4004
+      --bind rest-api:8008
+
+  shell:
+    image: hyperledger/sawtooth-shell:1.1
+    depends_on:
+      - rest-api
+    volumes:
+      - ./cli.toml:/etc/sawtooth/cli.toml
+    entrypoint: >-
+      bash -c "
+      sawtooth keygen &&
+      tail -f /dev/null
+      "
+
+  tp-vehicle:
+    image: dsifford/sawtooth-vehicle-tp
+    build: ./processor
+    depends_on:
+      - validator
+    command: npm start -- tcp://validator:4004
+
+  # Settings Transaction Processor
+  tp-settings:
+    image: hyperledger/sawtooth-settings-tp:1.1
+    depends_on:
+      - validator
+    entrypoint: >-
+      settings-tp
+      -vv
+      --connect tcp://validator:4004
