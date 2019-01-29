@@ -1,0 +1,20 @@
+#
+# This compose file is for production only.
+#
+version: '3.7'
+
+services:
+  # Build and run the middleware service from the Dockerfile, without mounting
+  # a volume for development
+  middleware:
+    image: fordtotalloss/middleware
+    build: ./middleware
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      DB_PASS: ${DB_PASS:?DB_PASS must be specified in a .env file}
+
+  middleware-db:
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS:?DB_PASS must be specified in a .env file}
