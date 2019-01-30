@@ -1,18 +1,16 @@
 const path = require('path');
 
 const express = require('express');
-const express_handlebar = require('express-handlebars');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const sequelize = require('./config/database');
-
 const PORT = process.env.PORT || 8080;
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+
 const app = express();
 
+app.use(express.json());
 app.use(cors());
 
-// Show message on localhost:8080
 app.get('/', function(req, res) {
   res.send(`GET request homepage - localhost:${PORT}`);
 });
@@ -30,20 +28,7 @@ app.delete('/', function(req, res) {
 });
 
 app.use('/keys', require('./routes/keys'));
-app.use('/customer', require('./routes/customer'));
 
-// This is necessary because the database service takes a bit longer
-// than this service to spin up.
-const interval = setInterval(async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('MySQL connection established...');
-    app.listen(
-      PORT,
-      console.log(`Server listening on port ${PORT}. (8080 if developing)`),
-    );
-    clearInterval(interval);
-  } catch (_) {
-    return;
-  }
-}, 1000);
+app.listen(PORT, () =>
+  console.log(`Server listening on port ${IS_PRODUCTION ? PORT : '8080'}.`),
+);

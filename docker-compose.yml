@@ -50,21 +50,10 @@ services:
     ports:
       - 8080:80
     depends_on:
-      - middleware-db
       - rest-api
     command: npm start
     environment:
-      DB_NAME: fordtotalloss
       PORT: 80
-
-  # Database for the web "middleware" service
-  middleware-db:
-    image: mysql:8
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_DATABASE: fordtotalloss
-    volumes:
-      - middleware-db:/var/lib/mysql
 
   # Static web server for frontend app
   web:
@@ -88,6 +77,3 @@ services:
       settings-tp
       -vv
       --connect tcp://validator:4004
-
-volumes:
-  middleware-db:
