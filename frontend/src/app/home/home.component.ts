@@ -5,17 +5,14 @@ import { MidwareService } from '../midware/midware.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  midObj = {};
 
-  midObj: Object = null;
+  constructor(private auth: AuthService, private midware: MidwareService) {}
 
-  constructor(private auth: AuthService, private midware: MidwareService) { 
-  }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   isAuthenticated(): boolean {
     if (this.auth.isAuthenticated()) {
@@ -24,28 +21,34 @@ export class HomeComponent implements OnInit {
     return false;
   }
 
+  generateKeypair(): void {
+    this.midware.generateKeypair().subscribe(keypair => {
+      console.log(keypair);
+      this.midObj = { ...this.midObj, keypair };
+    });
+  }
   get(): void {
     this.midware.checkGet().subscribe(midware => {
       this.midObj = midware;
       console.log(this.midObj);
-    })
-   }   
-  post(): void { 
+    });
+  }
+  post(): void {
     this.midware.checkPost().subscribe(midware => {
       this.midObj = midware;
       console.log(this.midObj);
-    })
+    });
   }
   put(): void {
     this.midware.checkPut().subscribe(midware => {
       this.midObj = midware;
       console.log(this.midObj);
-    })
-   }
-  delete(): void { 
+    });
+  }
+  delete(): void {
     this.midware.checkDelete().subscribe(midware => {
       this.midObj = midware;
       console.log(this.midObj);
-    })
+    });
   }
 }
