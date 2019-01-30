@@ -1,0 +1,57 @@
+<div>
+  <ly-card class="form-card center-to-page mth" [elevation]="4">
+    <ly-card-content>
+          <ly-grid container alignItems="center" [spacingX]="16">
+            <ly-grid item [col]="'6 12@XSmall'">
+              <ly-field fullWidth [appearance]="appearance.value">
+                <ly-label>VIN Number</ly-label>
+                <input #_input
+                  lyNativeControl
+                  [formControl]="vin"
+                  type="text"
+                  maxlength="17"
+                  minlength="11"
+                >
+                <ly-hint>Must be between 11 and 17 characters</ly-hint>
+                <ly-hint [align]="'after'">{{ _input.value?.length || 0 }}/17</ly-hint>
+                <ly-error *ngIf="vin.hasError('required')">VIN is required</ly-error>
+                <ly-error *ngIf="vin.hasError('minlength')">Must be between 11 and 17 characters</ly-error>
+              </ly-field>
+            </ly-grid>
+
+            <ly-grid item [col]="'6 12@XSmall'">
+                <ly-field fullWidth [appearance]="appearance.value">
+                  <ly-label>Vehicle Model</ly-label>
+                  <input #_input
+                    lyNativeControl
+                    [formControl]="model"
+                    type="text"
+                  >
+                  <ly-hint [align]="'after'"></ly-hint>
+                  <ly-error *ngIf="model.hasError('required')">Model of vehicle is required</ly-error>
+                </ly-field>
+              </ly-grid>
+
+              <ly-grid item [col]="'6 12@XSmall'">
+                <ly-field fullWidth [appearance]="appearance.value">
+                  <ly-label>Color</ly-label>
+                  <input #_input
+                    lyNativeControl
+                    [formControl]="color"
+                    type="text"
+                  >
+                  <ly-hint [align]="'after'"></ly-hint>
+                  <ly-error *ngIf="color.hasError('required')">Color of vehicle is required</ly-error>
+                </ly-field>
+              </ly-grid>
+
+              <ly-grid item [col]="'6 12@XSmall'">
+                  <button ly-button bg="primary" raised>
+                      <span [className]="classes.labelBefore">Create Claim</span>
+                      <ly-icon>send</ly-icon>
+                    </button>
+              </ly-grid>
+          </ly-grid>
+    </ly-card-content>
+  </ly-card>
+</div>

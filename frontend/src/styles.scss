@@ -25,6 +25,11 @@ html {
   margin-right: auto;
 }
 
+// Color Schemes
+.ford-gray {
+  background-color: #6f777e !important;
+}
+
 
 // General Styles
 
@@ -43,6 +48,10 @@ html {
   text-align: right;
 }
 
+.center-to-page {
+  margin: auto;
+}
+
 .mls {
   margin-left: 4px !important;
 }
@@ -53,6 +62,50 @@ html {
   margin-left: 16px !important;
 }
 
+.mts {
+  margin-top: 4px !important;
+}
+.mtm {
+  margin-top: 8px !important;
+}
+.mtl {
+  margin-top: 16px !important;
+}
+.mth {
+  margin-top: 32px !important;
+}
+
+.mbs {
+  margin-bottom: 4px !important;
+}
+.mbm {
+  margin-bottom: 8px !important;
+}
+.mbl {
+  margin-bottom: 16px !important;
+}
+.mbh {
+  margin-bottom: 32px !important;
+}
+
+.pls {
+  padding-left: 4px !important;
+}
+
 .auto-height {
   height: auto !important;
+}
+
+.width-100 {
+  width: 100%;
+}
+
+// Cards
+.form-card {
+  max-width: 600px;
+}
+
+// Logo
+.homepage-logo {
+  max-width: 50%;
 }
