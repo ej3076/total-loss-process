@@ -6,8 +6,11 @@
                 <button ly-button raised bg="accent" [lyMenuTriggerFor]="menu" class="float-right">Menu</button>
                 <ng-template #menu let-M>
                   <ly-menu [ref]="M">
-                    <button ly-button ly-menu-item *ngFor="let item of [null, null, null]; index as i">
-                      <span>Item {{ i + 1 }}</span>
+                    <button ly-button ly-menu-item routerLink="/home">
+                      <span>Home</span>
+                    </button>
+                    <button ly-button ly-menu-item routerLink="/new-claim">
+                      <span>New Claim</span>
                     </button>
                   </ly-menu>
                 </ng-template>
