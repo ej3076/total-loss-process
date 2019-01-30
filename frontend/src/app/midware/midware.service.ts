@@ -1,27 +1,36 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+interface KeypairResponse {
+  public_key: string;
+  private_key: string;
+}
+
+const API_BASE = 'http://localhost:8080';
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MidwareService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  checkGet(){
-    //return this.http.get('https://reqres.in/api/users');
-    return this.http.get('http://localhost:8080');
+  generateKeypair() {
+    return this.http.post<KeypairResponse>(`${API_BASE}/keys/generate`, null);
   }
 
-  checkPost(){
-    return this.http.post('http://localhost:8080', 'any');
+  checkGet() {
+    return this.http.get(API_BASE, { responseType: 'text' });
   }
 
-  checkPut(){
-    return this.http.put('http://localhost:8080', 'any');
+  checkPost() {
+    return this.http.post(API_BASE, 'any');
   }
 
-  checkDelete(){
-    return this.http.delete('http://localhost:8080');
+  checkPut() {
+    return this.http.put(API_BASE, 'any');
+  }
+
+  checkDelete() {
+    return this.http.delete(API_BASE);
   }
 }

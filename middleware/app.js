@@ -29,7 +29,7 @@ app.delete('/', function(req, res) {
   res.send(`DELETE request homepage - localhost:${PORT}`);
 });
 
-// Customer routes - query to pull results from customer table
+app.use('/keys', require('./routes/keys'));
 app.use('/customer', require('./routes/customer'));
 
 // This is necessary because the database service takes a bit longer
@@ -47,5 +47,3 @@ const interval = setInterval(async () => {
     return;
   }
 }, 1000);
-
-console.log(process.env);
