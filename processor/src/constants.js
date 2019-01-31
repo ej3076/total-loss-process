@@ -16,7 +16,7 @@ module.exports = {
    * @returns {string} A block address.
    */
   addressFromVIN(vin) {
-    return `${VEHICLE_FAMILY}${hash(vin)}`;
+    return `${VEHICLE_NAMESPACE}${hash(vin)}`;
   },
 };
 
