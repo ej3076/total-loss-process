@@ -1,7 +1,6 @@
 'use strict';
 const express = require('express');
 const cors = require('cors');
-const VehicleClient = require('./lib/vehicle-client');
 
 const PORT = process.env.PORT || 8080;
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
