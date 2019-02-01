@@ -3,7 +3,7 @@ const router = require('express').Router();
 
 const { generateKeypair } = require('../lib/client-utils');
 
-router.post('/generate', (req, res) => {
+router.post('/generate', (_, res) => {
   res.json(generateKeypair);
 });
 

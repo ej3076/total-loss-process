@@ -8,7 +8,7 @@ services:
       - 4004:4004
     # start the validator with an empty genesis batch
     entrypoint: >-
-      bash -c "
+      bash -c '
       sawadm keygen &&
       sawtooth keygen id_ecdsa &&
       sawset genesis --key /root/.sawtooth/keys/id_ecdsa.priv &&
@@ -18,7 +18,7 @@ services:
       --bind component:tcp://eth0:4004
       --bind network:tcp://eth0:8800
       --bind consensus:tcp://eth0:5050
-      "
+      '
 
   # Sawtooth REST API that communicates with the validator
   rest-api:
@@ -40,10 +40,10 @@ services:
     volumes:
       - ./cli.toml:/etc/sawtooth/cli.toml
     entrypoint: >-
-      bash -c "
+      bash -c '
       sawtooth keygen &&
       tail -f /dev/null
-      "
+      '
 
   # The web "middleware" service
   middleware:
@@ -62,8 +62,6 @@ services:
 
   # Our custom vehicle transaction processor
   tp-vehicle:
-    image: fordtotalloss/sawtooth-vehicle-tp
-    build: ./processor
     depends_on:
       - validator
     command: npm start -- tcp://validator:4004

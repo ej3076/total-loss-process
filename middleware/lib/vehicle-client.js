@@ -1,6 +1,7 @@
 'use strict';
+
+const cbor = require('cbor');
 const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
-const protobuf = require('sawtooth-sdk/protobuf');
 const { CryptoFactory } = require('sawtooth-sdk/signing');
 const {
   Secp256k1PrivateKey: PrivateKey,
@@ -85,20 +86,26 @@ class VehicleClient {
   /**
    * Edit an exiting vehicle on the blockchain.
    *
-   * @param {Partial<Vehicle> & { vin: string }} data - The vehicle data to edit.
+   * @param {string} vin - The VIN of the vehicle to edit.
+   * @param {Partial<Vehicle>} data - The vehicle data to edit.
    */
-  async editVehicle(data) {
-    if (typeof data.vin !== 'string') {
+  async editVehicle(vin, data) {
+    if (typeof vin !== 'string') {
       throw new InvalidTransaction('VIN must be specified in the data');
     }
-    const address = calculateAddress(data.vin);
+    const address = calculateAddress(vin);
     return API.sendBatches(
       createBatch(
         this.signer,
-        createTransaction(this.signer, Actions.EDIT_VEHICLE, data, {
-          inputs: [address],
-          outputs: [address],
-        }),
+        createTransaction(
+          this.signer,
+          Actions.EDIT_VEHICLE,
+          { ...data, vin },
+          {
+            inputs: [address],
+            outputs: [address],
+          },
+        ),
       ),
     );
   }
@@ -107,23 +114,32 @@ class VehicleClient {
    * Retrieve a vehicle from the blockchain.
    *
    * @param {string} vin - The VIN of the vehicle to retrieve.
+   * @return {Promise<Vehicle>}
    */
-  getVehicle(vin) {
+  async getVehicle(vin) {
     if (typeof vin !== 'string') {
       throw new InvalidTransaction('VIN must be specified in the data');
     }
-    const address = calculateAddress(vin);
-    return API.getStateItem(address);
+    const response = await API.getStateItem(calculateAddress(vin));
+    return cbor.decodeFirst(Buffer.from(response.data, 'base64'));
   }
 
   /**
    * Retrives a list of items from the blockchain.
    *
    * @param {import('./api').GetStateParams} [params] - Extra query parameters for the `/state` endpoint.
-   * @return {Promise<Response>}
+   * @return {Promise<Vehicle[]>}
    */
-  listVehicles(params) {
-    return API.getState({ ...params, address: FAMILY_NAMESPACE });
+  async listVehicles(params) {
+    const response = await API.getState({
+      ...params,
+      address: FAMILY_NAMESPACE,
+    });
+    return Promise.all(
+      response.data.map(({ data }) =>
+        cbor.decodeFirst(Buffer.from(data, 'base64')),
+      ),
+    );
   }
 }
 
