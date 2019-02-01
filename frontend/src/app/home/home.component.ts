@@ -1,22 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
-import { MidwareService } from '../midware/midware.service';
+import { MiddlewareService } from '../middleware/middleware.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  midObj = {};
 
-  midObj: Object = null;
+  constructor(private auth: AuthService, private middleware: MiddlewareService) {}
 
-  constructor(private auth: AuthService, private midware: MidwareService) { 
-    this.midObj = midware;
-  }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   isAuthenticated(): boolean {
     if (this.auth.isAuthenticated()) {
@@ -25,28 +21,34 @@ export class HomeComponent implements OnInit {
     return false;
   }
 
+  generateKeypair(): void {
+    this.middleware.generateKeypair().subscribe(keypair => {
+      console.log(keypair);
+      this.midObj = { ...this.midObj, keypair };
+    });
+  }
   get(): void {
-    this.midware.checkGet().subscribe(midware => {
-      this.midObj = midware;
+    this.middleware.checkGet().subscribe(middleware => {
+      this.midObj = middleware;
       console.log(this.midObj);
-    })
-   }
-  post(): void { 
-    this.midware.checkPost().subscribe(midware => {
-      this.midObj = midware;
+    });
+  }
+  post(): void {
+    this.middleware.checkPost().subscribe(middleware => {
+      this.midObj = middleware;
       console.log(this.midObj);
-    })
+    });
   }
   put(): void {
-    this.midware.checkPut().subscribe(midware => {
-      this.midObj = midware;
+    this.middleware.checkPut().subscribe(middleware => {
+      this.midObj = middleware;
       console.log(this.midObj);
-    })
-   }
-  delete(): void { 
-    this.midware.checkDelete().subscribe(midware => {
-      this.midObj = midware;
+    });
+  }
+  delete(): void {
+    this.middleware.checkDelete().subscribe(middleware => {
+      this.midObj = middleware;
       console.log(this.midObj);
-    })
+    });
   }
 }
