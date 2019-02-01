@@ -3,7 +3,7 @@ version: '3.7'
 services:
   # Main validator
   validator:
-    image: hyperledger/sawtooth-validator:1.1
+    image: hyperledger/sawtooth-validator:1.0
     ports:
       - 4004:4004
     # start the validator with an empty genesis batch
