@@ -1,5 +1,7 @@
 'use strict';
 
+const cbor = require('cbor');
+
 const { addressFromVIN } = require('./constants');
 
 /**
@@ -7,10 +9,14 @@ const { addressFromVIN } = require('./constants');
  */
 
 /**
- * @typedef {Object.<string, unknown>} Data The data stored on the blockchain.
+ * @typedef {object} Vehicle - Vehicle payload interface.
+ * @prop {string} vin - The VIN.
+ * @prop {string} model - The model of the vehicle.
+ * @prop {string} color - The color of the vehicle.
+ * @prop {number} status - An integer representing the vehicles status.
  */
 
-module.exports = class VehicleState {
+class VehicleState {
   /**
    * Constructor.
    *
@@ -26,7 +32,7 @@ module.exports = class VehicleState {
    * Retrieves and deserlializes a vehicle's data.
    *
    * @param {string} vin The VIN number of the vehicle.
-   * @returns {Promise<Data[]>}
+   * @returns {Promise<Vehicle | undefined>}
    */
   async getVehicle(vin) {
     return this._loadVehicle(vin);
@@ -36,12 +42,12 @@ module.exports = class VehicleState {
    * Serializes and sets a vehicle's data.
    *
    * @param {string} vin The VIN number of the vehicle.
-   * @param {Data[]} data
+   * @param {Vehicle} data
    * @returns {Promise<string[]>} The address(es) successfully set.
    */
   async setVehicle(vin, data) {
     const address = addressFromVIN(vin);
-    const vehicle = await this._loadVehicle(vin);
+    this.cache.set(address, data);
     return this.context.setState(
       {
         [address]: this._serialize(data),
@@ -54,13 +60,16 @@ module.exports = class VehicleState {
    * Loads, deserializes, and returns a given vehicle's data.
    *
    * @param {string} vin The VIN number of the vehicle.
-   * @returns {Promise<Data[]>}
+   * @returns {Promise<Vehicle | undefined>}
    */
   async _loadVehicle(vin) {
     const address = addressFromVIN(vin);
+    if (this.cache.has(address)) {
+      return this.cache.get(address);
+    }
     const state = await this.context.getState([address], this.timeout);
     if (!state[address].toString()) {
-      return [];
+      return;
     }
     return this._deserialize(state[address]);
   }
@@ -68,20 +77,22 @@ module.exports = class VehicleState {
   /**
    * Deserializes and returns data for a single address.
    *
-   * @param {Buffer} data Data to be deserialized.
-   * @returns {Data[]}
+   * @param {Buffer} data Vehicle data to be deserialized.
+   * @returns {Promise<Vehicle>}
    */
-  _deserialize(data) {
-    return JSON.parse(data.toString());
+  async _deserialize(data) {
+    return cbor.decodeFirstSync(data);
   }
 
   /**
    * Serializes and returns data for a single address.
    *
-   * @param {Data[]} data
+   * @param {Vehicle} vehicle
    * @returns {Buffer}
    */
-  _serialize(data) {
-    return Buffer.from(JSON.stringify(data));
+  _serialize(vehicle) {
+    return cbor.encode(vehicle);
   }
-};
+}
+
+module.exports = VehicleState;

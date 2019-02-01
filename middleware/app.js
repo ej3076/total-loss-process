@@ -1,5 +1,4 @@
-const path = require('path');
-
+'use strict';
 const express = require('express');
 const cors = require('cors');
 
@@ -11,19 +10,19 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get('/', function(req, res) {
+app.get('/', function(_, res) {
   res.send(`GET request homepage - localhost:${PORT}`);
 });
 
-app.post('/', function(req, res) {
+app.post('/', function(_, res) {
   res.send(`POST request homepage - localhost:${PORT}`);
 });
 
-app.put('/', function(req, res) {
+app.put('/', function(_, res) {
   res.send(`PUT request homepage - localhost:${PORT}`);
 });
 
-app.delete('/', function(req, res) {
+app.delete('/', function(_, res) {
   res.send(`DELETE request homepage - localhost:${PORT}`);
 });
 

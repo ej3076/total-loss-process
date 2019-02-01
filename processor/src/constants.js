@@ -2,23 +2,30 @@
 
 const { createHash } = require('crypto');
 
-const VEHICLE_FAMILY = 'vechicle';
-
+const VEHICLE_FAMILY = 'vehicle';
 const VEHICLE_NAMESPACE = hash(VEHICLE_FAMILY).substring(0, 6);
 
-module.exports = {
-  VEHICLE_FAMILY,
-  VEHICLE_NAMESPACE,
-  /**
-   * Given a VIN number generate and return a block address.
-   *
-   * @param {string} vin The vin number of interest.
-   * @returns {string} A block address.
-   */
-  addressFromVIN(vin) {
-    return `${VEHICLE_FAMILY}${hash(vin)}`;
-  },
+/**
+ * Actions that the processor is currently able to handle.
+ *
+ * @enum {string}
+ */
+exports.KNOWN_ACTIONS = {
+  CREATE_VEHICLE: 'CREATE_VEHICLE',
+  EDIT_VEHICLE: 'EDIT_VEHICLE',
 };
+
+exports.VEHICLE_FAMILY = VEHICLE_FAMILY;
+
+exports.VEHICLE_NAMESPACE = VEHICLE_NAMESPACE;
+
+/**
+ * Given a VIN number generate and return a block address.
+ *
+ * @param {string} vin The vin number of interest.
+ * @returns {string} A block address.
+ */
+exports.addressFromVIN = vin => `${VEHICLE_NAMESPACE}${hash(vin)}`;
 
 /**
  * Generates a SHA-512 hash hex digest of a given string.

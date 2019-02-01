@@ -4,14 +4,13 @@ const { TransactionProcessor } = require('sawtooth-sdk/processor');
 const VehicleHandler = require('./handler');
 
 if (!process.argv[2]) {
-  console.error('missing validator address');
-  process.exit(1);
+  throw new Error('missing validator address');
 }
+
 const url = new URL(process.argv[2]);
 
 if (url.protocol !== 'tcp:') {
-  console.error('validator address must use tcp protocol');
-  process.exit(1);
+  throw new Error('validator address must use tcp protocol');
 }
 
 const processor = new TransactionProcessor(url.href);
