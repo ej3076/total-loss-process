@@ -35,6 +35,7 @@ import { LyCheckboxModule } from '@alyle/ui/checkbox';
 import { CallbackComponent } from './callback/callback.component';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth/auth.service';
+import { ViewClaimsComponent } from './view-claims/view-claims.component';
 
 export class CustomMinimaLight extends MinimaLight {
   primary = {
@@ -81,7 +82,8 @@ export class CustomMinimaDark extends MinimaDark {
     FooterComponent,
     HomeComponent,
     CallbackComponent,
-    NewClaimComponent
+    NewClaimComponent,
+    ViewClaimsComponent
   ],
   imports: [
     BrowserModule,

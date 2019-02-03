@@ -48,6 +48,10 @@ html {
   text-align: right;
 }
 
+.justify-left {
+  justify-content: left !important;
+}
+
 .center-to-page {
   margin: auto;
 }
@@ -107,5 +111,5 @@ html {
 
 // Logo
 .homepage-logo {
-  max-width: 50%;
+  max-width: 15%;
 }

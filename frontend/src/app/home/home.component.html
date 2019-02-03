@@ -1,20 +1,39 @@
 <div class="center-text">
-<<<<<<< HEAD
-    <h1 lyTyp="display2" gutterBottom>Ford - Total Loss Process Homepage</h1>
+  <h2 lyTyp="display2" gutterBottom *ngIf="isAuthenticated()">
+    Hello, {{ user.firstName }}
+  </h2>
+  <h2 lyTyp="display2" gutterBottom *ngIf="!isAuthenticated()">
+    You are not logged in!
+  </h2>
+  <a
+    routerLink="/new-claim"
+    ly-button
+    raised
+    bg="primary"
+    lyTyp="display2"
+    class="width-100 mth mbh"
+    >Start a New Claim</a
+  >
 
-    <h2 lyTyp="display2" gutterBottom *ngIf="isAuthenticated()">Hello, {{user.firstName}}</h2>
-    <h2 lyTyp="display2" gutterBottom *ngIf="!isAuthenticated()">You are not logged in!</h2>
-=======
-    <a routerLink='/new-claim' ly-button raised bg="primary" lyTyp="display2" class="width-100 mth mbh">Start a New Claim</a>
->>>>>>> Create form for new claims, add Ford logo, make some things prettier
+  <button ly-button bg="primary" raised (click)="generateKeypair()">
+    Primary Color (Generate Keypair)
+  </button>
+  <button ly-button bg="primary" raised (click)="get()">
+    Primary Color (GET)
+  </button>
+  <button ly-button bg="accent" raised (click)="post()">
+    Accent Color (POST)
+  </button>
+  <button ly-button bg="warn" raised (click)="put()">Warn Color (PUT)</button>
+  <button ly-button bg="secondary" raised (click)="delete()">
+    Secondary Color (DELETE)
+  </button>
 
-    <button ly-button bg = "primary" raised (click)="generateKeypair()"> Primary Color (Generate Keypair) </button>
-    <button ly-button bg = "primary" raised (click)="get()"> Primary Color (GET) </button>
-    <button ly-button bg = "accent" raised (click)="post()"> Accent Color (POST)</button>
-    <button ly-button bg = "warn" raised (click)="put()"> Warn Color (PUT)</button>
-    <button ly-button bg = "secondary" raised (click)="delete()"> Secondary Color (DELETE)</button>
-
-    <div>
-        <img src="../../assets/ford-logo.png" alt="Logo" class="center-to-page width-100 mth homepage-logo">
-    </div>   
+  <div>
+    <img
+      src="../../assets/ford-logo.png"
+      alt="Logo"
+      class="center-to-page width-100 mth homepage-logo"
+    />
+  </div>
 </div>
