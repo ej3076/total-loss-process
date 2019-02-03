@@ -5,21 +5,27 @@ import { Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
 import { CookieService } from 'ngx-cookie-service';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { User } from '../models/User';
+
+const API_BASE = 'https://total-loss-process.auth0.com/api/v2/';
+const helper = new JwtHelperService();
 
 @Injectable()
 export class AuthService {
-
   private _idToken: string;
   private _accessToken: string;
   private _expiresAt: number;
+  user: User;
 
   auth0 = new auth0.WebAuth({
     clientID: 't3sXyFtDUl0wFsHVsQsJbEa4en4bgPly',
     domain: 'total-loss-process.auth0.com',
     responseType: 'token id_token',
     redirectUri: 'http://localhost:4200/callback',
-    scope: 'openid'
+    scope: 'openid profile',
   });
+  id_token: any;
 
   constructor(public router: Router, public cookieService: CookieService) {
     this._idToken = '';
@@ -30,16 +36,15 @@ export class AuthService {
   }
 
   private setFromCookie(): void {
-
     if (
       this.cookieService.check('access_token') &&
       this.cookieService.check('id_token') &&
       this.cookieService.check('expires_at')
-      ) {
-        this._idToken = this.cookieService.get('id_token');
-        this._accessToken = this.cookieService.get('access_token');
-        this._expiresAt = +this.cookieService.get('expires_at');
-      }
+    ) {
+      this._idToken = this.cookieService.get('id_token');
+      this._accessToken = this.cookieService.get('access_token');
+      this._expiresAt = +this.cookieService.get('expires_at');
+    }
   }
 
   get accessToken(): string {
@@ -71,7 +76,7 @@ export class AuthService {
     // Set isLoggedIn flag in localStorage
     localStorage.setItem('isLoggedIn', 'true');
     // Set the time that the access token will expire at
-    const expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
+    const expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
     this._accessToken = authResult.accessToken;
     this._idToken = authResult.idToken;
     this._expiresAt = expiresAt;
@@ -107,7 +112,7 @@ export class AuthService {
   public isAuthenticated(): boolean {
     // Check whether the current time is past the
     // access token's expiry time
-    
+
     return new Date().getTime() < this._expiresAt;
   }
 
@@ -117,5 +122,16 @@ export class AuthService {
     this.cookieService.set('access_token', this._accessToken, now);
     this.cookieService.set('id_token', this._idToken, now);
     this.cookieService.set('expires_at', this._expiresAt.toString(), now);
+  }
+
+  getUser() {
+    var decode = helper.decodeToken(this._idToken);
+    this.user = {
+      firstName: decode.given_name,
+      lastName: decode.family_name,
+      email: decode.email,
+      picture: decode.picture,
+    };
+    return this.user;
   }
 }

@@ -10,8 +10,7 @@ const routes: Routes = [
   {path: 'header', component: HeaderComponent},
   {path: 'footer', component: FooterComponent},
   {path: 'callback', component: CallbackComponent},
-  {path: '**', component: HomeComponent},
-  {path: './', component: HomeComponent},
+  {path: '**', component: HomeComponent}
 ];
 
 @NgModule({
