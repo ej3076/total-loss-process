@@ -3,4 +3,6 @@ export interface User {
   lastName: string;
   email: string;
   picture: string;
+  publicKey: string;
+  privateKey: string;
 }

@@ -16,10 +16,11 @@ export class AuthService {
   private _idToken: string;
   private _accessToken: string;
   private _expiresAt: number;
-  user: User;
+  private clientId: string = 't3sXyFtDUl0wFsHVsQsJbEa4en4bgPly';
+  private user: User;
 
   auth0 = new auth0.WebAuth({
-    clientID: 't3sXyFtDUl0wFsHVsQsJbEa4en4bgPly',
+    clientID: this.clientId,
     domain: 'total-loss-process.auth0.com',
     responseType: 'token id_token',
     redirectUri: 'http://localhost:4200/callback',
@@ -98,7 +99,23 @@ export class AuthService {
   public isAuthenticated(): boolean {
     // Check whether the current time is past the
     // access token's expiry time
-
     return new Date().getTime() < this._expiresAt;
+  }
+
+  getUser() {
+    var decode = helper.decodeToken(this._idToken);
+    this.user = {
+      firstName: decode.given_name,
+      lastName: decode.family_name,
+      email: decode.email,
+      picture: decode.picture,
+      publicKey: decode.public_key,
+      privateKey: decode.private_key,
+    };
+    return this.user;
+  }
+
+  public getClientId(): string {
+    return this.clientId;
   }
 }
