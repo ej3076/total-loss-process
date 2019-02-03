@@ -5,6 +5,5 @@
     "start:production": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d",
     "stop": "docker-compose stop",
     "down": "docker-compose down -v"
-  },
-  "devDependencies": {}
+  }
 }
