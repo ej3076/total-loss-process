@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Vehicle } from '../models/vehicle';
+import { AuthService } from '../auth/auth.service';
+import { User } from '../models/User';
+import { Observable } from 'rxjs';
 
 interface KeypairResponse {
   public_key: string;
@@ -12,7 +16,14 @@ const API_BASE = 'http://localhost:8080';
   providedIn: 'root',
 })
 export class MiddlewareService {
-  constructor(private http: HttpClient) {}
+  private claims: Vehicle[];
+  private user: User;
+
+  constructor(private http: HttpClient, private auth: AuthService) {
+    if (auth.isAuthenticated()) {
+      this.user = auth.getUser();
+    }
+  }
 
   generateKeypair() {
     return this.http.post<KeypairResponse>(`${API_BASE}/keys/generate`, null);
@@ -32,5 +43,21 @@ export class MiddlewareService {
 
   checkDelete() {
     return this.http.delete(API_BASE);
+  }
+
+  getClaims(): Observable<Vehicle[]> {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Authorization', this.auth.idToken);
+
+    return this.http.get<Vehicle[]>(`${API_BASE}/vehicles`, { headers });
+  }
+
+  addClaim(vehicle: Vehicle) {
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Authorization', `Bearer ${this.auth.idToken}`);
+
+    return this.http.post(`${API_BASE}/vehicles/${vehicle.vin}`, vehicle, {
+      headers,
+    });
   }
 }

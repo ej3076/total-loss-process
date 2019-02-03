@@ -2,10 +2,11 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Vehicle } from '../models/vehicle';
 import { LyTheme2 } from '@alyle/ui';
+import { MiddlewareService } from '../middleware/middleware.service';
 
 const STYLES = () => ({
   labelBefore: {
-    paddingAfter: '8px'
+    paddingAfter: '8px',
   },
 });
 
@@ -13,7 +14,7 @@ const STYLES = () => ({
   selector: 'app-new-claim',
   templateUrl: './new-claim.component.html',
   styleUrls: ['./new-claim.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewClaimComponent implements OnInit {
   appearance = new FormControl();
@@ -21,31 +22,31 @@ export class NewClaimComponent implements OnInit {
   vin = new FormControl('', [Validators.required, Validators.minLength(11)]);
   model = new FormControl('', [Validators.required]);
   color = new FormControl('', [Validators.required]);
-
-  vehicle: Vehicle;
-
   readonly classes = this._theme.addStyleSheet(STYLES);
-  
-  constructor(private _theme: LyTheme2) {
-      this.appearance.setValue('outlined');
-   }
 
-  ngOnInit() {
+  constructor(
+    private _theme: LyTheme2,
+    private middlewareService: MiddlewareService,
+  ) {
+    this.appearance.setValue('outlined');
   }
 
+  ngOnInit() {}
+
   private setVehicle() {
-    this.vehicle = {
+    var vehicle: Vehicle = {
       vin: this.vin.value,
       model: this.model.value,
       color: this.color.value,
-      status: 0
-    }
+      status: 0,
+    };
+
+    var test = this.middlewareService.addClaim(vehicle);
+
+    console.log(test);
   }
 
   sendNewVehicle() {
     this.setVehicle();
-
-
   }
-
 }
