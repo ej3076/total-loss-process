@@ -5,6 +5,17 @@ import { Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
 import { CookieService } from 'ngx-cookie-service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { User } from '../models/User';
+
+
+
+const API_BASE = 'https://total-loss-process.auth0.com/api/v2/';
+const helper = new JwtHelperService();
+
+
+
 
 @Injectable()
 export class AuthService {
@@ -12,22 +23,26 @@ export class AuthService {
   private _idToken: string;
   private _accessToken: string;
   private _expiresAt: number;
+  user: User;
+
 
   auth0 = new auth0.WebAuth({
     clientID: 't3sXyFtDUl0wFsHVsQsJbEa4en4bgPly',
     domain: 'total-loss-process.auth0.com',
     responseType: 'token id_token',
     redirectUri: 'http://localhost:4200/callback',
-    scope: 'openid'
+    scope: 'openid profile'
   });
+  id_token: any;
 
-  constructor(public router: Router, public cookieService: CookieService) {
+  constructor(public router: Router, public cookieService: CookieService, public http: HttpClient) {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
 
     this.setFromCookie();
   }
+
 
   private setFromCookie(): void {
 
@@ -117,5 +132,16 @@ export class AuthService {
     this.cookieService.set('access_token', this._accessToken, now);
     this.cookieService.set('id_token', this._idToken, now);
     this.cookieService.set('expires_at', this._expiresAt.toString(), now);
+  }
+
+  getUser(){
+    var decode = helper.decodeToken(this._idToken);
+    this.user = {
+      firstName: decode.given_name,
+      lastName: decode.family_name,
+      email: decode.email,
+      picture: decode.picture
+    }
+    return this.user;
   }
 }
