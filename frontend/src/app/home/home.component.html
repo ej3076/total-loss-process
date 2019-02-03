@@ -1,9 +1,8 @@
 <div class="center-text">
     <h1 lyTyp="display2" gutterBottom>Ford - Total Loss Process Homepage</h1>
 
-    <h2 lyTyp="display2" gutterBottom *ngIf="isAuthenticated()">You are logged in!</h2>
+    <h2 lyTyp="display2" gutterBottom *ngIf="isAuthenticated()">Hello, {{user.firstName}}</h2>
     <h2 lyTyp="display2" gutterBottom *ngIf="!isAuthenticated()">You are not logged in!</h2>
-
 
     <button ly-button bg = "primary" raised (click)="generateKeypair()"> Primary Color (Generate Keypair) </button>
     <button ly-button bg = "primary" raised (click)="get()"> Primary Color (GET) </button>

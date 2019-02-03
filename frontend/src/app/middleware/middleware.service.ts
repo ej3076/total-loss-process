@@ -11,7 +11,7 @@ const API_BASE = 'http://localhost:8080';
 @Injectable({
   providedIn: 'root',
 })
-export class MidwareService {
+export class MiddlewareService {
   constructor(private http: HttpClient) {}
 
   generateKeypair() {
