@@ -1,7 +1,7 @@
 #
 # This compose file is for development and testing use only.
 #
-version: '3.7'
+version: '3.6'
 
 services:
   # Consensus Engine using a simplified random-leader algorithm

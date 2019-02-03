@@ -31,20 +31,6 @@ export class AuthService {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
-
-    this.setFromCookie();
-  }
-
-  private setFromCookie(): void {
-    if (
-      this.cookieService.check('access_token') &&
-      this.cookieService.check('id_token') &&
-      this.cookieService.check('expires_at')
-    ) {
-      this._idToken = this.cookieService.get('id_token');
-      this._accessToken = this.cookieService.get('access_token');
-      this._expiresAt = +this.cookieService.get('expires_at');
-    }
   }
 
   get accessToken(): string {
@@ -114,24 +100,5 @@ export class AuthService {
     // access token's expiry time
 
     return new Date().getTime() < this._expiresAt;
-  }
-
-  public saveUserSession(): void {
-    var now = new Date('tomorrow');
-
-    this.cookieService.set('access_token', this._accessToken, now);
-    this.cookieService.set('id_token', this._idToken, now);
-    this.cookieService.set('expires_at', this._expiresAt.toString(), now);
-  }
-
-  getUser() {
-    var decode = helper.decodeToken(this._idToken);
-    this.user = {
-      firstName: decode.given_name,
-      lastName: decode.family_name,
-      email: decode.email,
-      picture: decode.picture,
-    };
-    return this.user;
   }
 }
