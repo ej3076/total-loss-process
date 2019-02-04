@@ -48,6 +48,7 @@ export class MiddlewareService {
   getClaims(): Observable<Vehicle[]> {
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Authorization', this.auth.idToken);
+    headers = headers.append('private_key', this.user.privateKey);
 
     return this.http.get<Vehicle[]>(`${API_BASE}/vehicles`, { headers });
   }
@@ -55,7 +56,7 @@ export class MiddlewareService {
   addClaim(vehicle: Vehicle) {
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Authorization', `Bearer ${this.auth.idToken}`);
-
+    headers = headers.append('private_key', this.user.privateKey);
     return this.http.post(`${API_BASE}/vehicles/${vehicle.vin}`, vehicle, {
       headers,
     });
