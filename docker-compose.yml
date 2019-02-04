@@ -1,9 +1,11 @@
-version: '3.7'
+version: '3.6'
 
 services:
   # Main validator
   validator:
     image: hyperledger/sawtooth-validator:1.0
+    security_opt:
+      - apparmor:unconfined
     ports:
       - 4004:4004
     # start the validator with an empty genesis batch
