@@ -2,7 +2,6 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-//const http = require('http');
 
 const PORT = process.env.PORT || 8080;
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
@@ -30,40 +29,40 @@ app.delete('/', function(_, res) {
 });
 
 // List all vehicles from blockchain
-app.get('/vehicles', function(req, res) {
-  (async () => {
+app.get('/vehicles', async(req, res) => {
+  try {
     const privateKey = req.headers.authorization;
     const VehicleClient = require('./lib/vehicle-client.js');
-    const client = new VehicleClient(
-      privateKey,
-    );
-  
+    const client = new VehicleClient(privateKey);
+    
     const resVehicleList = await client.listVehicles();
     console.log(resVehicleList);
     res.send(resVehicleList);
-  })();
+  } catch(err) {
+    console.log(err);
+  }
 });
 
 // Post a new vehicle to the blockchain
-app.post('/vehicles', function(req, res) {
-  (async () => {
+app.post('/vehicles', async(req, res) => {
+  try {
     const privateKey = req.headers.authorization;
     const VehicleClient = require('./lib/vehicle-client.js');
-    const client = new VehicleClient(
-      privateKey,
-    );
-  
+    const client = new VehicleClient(privateKey);
+    
     const newVehicle = {
       vin: req.body.vin,
-      model: req.body.model,
       color: req.body.color,
+      model: req.body.model,
       status: req.body.status,
     };
-  
+
     const resPostVehicle = await client.createVehicle(newVehicle);
     console.log(resPostVehicle);
     res.send(resPostVehicle);
-  })();
+  } catch(err) {
+    console.log(err);
+  }
 });
 
 app.use('/keys', require('./routes/keys'));
