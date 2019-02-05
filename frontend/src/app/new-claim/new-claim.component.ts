@@ -41,6 +41,8 @@ export class NewClaimComponent implements OnInit {
       status: 0,
     };
 
+    console.log(vehicle);
+
     let test = this.middlewareService.addClaim(vehicle);
 
     console.log(test);

@@ -26,7 +26,7 @@ export class AuthService {
     redirectUri: 'http://localhost:4200/callback',
     scope: 'openid profile',
   });
-  userProfile: any;
+  id_token: any;
 
   constructor(public router: Router, public cookieService: CookieService) {
     this._idToken = '';
@@ -103,19 +103,26 @@ export class AuthService {
   }
 
   getUser() {
+    let _name: string;
     let decode = helper.decodeToken(this._idToken);
 
+    console.log(this._idToken);
+
+    if (decode.given_name) {
+      _name = decode.given_name;
+    } else {
+      _name = decode.name;
+    }
+
     this.user = {
-      firstName: decode.given_name,
+      firstName: _name,
       lastName: decode.family_name,
       email: decode.email,
       picture: decode.picture,
-      publicKey: decode['https://total-loss-process.compublic_key'],
-      privateKey: decode['https://total-loss-process.comprivate_key'],
+      publicKey: decode['https://total-loss-process.com/public_key'],
+      privateKey: decode['https://total-loss-process.com/private_key'],
     };
-
 
     return this.user;
   }
-
 }

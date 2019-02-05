@@ -54,6 +54,7 @@ export class MiddlewareService {
   }
 
   addClaim(vehicle: Vehicle) {
+    this.user = this.auth.getUser();
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Authorization', `Bearer ${this.auth.idToken}`);
     headers = headers.append('private_key', this.user.privateKey);
