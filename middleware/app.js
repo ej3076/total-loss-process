@@ -20,7 +20,7 @@ const checkJwt = jwt({
   // based on the kid in the header and
   // the signing keys provided by the JWKS endpoint.
   secret: jwksRsa.expressJwtSecret({
-    cache: true,
+    cache: false,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
     jwksUri: `https://total-loss-process.auth0.com/.well-known/jwks.json`,
@@ -37,11 +37,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // List all vehicles from blockchain
-app.get('/vehicles', async (req, res) => {
+app.get('/vehicles', async (_, res) => {
   try {
-    const privateKey = req.headers.authorization;
     const VehicleClient = require('./lib/vehicle-client.js');
-    const client = new VehicleClient(privateKey);
+    const client = new VehicleClient();
 
     const resVehicleList = await client.listVehicles();
     console.log(resVehicleList);
