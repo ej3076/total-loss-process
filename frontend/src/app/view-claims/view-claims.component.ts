@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LyTheme2 } from '@alyle/ui';
-import { Vehicle } from '../models/vehicle';
+import { Vehicle } from '../models/Vehicle';
 import { MiddlewareService } from '../middleware/middleware.service';
 import { AuthService } from '../auth/auth.service';
 

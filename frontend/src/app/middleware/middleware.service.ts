@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Vehicle } from '../models/vehicle';
+import { Vehicle } from '../models/Vehicle';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../models/User';
 import { Observable } from 'rxjs';
