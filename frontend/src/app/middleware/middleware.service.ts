@@ -17,12 +17,14 @@ const API_BASE = 'http://localhost:8080';
 })
 export class MiddlewareService {
   private claims: Vehicle[];
-  private user: User;
 
-  constructor(private http: HttpClient, private auth: AuthService) {
-    if (auth.isAuthenticated()) {
-      this.user = auth.getUser();
+  constructor(private http: HttpClient, private auth: AuthService) {}
+
+  get user() {
+    if (this.auth.isAuthenticated()) {
+      return this.auth.getUser();
     }
+    throw new Error('User needs to be logged in');
   }
 
   generateKeypair() {
@@ -53,11 +55,22 @@ export class MiddlewareService {
     return this.http.get<Vehicle[]>(`${API_BASE}/vehicles`, { headers });
   }
 
-  addClaim(vehicle: Vehicle) {
+  async addClaim(vehicle: Vehicle) {
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Authorization', `Bearer ${this.auth.idToken}`);
     headers = headers.append('private_key', this.user.privateKey);
-    return this.http.post(`${API_BASE}/vehicles/${vehicle.vin}`, vehicle, {
+    const res = await fetch(`${API_BASE}/vehicles`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.auth.idToken}`,
+        private_key: this.user.privateKey,
+      },
+      body: JSON.stringify(vehicle),
+    });
+    console.log(res.status);
+    const json = await res.json();
+    console.log(json);
+    return this.http.post(`${API_BASE}/vehicles`, vehicle, {
       headers,
     });
   }

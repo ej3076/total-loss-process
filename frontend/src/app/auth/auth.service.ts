@@ -25,6 +25,7 @@ export class AuthService {
     responseType: 'token id_token',
     redirectUri: 'http://localhost:4200/callback',
     scope: 'openid profile',
+    audience: 'https://total-loss-process.auth0.com/api/v2/',
   });
   userProfile: any;
 
@@ -104,6 +105,7 @@ export class AuthService {
 
   getUser() {
     let decode = helper.decodeToken(this._idToken);
+    console.log(this.auth0);
 
     this.user = {
       firstName: decode.given_name,
