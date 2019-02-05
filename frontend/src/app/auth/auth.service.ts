@@ -26,7 +26,7 @@ export class AuthService {
     redirectUri: 'http://localhost:4200/callback',
     scope: 'openid profile',
   });
-  id_token: any;
+  userProfile: any;
 
   constructor(public router: Router, public cookieService: CookieService) {
     this._idToken = '';
@@ -74,7 +74,7 @@ export class AuthService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.localLogin(authResult);
       } else if (err) {
-        //alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
+        // alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
         this.logout();
       }
     });
@@ -103,19 +103,19 @@ export class AuthService {
   }
 
   getUser() {
-    var decode = helper.decodeToken(this._idToken);
+    let decode = helper.decodeToken(this._idToken);
+
     this.user = {
       firstName: decode.given_name,
       lastName: decode.family_name,
       email: decode.email,
       picture: decode.picture,
-      publicKey: decode.public_key,
-      privateKey: decode.private_key,
+      publicKey: decode['https://total-loss-process.compublic_key'],
+      privateKey: decode['https://total-loss-process.comprivate_key'],
     };
+
+
     return this.user;
   }
 
-  public getClientId(): string {
-    return this.clientId;
-  }
 }
