@@ -9,6 +9,7 @@ services:
     image: hyperledger/sawtooth-devmode-engine-rust:1.1
     depends_on:
       - validator
+    restart: on-failure
     entrypoint: >-
       devmode-engine-rust
       --connect tcp://validator:5050
@@ -20,7 +21,7 @@ services:
       - ./middleware:/usr/src/app
     command: >-
       bash -c '
-      npm install &&
+      npm ci &&
       npm run dev
       '
 
@@ -33,7 +34,7 @@ services:
       - ./frontend:/usr/src/app
     command: >-
       bash -c '
-      npm install &&
+      npm ci &&
       npm start -- --host 0.0.0.0
       '
 
@@ -44,7 +45,7 @@ services:
       - ./processor:/usr/src/app
     command: >-
       bash -c '
-      npm install &&
+      npm ci &&
       npm run dev -- tcp://validator:4004
       '
 
