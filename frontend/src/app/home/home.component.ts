@@ -12,10 +12,13 @@ export class HomeComponent implements OnInit {
   midObj = {};
   user: User;
 
-  constructor(private auth: AuthService, private middleware: MiddlewareService) {}
+  constructor(
+    private auth: AuthService,
+    private middleware: MiddlewareService,
+  ) {}
 
   ngOnInit() {
-    if(this.isAuthenticated()){
+    if (this.isAuthenticated()) {
       this.user = this.auth.getUser();
     }
   }
@@ -25,36 +28,5 @@ export class HomeComponent implements OnInit {
       return true;
     }
     return false;
-  }
-
-  generateKeypair(): void {
-    this.middleware.generateKeypair().subscribe(keypair => {
-      console.log(keypair);
-      this.midObj = { ...this.midObj, keypair };
-    });
-  }
-  get(): void {
-    this.middleware.checkGet().subscribe(middleware => {
-      this.midObj = middleware;
-      console.log(this.midObj);
-    });
-  }
-  post(): void {
-    this.middleware.checkPost().subscribe(middleware => {
-      this.midObj = middleware;
-      console.log(this.midObj);
-    });
-  }
-  put(): void {
-    this.middleware.checkPut().subscribe(middleware => {
-      this.midObj = middleware;
-      console.log(this.midObj);
-    });
-  }
-  delete(): void {
-    this.middleware.checkDelete().subscribe(middleware => {
-      this.midObj = middleware;
-      console.log(this.midObj);
-    });
   }
 }

@@ -16,14 +16,16 @@ export class AuthService {
   private _idToken: string;
   private _accessToken: string;
   private _expiresAt: number;
-  user: User;
+  private clientId: string = 't3sXyFtDUl0wFsHVsQsJbEa4en4bgPly';
+  private user: User;
 
   auth0 = new auth0.WebAuth({
-    clientID: 't3sXyFtDUl0wFsHVsQsJbEa4en4bgPly',
+    clientID: this.clientId,
     domain: 'total-loss-process.auth0.com',
     responseType: 'token id_token',
     redirectUri: 'http://localhost:4200/callback',
     scope: 'openid profile',
+    audience: 'https://total-loss-process.auth0.com/api/v2/',
   });
   id_token: any;
 
@@ -31,20 +33,6 @@ export class AuthService {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
-
-    this.setFromCookie();
-  }
-
-  private setFromCookie(): void {
-    if (
-      this.cookieService.check('access_token') &&
-      this.cookieService.check('id_token') &&
-      this.cookieService.check('expires_at')
-    ) {
-      this._idToken = this.cookieService.get('id_token');
-      this._accessToken = this.cookieService.get('access_token');
-      this._expiresAt = +this.cookieService.get('expires_at');
-    }
   }
 
   get accessToken(): string {
@@ -87,7 +75,7 @@ export class AuthService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.localLogin(authResult);
       } else if (err) {
-        //alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
+        // alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
         this.logout();
       }
     });
@@ -112,26 +100,31 @@ export class AuthService {
   public isAuthenticated(): boolean {
     // Check whether the current time is past the
     // access token's expiry time
-
     return new Date().getTime() < this._expiresAt;
   }
 
-  public saveUserSession(): void {
-    var now = new Date('tomorrow');
-
-    this.cookieService.set('access_token', this._accessToken, now);
-    this.cookieService.set('id_token', this._idToken, now);
-    this.cookieService.set('expires_at', this._expiresAt.toString(), now);
-  }
-
   getUser() {
-    var decode = helper.decodeToken(this._idToken);
+    let _name: string;
+    let decode = helper.decodeToken(this._idToken);
+    console.log(this.auth0);
+
+    console.log(this._idToken);
+
+    if (decode.given_name) {
+      _name = decode.given_name;
+    } else {
+      _name = decode.name;
+    }
+
     this.user = {
-      firstName: decode.given_name,
+      firstName: _name,
       lastName: decode.family_name,
       email: decode.email,
       picture: decode.picture,
+      publicKey: decode['https://total-loss-process.com/public_key'],
+      privateKey: decode['https://total-loss-process.com/private_key'],
     };
+
     return this.user;
   }
 }

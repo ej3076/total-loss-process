@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { HomeComponent } from './home/home.component';
+import { NewClaimComponent } from './new-claim/new-claim.component';
 
 //Alyle Components
 import { LyButtonModule } from '@alyle/ui/button';
@@ -25,11 +26,16 @@ import { LyGridModule } from '@alyle/ui/grid';
 import { LyBadgeModule } from '@alyle/ui/badge';
 import { MinimaLight, MinimaDark } from '@alyle/ui/themes/minima';
 import { LyThemeModule, LyCommonModule, PartialThemeVariables, LY_THEME, LY_THEME_GLOBAL_VARIABLES } from '@alyle/ui';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LyFieldModule } from '@alyle/ui/field';
+import { LyRadioModule } from '@alyle/ui/radio';
+import { LyCheckboxModule } from '@alyle/ui/checkbox';
 
 //Auth0 Components
 import { CallbackComponent } from './callback/callback.component';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth/auth.service';
+import { ViewClaimsComponent } from './view-claims/view-claims.component';
 
 export class CustomMinimaLight extends MinimaLight {
   primary = {
@@ -75,7 +81,9 @@ export class CustomMinimaDark extends MinimaDark {
     HeaderComponent,
     FooterComponent,
     HomeComponent,
-    CallbackComponent
+    CallbackComponent,
+    NewClaimComponent,
+    ViewClaimsComponent
   ],
   imports: [
     BrowserModule,
@@ -94,7 +102,12 @@ export class CustomMinimaDark extends MinimaDark {
     LyCardModule,
     LyGridModule,
     LyBadgeModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    LyFieldModule,
+    LyRadioModule,
+    LyCheckboxModule
   ],
   providers: [
     { provide: LY_THEME, useClass: CustomMinimaLight, multi: true },

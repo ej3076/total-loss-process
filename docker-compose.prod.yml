@@ -1,7 +1,7 @@
 #
 # This compose file is for production only.
 #
-version: '3.7'
+version: '3.6'
 
 services:
   # Build and run the middleware service from the Dockerfile, without mounting

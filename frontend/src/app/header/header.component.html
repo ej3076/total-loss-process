@@ -1,13 +1,19 @@
 <header class="head nav-bar">
-    <ly-toolbar position="relative" bg="primary" [elevation]="5" class="auto-height toolbar-override-header">
-        <h6 [lyTyp]="'title'">Total Loss Process</h6>
+    <ly-toolbar position="relative" bg="primary" [elevation]="5" class="auto-height">
+      <img src="../../assets/ford-logo.png" alt="Logo" class="center-to-page width-100 homepage-logo">
         <ly-grid container [spacing]="6">
             <ly-grid item col>
                 <button ly-button raised bg="accent" [lyMenuTriggerFor]="menu" class="float-right">Menu</button>
                 <ng-template #menu let-M>
                   <ly-menu [ref]="M">
-                    <button ly-button ly-menu-item *ngFor="let item of [null, null, null]; index as i">
-                      <span>Item {{ i + 1 }}</span>
+                    <button class="justify-left" ly-button ly-menu-item routerLink="/home">
+                      <span>Home</span>
+                    </button>
+                    <button class="justify-left" ly-button ly-menu-item routerLink="/new-claim">
+                      <span>New Claim</span>
+                    </button>
+                    <button class="justify-left" ly-button ly-menu-item routerLink="/view-claims">
+                      <span>View Claims</span>
                     </button>
                   </ly-menu>
                 </ng-template>

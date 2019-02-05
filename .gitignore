@@ -1,9 +1,12 @@
 # Directories
 dist/
 node_modules/
+.idea/
 
  # Files
 .DS_Store
 Thumbs.db
 npm-debug.log
 yarn-error.log
+package-lock.json
+frontend/package-lock.json
