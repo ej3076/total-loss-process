@@ -1,7 +1,6 @@
 'use strict';
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const jwt = require('express-jwt');
 // TODO: Use this for scoping endpoints...
 // const jwtAuthz = require('express-jwt-authz');
@@ -34,7 +33,6 @@ const checkJwt = jwt({
 
 app.use(express.json());
 app.use(cors());
-app.use(bodyParser.json());
 
 // List all vehicles from blockchain
 app.get('/vehicles', async (_, res) => {
