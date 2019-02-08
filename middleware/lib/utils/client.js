@@ -2,9 +2,8 @@
 
 const { createHash, randomBytes } = require('crypto');
 
-const { encode } = require('cbor');
 const { AuthorizationException } = require('sawtooth-sdk/processor/exceptions');
-const protobuf = require('sawtooth-sdk/protobuf');
+const sawtooth = require('sawtooth-sdk/protobuf');
 const { createContext } = require('sawtooth-sdk/signing');
 
 /**
@@ -17,7 +16,7 @@ const { createContext } = require('sawtooth-sdk/signing');
  */
 
 /**
- * @typedef {(signer: Signer, action: string, data: Record<string, any>, extraHeaders: Partial<TransactionHeader>) => Message<Transaction>} TransactionCreator
+ * @typedef {(signer: Signer, payload: Buffer|Uint8Array, extraHeaders: Partial<TransactionHeader>) => Message<Transaction>} TransactionCreator
  */
 
 /**
@@ -73,37 +72,16 @@ exports.createBatch = (signer, ...transactions) => {
       'Signer private key must be provided to use this method.',
     );
   }
-  const header = protobuf.BatchHeader.encode({
+  const header = sawtooth.BatchHeader.encode({
     signerPublicKey: signer.getPublicKey().asHex(),
     transactionIds: transactions.map(({ headerSignature }) => headerSignature),
   }).finish();
   const headerSignature = signer.sign(header);
-  return protobuf.Batch.create({
+  return sawtooth.Batch.create({
     header,
     headerSignature,
     transactions,
   });
-};
-
-/**
- * Helper that generates hash utilities for a given transaction family.
- *
- * @param {string} familyName - The family name.
- */
-exports.familyHashUtils = familyName => {
-  const FAMILY_NAMESPACE = hash(familyName).substring(0, 6);
-  return {
-    FAMILY_NAMESPACE,
-    /**
-     * Calculates a block address using arbitrary string data.
-     *
-     * @param {string} data - Unique data to calculate a unique address.
-     * @return {string} A calculated block address.
-     */
-    calculateAddress(data) {
-      return `${FAMILY_NAMESPACE}${hash(data)}`;
-    },
-  };
 };
 
 /**
@@ -130,8 +108,7 @@ exports.generateKeypair = () => {
  */
 exports.makeTransactionCreator = (familyName, familyVersion) => (
   signer,
-  action,
-  data,
+  payload,
   extraHeaders = {},
 ) => {
   if (!signer) {
@@ -139,15 +116,11 @@ exports.makeTransactionCreator = (familyName, familyVersion) => (
       'Signer private key must be provided to use this method.',
     );
   }
-  const payload = encode({ action, data });
-  const header = protobuf.TransactionHeader.encode({
+  const header = sawtooth.TransactionHeader.encode({
     familyName,
     familyVersion,
-    inputs: [],
-    outputs: [],
     signerPublicKey: signer.getPublicKey().asHex(),
     batcherPublicKey: signer.getPublicKey().asHex(),
-    dependencies: [],
     payloadSha512: createHash('sha512')
       .update(payload)
       .digest('hex'),
@@ -155,23 +128,9 @@ exports.makeTransactionCreator = (familyName, familyVersion) => (
     nonce: randomBytes(64).toString('hex'),
   }).finish();
   const headerSignature = signer.sign(header);
-  return protobuf.Transaction.create({
+  return sawtooth.Transaction.create({
     header,
     headerSignature,
     payload,
   });
 };
-
-/**
- * Generates a SHA-512 hash hex digest of a given string.
- *
- * @param {string} str The input string.
- * @returns {string} A trimmed substring of length 64 of the hash.
- */
-function hash(str) {
-  return createHash('sha512')
-    .update(str)
-    .digest('hex')
-    .toLowerCase()
-    .substring(0, 64);
-}

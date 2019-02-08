@@ -50,12 +50,10 @@ services:
   # The web "middleware" service
   middleware:
     ports:
-      - 8080:80
+      - 8080:8080
     depends_on:
       - rest-api
     command: npm start
-    environment:
-      PORT: 80
 
   # Static web server for frontend app
   web:

@@ -3,11 +3,7 @@
 const { TransactionHandler } = require('sawtooth-sdk/processor/handler');
 const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
 
-const {
-  KNOWN_ACTIONS,
-  VEHICLE_FAMILY,
-  VEHICLE_NAMESPACE,
-} = require('./constants');
+const { VEHICLE_FAMILY, VEHICLE_NAMESPACE } = require('./constants');
 const VehiclePayload = require('./payload');
 const VehicleState = require('./state');
 
@@ -45,10 +41,11 @@ class VehicleHandler extends TransactionHandler {
   async apply(transaction, context) {
     const payload = await VehiclePayload.fromBytes(transaction.payload);
     const state = new VehicleState(context);
+    const { Actions } = payload;
     switch (payload.action) {
-      case KNOWN_ACTIONS.CREATE_VEHICLE:
+      case Actions.CREATE_VEHICLE:
         return this.createVehicle(payload, state);
-      case KNOWN_ACTIONS.EDIT_VEHICLE:
+      case Actions.EDIT_VEHICLE:
         return this.editVehicle(payload, state);
       default:
         throw new InvalidTransaction(
@@ -69,12 +66,12 @@ class VehicleHandler extends TransactionHandler {
         'Payload must be complete in order to create a new vehicle',
       );
     }
-    const { vin, ...data } = payload.data;
+    const { vin } = payload.data;
     const existingVehicle = await state.getVehicle(vin);
     if (existingVehicle) {
       throw new InvalidTransaction('Vehicle already exists');
     }
-    return state.setVehicle(vin, { vin, ...data });
+    return state.setVehicle(vin, payload.data);
   }
 
   /**

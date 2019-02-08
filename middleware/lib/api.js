@@ -1,7 +1,7 @@
 'use strict';
 
 const request = require('request-promise-native');
-const protobuf = require('sawtooth-sdk/protobuf');
+const sawtooth = require('sawtooth-sdk/protobuf');
 
 const { get } = request.defaults({
   baseUrl: 'http://rest-api:8008',
@@ -94,4 +94,4 @@ exports.getStatus = async () => get('/status');
  * @return {Promise<PostBatchesResponse>}
  */
 exports.sendBatches = async (...batches) =>
-  post('/batches', { body: protobuf.BatchList.encode({ batches }).finish() });
+  post('/batches', { body: sawtooth.BatchList.encode({ batches }).finish() });

@@ -1,8 +1,9 @@
 'use strict';
 
-const cbor = require('cbor');
+const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
 
 const { addressFromVIN } = require('./constants');
+const { loadType } = require('./proto');
 
 /**
  * @typedef {import('sawtooth-sdk/processor/context')} Context Sawtooth context.
@@ -50,7 +51,7 @@ class VehicleState {
     this.cache.set(address, data);
     return this.context.setState(
       {
-        [address]: this._serialize(data),
+        [address]: await this._serialize(data),
       },
       this.timeout,
     );
@@ -81,17 +82,23 @@ class VehicleState {
    * @returns {Promise<Vehicle>}
    */
   async _deserialize(data) {
-    return cbor.decodeFirstSync(data);
+    const Data = await loadType('vehicle.proto', 'vehicle.Data');
+    return /** @type {Vehicle} */ (Data.toObject(Data.decode(data)));
   }
 
   /**
    * Serializes and returns data for a single address.
    *
    * @param {Vehicle} vehicle
-   * @returns {Buffer}
+   * @returns {Promise<Buffer>}
    */
-  _serialize(vehicle) {
-    return cbor.encode(vehicle);
+  async _serialize(vehicle) {
+    const Data = await loadType('vehicle.proto', 'vehicle.Data');
+    const err = Data.verify(vehicle);
+    if (err) {
+      throw new InvalidTransaction(err);
+    }
+    return /** @type {Buffer} */ (Data.encode(vehicle).finish());
   }
 }
 

@@ -16,9 +16,11 @@ services:
 
   middleware:
     image: node:11
+    user: node
     working_dir: /usr/src/app
     volumes:
       - ./middleware:/usr/src/app
+      - ./protos:/usr/src/protos
     command: >-
       bash -c '
       npm ci &&
@@ -27,6 +29,7 @@ services:
 
   web:
     image: node:11
+    user: node
     working_dir: /usr/src/app
     ports:
       - 4200:4200
@@ -40,9 +43,11 @@ services:
 
   tp-vehicle:
     image: node:11
+    user: node
     working_dir: /usr/src/app
     volumes:
       - ./processor:/usr/src/app
+      - ./protos:/usr/src/protos
     command: >-
       bash -c '
       npm ci &&

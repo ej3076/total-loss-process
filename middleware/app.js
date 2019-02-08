@@ -1,4 +1,5 @@
 'use strict';
+
 const express = require('express');
 const cors = require('cors');
 const jwt = require('express-jwt');
@@ -7,7 +8,6 @@ const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
 const PORT = process.env.PORT || 8080;
-const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
 const app = express();
 
@@ -77,6 +77,4 @@ app.post('/vehicles', checkJwt, async (req, res) => {
 
 app.use('/keys', require('./routes/keys'));
 
-app.listen(PORT, () =>
-  console.log(`Server listening on port ${IS_PRODUCTION ? PORT : '8080'}.`),
-);
+app.listen(PORT, () => console.log(`Server listening on port ${PORT}.`));

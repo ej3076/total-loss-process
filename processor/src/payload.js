@@ -1,9 +1,6 @@
 'use strict';
 
-const cbor = require('cbor');
-const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
-
-const { KNOWN_ACTIONS } = require('./constants');
+const { loadType } = require('./proto');
 
 /**
  * @typedef {import('./state').Vehicle} Vehicle
@@ -14,10 +11,12 @@ class VehiclePayload {
   /**
    * Constructor.
    *
-   * @param {string} action       - An action to perform.
-   * @param {PartialVehicle} data - Data associated with the action.
+   * @param {Record<string, number>} actions - Known actions.
+   * @param {number} action                  - An action to perform.
+   * @param {PartialVehicle} data            - Data associated with the action.
    */
-  constructor(action, data) {
+  constructor(actions, action, data) {
+    this.Actions = actions;
     this.action = action;
     this.data = data;
   }
@@ -29,18 +28,9 @@ class VehiclePayload {
    * @return {Promise<VehiclePayload>}
    */
   static async fromBytes(payload) {
-    const { action, data } = await cbor.decodeFirst(payload);
-    console.log(action);
-    console.log(data);
-    if (!Object.values(KNOWN_ACTIONS).includes(action)) {
-      throw new InvalidTransaction(`Unable to process action: ${action}`);
-    }
-    if (typeof data.vin !== 'string') {
-      throw new InvalidTransaction(
-        'All transactions must include a vehicle VIN',
-      );
-    }
-    return new VehiclePayload(action, data);
+    const Payload = await loadType('vehicle.proto', 'vehicle.Payload');
+    const { action, data } = Payload.toObject(Payload.decode(payload));
+    return new VehiclePayload(Payload.Action, action, data);
   }
 
   /**
@@ -50,12 +40,7 @@ class VehiclePayload {
    * @return {vehicle is Vehicle}
    */
   static isComplete(vehicle) {
-    return (
-      typeof vehicle.color === 'string' &&
-      typeof vehicle.model === 'string' &&
-      typeof vehicle.status === 'number' &&
-      typeof vehicle.vin === 'string'
-    );
+    return (vehicle.color && vehicle.model && vehicle.vin && true) || false;
   }
 }
 

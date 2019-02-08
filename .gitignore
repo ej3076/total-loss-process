@@ -8,5 +8,3 @@ node_modules/
 Thumbs.db
 npm-debug.log
 yarn-error.log
-package-lock.json
-frontend/package-lock.json
