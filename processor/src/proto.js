@@ -1,32 +1,38 @@
 'use strict';
 
-const { join } = require('path');
+const fs = require('fs');
+const path = require('path');
+const { promisify } = require('util');
 
 const { load } = require('protobufjs');
 
+const readdir = promisify(fs.readdir);
+
 /**
- * @typedef {import('protobufjs').Type & {[k: string]: any}} ProtobufType
+ * @typedef {import('protobufjs').Type & Record<string, any>} ProtobufType
  * @typedef {import('protobufjs').Root} ProtobufRoot
  */
 
 /**
  * Loads and returns the Root of a given proto file.
  *
- * @param {string} filename - The name of the `.proto` file to load from.
  * @return {Promise<ProtobufRoot>}
  */
-exports.loadRoot = async filename => {
-  return load(join(__dirname, '../../protos', filename));
+exports.loadRoot = async () => {
+  const protosPath = path.join(__dirname, '../../protos');
+  const protos = await readdir(protosPath).then(files =>
+    files.map(name => path.join(protosPath, name)),
+  );
+  return load(protos);
 };
 
 /**
  * Loads and returns a protobuf type from the protos dir.
  *
- * @param {string} filename - The name of the `.proto` file to load from.
  * @param {string} typename - The name of the type to load.
  * @return {Promise<ProtobufType>}
  */
-exports.loadType = async (filename, typename) => {
-  const Root = await exports.loadRoot(filename);
+exports.loadType = async (typename) => {
+  const Root = await exports.loadRoot();
   return Root.lookupType(typename);
 };

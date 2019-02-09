@@ -1,16 +1,6 @@
 {
-  "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strict": true,
-    "target": "es2018"
-  }
+  "extends": "../tsconfig.js",
+  "include": [
+    "src/**/*", "../types/*"
+  ]
 }

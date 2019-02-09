@@ -3,50 +3,31 @@
 const { TransactionHandler } = require('sawtooth-sdk/processor/handler');
 const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
 
-const { VEHICLE_FAMILY, VEHICLE_NAMESPACE } = require('./constants');
-const VehiclePayload = require('./payload');
-const VehicleState = require('./state');
+const { CLAIM_FAMILY, CLAIM_NAMESPACE } = require('./constants');
+const ClaimPayload = require('./payload');
+const ClaimState = require('./state');
 
-/**
- * @typedef {object} TransactionHeader
- * @prop {string} batcherPublicKey - Public key for the client who added this transaction to a batch.
- * @prop {string[]} dependencies   - A list of transaction signatures that describe the transactions that must be processed before this transaction can be valid.
- * @prop {string} familyName       - The family name correlates to the transaction processor's family name that this transaction can be processed on, for example `intkey`.
- * @prop {string} familyVersion    - The family version correlates to the transaction processor's family version that this transaction can be processed on, for example `1.0`.
- * @prop {string[]} inputs         - A list of addresses that are given to the context manager and control what addresses the transaction processor is allowed to read from.
- * @prop {string} nonce            - A random string that provides uniqueness for transactions with otherwise identical fields.
- * @prop {string[]} outputs        - A list of addresses that are given to the context manager and control what addresses the transaction processor is allowed to write to.
- * @prop {string} payloadSha512    - The sha512 hash of the encoded payload.
- * @prop {string} signerPublicKey  - Public key for the client that signed the TransactionHeader.
- */
-
-/**
- * @typedef {object} Transaction
- * @prop {TransactionHeader} header
- * @prop {string} headerSignature - The signature derived from signing the header.
- * @prop {Buffer} payload         - The encoded family specific information of the transaction.
- */
-
-class VehicleHandler extends TransactionHandler {
+class ClaimHandler extends TransactionHandler {
   constructor() {
-    super(VEHICLE_FAMILY, ['1.0'], [VEHICLE_NAMESPACE]);
+    super(CLAIM_FAMILY, ['1.0'], [CLAIM_NAMESPACE]);
   }
 
   /**
    * Main sawtooth transaction handler.
    *
-   * @param {Transaction} transaction
-   * @param {import('sawtooth-sdk/processor/context')} context
+   * @param {Sawtooth.Transaction} transaction
+   * @param {Sawtooth.Processor.Context} context
    */
   async apply(transaction, context) {
-    const payload = await VehiclePayload.fromBytes(transaction.payload);
-    const state = new VehicleState(context);
-    const { Actions } = payload;
+    const { Actions, ...payload } = await ClaimPayload.fromBytes(
+      transaction.payload,
+    );
+    const state = new ClaimState(context);
     switch (payload.action) {
-      case Actions.CREATE_VEHICLE:
-        return this.createVehicle(payload, state);
-      case Actions.EDIT_VEHICLE:
-        return this.editVehicle(payload, state);
+      case Actions.CREATE_CLAIM:
+        return this.createClaim(payload.data, state);
+      case Actions.EDIT_CLAIM:
+        return this.editClaim(payload.data, state);
       default:
         throw new InvalidTransaction(
           `Unable to process action: ${payload.action}`,
@@ -55,39 +36,43 @@ class VehicleHandler extends TransactionHandler {
   }
 
   /**
-   * CREATE_VEHICLE action handler.
+   * CREATE_CLAIM action handler.
    *
-   * @param {VehiclePayload} payload
-   * @param {VehicleState} state
+   * @param {Protos.Claim} claim
+   * @param {ClaimState} state
    */
-  async createVehicle(payload, state) {
-    if (!VehiclePayload.isComplete(payload.data)) {
-      throw new InvalidTransaction(
-        'Payload must be complete in order to create a new vehicle',
-      );
+  async createClaim(claim, state) {
+    const { vin } = claim.vehicle;
+    const existingClaim = await state.getClaim(vin);
+    if (existingClaim) {
+      throw new InvalidTransaction('Claim already exists');
     }
-    const { vin } = payload.data;
-    const existingVehicle = await state.getVehicle(vin);
-    if (existingVehicle) {
-      throw new InvalidTransaction('Vehicle already exists');
-    }
-    return state.setVehicle(vin, payload.data);
+    return state.setClaim(vin, claim);
   }
 
   /**
-   * EDIT_VEHICLE action handler.
+   * EDIT_CLAIM action handler.
    *
-   * @param {VehiclePayload} payload
-   * @param {VehicleState} state
+   * @param {Protos.Claim} claim
+   * @param {ClaimState} state
    */
-  async editVehicle(payload, state) {
-    const { vin, ...data } = payload.data;
-    const vehicle = await state.getVehicle(vin);
-    if (!vehicle) {
-      throw new InvalidTransaction('Vehicle does not exist');
+  async editClaim(claim, state) {
+    const { vin } = claim.vehicle;
+    const existingClaim = await state.getClaim(vin);
+    if (!existingClaim) {
+      throw new InvalidTransaction('Claim does not exist');
     }
-    return state.setVehicle(vin, { ...vehicle, ...data });
+    return state.setClaim(vin, {
+      ...existingClaim,
+      ...claim,
+      files: [...existingClaim.files, ...claim.files],
+      vehicle: {
+        ...existingClaim.vehicle,
+        ...claim.vehicle,
+        vin,
+      },
+    });
   }
 }
 
-module.exports = VehicleHandler;
+module.exports = ClaimHandler;
