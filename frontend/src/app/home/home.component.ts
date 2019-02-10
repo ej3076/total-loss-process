@@ -26,7 +26,8 @@ export class HomeComponent implements OnInit {
   isAuthenticated(): boolean {
     if (this.auth.isAuthenticated()) {
       return true;
+    } else {
+      return false;
     }
-    return false;
   }
 }

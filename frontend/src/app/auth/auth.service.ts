@@ -1,14 +1,17 @@
-// src/app/auth/auth.service.ts
-
+//Angular imports
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
+
+//Model imports
+import { AUTH0_CONFIG } from '../models/Authconfig';
+import { User } from '../models/User';
+
+//Auth0 imports
 import * as auth0 from 'auth0-js';
 import { CookieService } from 'ngx-cookie-service';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { User } from '../models/User';
 
-const API_BASE = 'https://total-loss-process.auth0.com/api/v2/';
 const helper = new JwtHelperService();
 
 @Injectable()
@@ -16,20 +19,27 @@ export class AuthService {
   private _idToken: string;
   private _accessToken: string;
   private _expiresAt: number;
-  private clientId: string = 't3sXyFtDUl0wFsHVsQsJbEa4en4bgPly';
   private user: User;
 
   auth0 = new auth0.WebAuth({
-    clientID: this.clientId,
-    domain: 'total-loss-process.auth0.com',
-    responseType: 'token id_token',
-    redirectUri: 'http://localhost:4200/callback',
-    scope: 'openid profile',
-    audience: 'https://total-loss-process.auth0.com/api/v2/',
+    clientID: AUTH0_CONFIG.clientID,
+    domain: AUTH0_CONFIG.domain,
+    responseType: AUTH0_CONFIG.responseType,
+    redirectUri: AUTH0_CONFIG.callbackURL,
+    scope: AUTH0_CONFIG.scope,
+    audience: AUTH0_CONFIG.apiUrl,
   });
-  id_token: any;
 
-  constructor(public router: Router, public cookieService: CookieService) {
+  appMetadata: {
+    color: 'pink';
+    type: 'bitch';
+  };
+
+  constructor(
+    public router: Router,
+    public cookieService: CookieService,
+    public http: HttpClient,
+  ) {
     this._idToken = '';
     this._accessToken = '';
     this._expiresAt = 0;
@@ -41,6 +51,10 @@ export class AuthService {
 
   get idToken(): string {
     return this._idToken;
+  }
+
+  get domain(): string {
+    return this.auth0.domain;
   }
 
   public login(): void {
@@ -60,6 +74,20 @@ export class AuthService {
     });
   }
 
+  Callback = (err: Error | null, data: any) => void {};
+
+  public initializeUser() {
+    const auth0Manage = new auth0.Management({
+      domain: AUTH0_CONFIG.domain,
+      token: this._accessToken,
+    });
+    auth0Manage.patchUserMetadata(
+      this.user.user_id,
+      this.appMetadata,
+      this.auth0.Callback,
+    );
+  }
+
   private localLogin(authResult): void {
     // Set isLoggedIn flag in localStorage
     localStorage.setItem('isLoggedIn', 'true');
@@ -75,7 +103,6 @@ export class AuthService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.localLogin(authResult);
       } else if (err) {
-        // alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
         this.logout();
       }
     });
@@ -117,6 +144,7 @@ export class AuthService {
     }
 
     this.user = {
+      user_id: decode.user_id,
       firstName: _name,
       lastName: decode.family_name,
       email: decode.email,

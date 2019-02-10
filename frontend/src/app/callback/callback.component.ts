@@ -6,15 +6,22 @@ import { CookieService } from 'ngx-cookie-service';
 @Component({
   selector: 'app-callback',
   templateUrl: './callback.component.html',
-  styleUrls: ['./callback.component.scss']
+  styleUrls: ['./callback.component.scss'],
 })
 export class CallbackComponent implements OnInit {
-  constructor(private auth: AuthService, private router: Router, private cookie: CookieService) { }
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private cookie: CookieService,
+  ) {}
 
   ngOnInit() {
     this.auth.handleAuthentication();
-
+    this.auth.initializeUser();
     this.router.navigate(['']);
   }
 
+  helloWorld() {
+    console.log('Hello, world');
+  }
 }
