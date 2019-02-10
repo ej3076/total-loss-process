@@ -1,35 +1,18 @@
 syntax = "proto3";
-package vehicle;
 
-message Data {
-  enum Status {
-    PENDING = 0;
-    PROCESSING = 1;
-    FINISHED = 2;
-  }
-
-  // The vehicle's VIN.
+message Vehicle {
+  // The vehicle VIN.
   string vin = 1;
 
-  // The color of the vehicle.
-  string color = 2;
+  // The vehicle model.
+  string model = 2;
 
-  // The model of the vehicle.
-  string model = 3;
+  // The vehicle year.
+  uint32 year = 3;
 
-  // The current status of the vehicle.
-  Status status = 4;
-}
+  // The vehicle's miles.
+  uint32 miles = 4;
 
-message Payload {
-  enum Action {
-    CREATE_VEHICLE = 0;
-    EDIT_VEHICLE = 1;
-  }
-
-  // Action to be taken.
-  Action action = 1;
-
-  // Vehicle data to associated with the action.
-  Data data = 2;
+  // The vehicle color.
+  string color = 5;
 }

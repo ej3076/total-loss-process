@@ -11,7 +11,7 @@
     "sawtooth-sdk": "^1.0.5"
   },
   "devDependencies": {
-    "@types/node": "^10.12.23",
-    "nodemon": "^1.18.9"
+    "@types/node": "^10.12.24",
+    "nodemon": "^1.18.10"
   }
 }

@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+import "vehicle.proto";
+
+message Claim {
+  message File {
+    // SHA512 hash of the file.
+    string hash = 1;
+
+    // User-assigned name of the file (e.g. "The Vehicle Title").
+    string name = 2;
+
+    // The filename of the file (e.g. "2019-01-01-ford-title.pdf").
+    string filename = 3;
+
+    // The URL to the file (e.g. "http://bucket.s3.amazonaws.com/foo/bar/baz.pdf").
+    string url = 4;
+  }
+
+  enum Status {
+    // Initial data entry and settlement agreement being orchestrated by
+    // the insurance company.
+    SETTLEMENT = 0;
+    // Settlement has been reached. Information and files are being
+    // collected/requested by agencies exterior to insurance company
+    // (DMV, Ford Credit, etc).
+    DATA_COLLECTION = 1;
+    // All required files have been obtained. Vehicle is ready for auction.
+    AUCTION = 2;
+    // Vehicle has passed auction phase. Case has now been fully resolved.
+    RESOLVED = 3;
+  }
+
+  Vehicle vehicle = 1;
+
+  // The status of the vehicle in the system.
+  Status status = 2;
+
+  // A list of associated files.
+  repeated File files = 3;
+}

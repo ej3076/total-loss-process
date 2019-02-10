@@ -1,5 +1,3 @@
-// src/app/auth/auth.service.ts
-
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -16,7 +14,7 @@ export class AuthService {
   private _idToken: string;
   private _accessToken: string;
   private _expiresAt: number;
-  private clientId: string = 't3sXyFtDUl0wFsHVsQsJbEa4en4bgPly';
+  private clientId = 't3sXyFtDUl0wFsHVsQsJbEa4en4bgPly';
   private user: User;
 
   auth0 = new auth0.WebAuth({
@@ -104,25 +102,15 @@ export class AuthService {
   }
 
   getUser() {
-    let _name: string;
-    let decode = helper.decodeToken(this._idToken);
-    console.log(this.auth0);
-
-    console.log(this._idToken);
-
-    if (decode.given_name) {
-      _name = decode.given_name;
-    } else {
-      _name = decode.name;
-    }
+    const decoded = helper.decodeToken(this._idToken);
 
     this.user = {
-      firstName: _name,
-      lastName: decode.family_name,
-      email: decode.email,
-      picture: decode.picture,
-      publicKey: decode['https://total-loss-process.com/public_key'],
-      privateKey: decode['https://total-loss-process.com/private_key'],
+      firstName: decoded.given_name || decoded.nickname || decoded.name,
+      lastName: decoded.family_name,
+      email: decoded.email,
+      picture: decoded.picture,
+      publicKey: decoded['https://total-loss-process.com/public_key'],
+      privateKey: decoded['https://total-loss-process.com/private_key'],
     };
 
     return this.user;

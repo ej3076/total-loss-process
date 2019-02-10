@@ -60,8 +60,8 @@ services:
     depends_on:
       - middleware
 
-  # Our custom vehicle transaction processor
-  tp-vehicle:
+  # Claim transaction processor
+  tp-claim:
     depends_on:
       - validator
     command: npm start -- tcp://validator:4004

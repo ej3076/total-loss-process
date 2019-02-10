@@ -3,45 +3,36 @@
 const { loadType } = require('./proto');
 
 /**
- * @typedef {import('./state').Vehicle} Vehicle
- * @typedef {Partial<import('./state').Vehicle> & { vin: string }} PartialVehicle
+ * @typedef {typeof Protos.Payload.Actions.ClaimActions} Actions
+ * @typedef {Protos.Payload.ClaimPayload} Payload
  */
 
-class VehiclePayload {
+class ClaimPayload {
   /**
    * Constructor.
    *
-   * @param {Record<string, number>} actions - Known actions.
-   * @param {number} action                  - An action to perform.
-   * @param {PartialVehicle} data            - Data associated with the action.
+   * @param {Payload} payload - The payload.
+   * @param {Actions} actions - Known actions.
    */
-  constructor(actions, action, data) {
+  constructor(payload, actions) {
+    this.action = payload.action;
+    this.data = payload.data;
     this.Actions = actions;
-    this.action = action;
-    this.data = data;
   }
 
   /**
-   * VehiclePayload builder.
+   * ClaimPayload builder.
    *
-   * @param {Buffer} payload - Raw payload buffer.
-   * @return {Promise<VehiclePayload>}
+   * @param {Buffer} buffer - Raw payload buffer.
+   * @return {Promise<ClaimPayload>}
    */
-  static async fromBytes(payload) {
-    const Payload = await loadType('vehicle.proto', 'vehicle.Payload');
-    const { action, data } = Payload.toObject(Payload.decode(payload));
-    return new VehiclePayload(Payload.Action, action, data);
-  }
-
-  /**
-   * Type guard for checking if a `Partial<Vehicle>` is complete, thereby being a `Vehicle`.
-   *
-   * @param {Partial<Vehicle>} vehicle
-   * @return {vehicle is Vehicle}
-   */
-  static isComplete(vehicle) {
-    return (vehicle.color && vehicle.model && vehicle.vin && true) || false;
+  static async fromBytes(buffer) {
+    const PayloadType = await loadType('ClaimPayload');
+    const payload = /** @type {Payload} */ (PayloadType.toObject(
+      PayloadType.decode(buffer),
+    ));
+    return new ClaimPayload(payload, PayloadType.Action);
   }
 }
 
-module.exports = VehiclePayload;
+module.exports = ClaimPayload;

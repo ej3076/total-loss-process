@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.js",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "protobufjs": ["../processor/node_modules/protobufjs"]
+    },
+    "typeRoots": [
+      "../processor/node_modules/@types"
+    ]
+  }
+}

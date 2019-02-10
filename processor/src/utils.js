@@ -2,6 +2,8 @@
 
 const { createHash } = require('crypto');
 
+const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
+
 /**
  * Helper that scaffolds out constants for new transaction families.
  *
@@ -19,6 +21,11 @@ exports.createFamily = FAMILY_NAME => {
      * @return {string} A calculated block address.
      */
     calculateAddress(data) {
+      if (typeof data !== 'string' || data.length === 0) {
+        throw new InvalidTransaction(
+          'Must pass a non-empty string to calculateAddress function',
+        );
+      }
       return `${FAMILY_NAMESPACE}${hash(data)}`;
     },
   };
