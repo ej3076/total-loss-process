@@ -49,7 +49,7 @@ class ClaimClient {
     const PayloadType = await loadType('ClaimPayload');
     const Actions = PayloadType.getEnum('Action');
     const payload = {
-      action: Actions.CREATE_VEHICLE,
+      action: Actions.CREATE_CLAIM,
       data: claim,
     };
     const err = PayloadType.verify(payload);
@@ -79,7 +79,7 @@ class ClaimClient {
     const PayloadType = await loadType('ClaimPayload');
     const Actions = PayloadType.getEnum('Action');
     const payload = {
-      action: Actions.EDIT_VEHICLE,
+      action: Actions.EDIT_CLAIM,
       data: claim,
     };
     const err = PayloadType.verify(payload);
