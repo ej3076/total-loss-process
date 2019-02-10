@@ -50,20 +50,18 @@ services:
   # The web "middleware" service
   middleware:
     ports:
-      - 8080:80
+      - 8080:8080
     depends_on:
       - rest-api
     command: npm start
-    environment:
-      PORT: 80
 
   # Static web server for frontend app
   web:
     depends_on:
       - middleware
 
-  # Our custom vehicle transaction processor
-  tp-vehicle:
+  # Claim transaction processor
+  tp-claim:
     depends_on:
       - validator
     command: npm start -- tcp://validator:4004

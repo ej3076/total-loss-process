@@ -16,9 +16,11 @@ services:
 
   middleware:
     image: node:11
+    user: node
     working_dir: /usr/src/app
     volumes:
       - ./middleware:/usr/src/app
+      - ./protos:/usr/src/protos
     command: >-
       bash -c '
       npm ci &&
@@ -27,34 +29,28 @@ services:
 
   web:
     image: node:11
+    user: node
     working_dir: /usr/src/app
     ports:
       - 4200:4200
     volumes:
       - ./frontend:/usr/src/app
+      - ./types:/usr/src/types
     command: >-
       bash -c '
       npm ci &&
       npm start -- --host 0.0.0.0
       '
 
-  tp-vehicle:
+  tp-claim:
     image: node:11
+    user: node
     working_dir: /usr/src/app
     volumes:
       - ./processor:/usr/src/app
+      - ./protos:/usr/src/protos
     command: >-
       bash -c '
       npm ci &&
       npm run dev -- tcp://validator:4004
       '
-
-  # XO Transaction Processor (Useful for testing)
-  tp-xo:
-    image: hyperledger/sawtooth-xo-tp-python:1.1
-    depends_on:
-      - validator
-    entrypoint: >-
-      xo-tp-python
-      -vv
-      --connect tcp://validator:4004

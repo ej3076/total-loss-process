@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+message Vehicle {
+  // The vehicle VIN.
+  string vin = 1;
+
+  // The vehicle model.
+  string model = 2;
+
+  // The vehicle year.
+  uint32 year = 3;
+
+  // The vehicle's miles.
+  uint32 miles = 4;
+
+  // The vehicle color.
+  string color = 5;
+}

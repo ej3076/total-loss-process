@@ -1,26 +1,15 @@
 'use strict';
 
-const cbor = require('cbor');
+const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
 
 const { addressFromVIN } = require('./constants');
+const { loadType } = require('./proto');
 
-/**
- * @typedef {import('sawtooth-sdk/processor/context')} Context Sawtooth context.
- */
-
-/**
- * @typedef {object} Vehicle - Vehicle payload interface.
- * @prop {string} vin - The VIN.
- * @prop {string} model - The model of the vehicle.
- * @prop {string} color - The color of the vehicle.
- * @prop {number} status - An integer representing the vehicles status.
- */
-
-class VehicleState {
+class ClaimState {
   /**
    * Constructor.
    *
-   * @param {Context} context The processor context.
+   * @param {Sawtooth.Processor.Context} context - The processor context.
    */
   constructor(context) {
     this.context = context;
@@ -29,45 +18,18 @@ class VehicleState {
   }
 
   /**
-   * Retrieves and deserlializes a vehicle's data.
+   * Retrieves and deserlializes a claim's data.
    *
-   * @param {string} vin The VIN number of the vehicle.
-   * @returns {Promise<Vehicle | undefined>}
+   * @param {string} vin - The VIN number of the claim.
+   * @returns {Promise<Protos.Claim | undefined>}
    */
-  async getVehicle(vin) {
-    return this._loadVehicle(vin);
-  }
-
-  /**
-   * Serializes and sets a vehicle's data.
-   *
-   * @param {string} vin The VIN number of the vehicle.
-   * @param {Vehicle} data
-   * @returns {Promise<string[]>} The address(es) successfully set.
-   */
-  async setVehicle(vin, data) {
-    const address = addressFromVIN(vin);
-    this.cache.set(address, data);
-    return this.context.setState(
-      {
-        [address]: this._serialize(data),
-      },
-      this.timeout,
-    );
-  }
-
-  /**
-   * Loads, deserializes, and returns a given vehicle's data.
-   *
-   * @param {string} vin The VIN number of the vehicle.
-   * @returns {Promise<Vehicle | undefined>}
-   */
-  async _loadVehicle(vin) {
+  async getClaim(vin) {
     const address = addressFromVIN(vin);
     if (this.cache.has(address)) {
       return this.cache.get(address);
     }
     const state = await this.context.getState([address], this.timeout);
+    // TODO: Look into this to see exactly what is returned for non-existant values
     if (!state[address].toString()) {
       return;
     }
@@ -75,24 +37,50 @@ class VehicleState {
   }
 
   /**
+   * Serializes and sets a claim's data.
+   *
+   * @param {string} vin - The VIN number of the vehicle.
+   * @param {Protos.Claim} data - The claim data.
+   * @returns {Promise<string[]>} The address(es) successfully set.
+   */
+  async setClaim(vin, data) {
+    const address = addressFromVIN(vin);
+    this.cache.set(address, data);
+    return this.context.setState(
+      {
+        [address]: await this._serialize(data),
+      },
+      this.timeout,
+    );
+  }
+
+  /**
    * Deserializes and returns data for a single address.
    *
-   * @param {Buffer} data Vehicle data to be deserialized.
-   * @returns {Promise<Vehicle>}
+   * @param {Buffer} data - Data to be deserialized.
+   * @returns {Promise<Protos.Claim>}
    */
   async _deserialize(data) {
-    return cbor.decodeFirstSync(data);
+    const ClaimType = await loadType('Claim');
+    return /** @type {Protos.Claim} */ (ClaimType.toObject(
+      ClaimType.decode(data),
+    ));
   }
 
   /**
    * Serializes and returns data for a single address.
    *
-   * @param {Vehicle} vehicle
-   * @returns {Buffer}
+   * @param {Protos.Claim} data - Data to be serialized.
+   * @returns {Promise<Buffer>}
    */
-  _serialize(vehicle) {
-    return cbor.encode(vehicle);
+  async _serialize(data) {
+    const ClaimType = await loadType('Claim');
+    const err = ClaimType.verify(data);
+    if (err) {
+      throw new InvalidTransaction(err);
+    }
+    return /** @type {Buffer} */ (ClaimType.encode(data).finish());
   }
 }
 
-module.exports = VehicleState;
+module.exports = ClaimState;

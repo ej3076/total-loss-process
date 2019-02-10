@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Vehicle } from '../models/Vehicle';
 import { LyTheme2 } from '@alyle/ui';
 import { MiddlewareService } from '../middleware/middleware.service';
 
@@ -33,22 +32,18 @@ export class NewClaimComponent implements OnInit {
 
   ngOnInit() {}
 
-  private setVehicle() {
-    let vehicle: Vehicle = {
-      vin: this.vin.value,
-      model: this.model.value,
-      color: this.color.value,
-      status: 0,
+  private setClaim() {
+    const claim: DeepPartial<Protos.Claim> = {
+      vehicle: {
+        vin: this.vin.value,
+        color: this.color.value,
+        model: this.model.value,
+      },
     };
-
-    console.log(vehicle);
-
-    let test = this.middlewareService.addClaim(vehicle);
-
-    console.log(test);
+    console.log(this.middlewareService.addClaim(claim));
   }
 
-  sendNewVehicle() {
-    this.setVehicle();
+  sendNewClaim() {
+    this.setClaim();
   }
 }

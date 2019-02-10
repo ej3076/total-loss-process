@@ -1,62 +1,38 @@
 'use strict';
 
-const cbor = require('cbor');
-const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
-
-const { KNOWN_ACTIONS } = require('./constants');
+const { loadType } = require('./proto');
 
 /**
- * @typedef {import('./state').Vehicle} Vehicle
- * @typedef {Partial<import('./state').Vehicle> & { vin: string }} PartialVehicle
+ * @typedef {typeof Protos.Payload.Actions.ClaimActions} Actions
+ * @typedef {Protos.Payload.ClaimPayload} Payload
  */
 
-class VehiclePayload {
+class ClaimPayload {
   /**
    * Constructor.
    *
-   * @param {string} action       - An action to perform.
-   * @param {PartialVehicle} data - Data associated with the action.
+   * @param {Payload} payload - The payload.
+   * @param {Actions} actions - Known actions.
    */
-  constructor(action, data) {
-    this.action = action;
-    this.data = data;
+  constructor(payload, actions) {
+    this.action = payload.action;
+    this.data = payload.data;
+    this.Actions = actions;
   }
 
   /**
-   * VehiclePayload builder.
+   * ClaimPayload builder.
    *
-   * @param {Buffer} payload - Raw payload buffer.
-   * @return {Promise<VehiclePayload>}
+   * @param {Buffer} buffer - Raw payload buffer.
+   * @return {Promise<ClaimPayload>}
    */
-  static async fromBytes(payload) {
-    const { action, data } = await cbor.decodeFirst(payload);
-    console.log(action);
-    console.log(data);
-    if (!Object.values(KNOWN_ACTIONS).includes(action)) {
-      throw new InvalidTransaction(`Unable to process action: ${action}`);
-    }
-    if (typeof data.vin !== 'string') {
-      throw new InvalidTransaction(
-        'All transactions must include a vehicle VIN',
-      );
-    }
-    return new VehiclePayload(action, data);
-  }
-
-  /**
-   * Type guard for checking if a `Partial<Vehicle>` is complete, thereby being a `Vehicle`.
-   *
-   * @param {Partial<Vehicle>} vehicle
-   * @return {vehicle is Vehicle}
-   */
-  static isComplete(vehicle) {
-    return (
-      typeof vehicle.color === 'string' &&
-      typeof vehicle.model === 'string' &&
-      typeof vehicle.status === 'number' &&
-      typeof vehicle.vin === 'string'
-    );
+  static async fromBytes(buffer) {
+    const PayloadType = await loadType('ClaimPayload');
+    const payload = /** @type {Payload} */ (PayloadType.toObject(
+      PayloadType.decode(buffer),
+    ));
+    return new ClaimPayload(payload, PayloadType.Action);
   }
 }
 
-module.exports = VehiclePayload;
+module.exports = ClaimPayload;

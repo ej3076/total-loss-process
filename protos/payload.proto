@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "claim.proto";
+
+message ClaimPayload {
+  enum Action {
+    // Create a new claim.
+    CREATE_CLAIM = 0;
+    // Edit an existing claim.
+    EDIT_CLAIM = 1;
+  }
+
+  // Action to be taken.
+  Action action = 1;
+
+  // Claim data associated with the action.
+  Claim data = 2;
+}

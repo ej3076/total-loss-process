@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { LyTheme2 } from '@alyle/ui';
-import { Vehicle } from '../models/Vehicle';
 import { MiddlewareService } from '../middleware/middleware.service';
 import { AuthService } from '../auth/auth.service';
 
@@ -20,7 +19,7 @@ const STYLES = {
 export class ViewClaimsComponent implements OnInit {
   readonly classes = this._theme.addStyleSheet(STYLES);
 
-  private claims: Vehicle[];
+  private claims: Protos.Claim[];
 
   constructor(
     private _theme: LyTheme2,
@@ -34,30 +33,42 @@ export class ViewClaimsComponent implements OnInit {
         this.claims = data;
       });
     } else {
-      var vehicle1: Vehicle = {
-        vin: '1234567',
-        model: 'TEST MODEL',
-        color: 'TEST COLOR',
-        status: 0,
-      };
-
-      var vehicle2: Vehicle = {
-        vin: '123456789',
-        model: 'TEST MODEL',
-        color: 'TEST COLOR',
-        status: 0,
-      };
-
-      var vehicle3: Vehicle = {
-        vin: '12345678901',
-        model: 'TEST MODEL',
-        color: 'TEST COLOR',
-        status: 0,
-      };
-
-      var arrayOfVehicles = [vehicle1, vehicle2, vehicle3];
-
-      this.claims = arrayOfVehicles;
+      // FIXME: Pitch this
+      this.claims = [
+        {
+          files: [],
+          status: 0,
+          vehicle: {
+            vin: '112233445566',
+            model: 'TEST MODEL 1',
+            color: 'TEST COLOR 1',
+            year: 2001,
+            miles: 100000,
+          },
+        },
+        {
+          files: [],
+          status: 0,
+          vehicle: {
+            vin: '223344556677',
+            model: 'TEST MODEL 2',
+            color: 'TEST COLOR 2',
+            year: 2002,
+            miles: 200000,
+          },
+        },
+        {
+          files: [],
+          status: 0,
+          vehicle: {
+            vin: '334455667788',
+            model: 'TEST MODEL 3',
+            color: 'TEST COLOR 3',
+            year: 2003,
+            miles: 300000,
+          },
+        },
+      ];
     }
   }
 }

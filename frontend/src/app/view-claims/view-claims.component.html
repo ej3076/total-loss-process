@@ -2,10 +2,10 @@
   <ly-grid container [spacing]="16">
     <ly-grid item [col]="6" *ngFor="let claim of claims">
       <ly-paper [withClass]="classes.paper" [elevation]="2">
-        <h3 [lyTyp]="'title'">{{ claim.vin }}</h3>
-        <p [lyTyp]="'body1'">Vehicle Model: {{ claim.model }}</p>
-        <p [lyTyp]="'body1'">Vehicle Color: {{ claim.color }}</p>
-        <p [lyTyp]="'body1'">Claim Status: {{ claim.status }}</p>
+        <h3 [lyTyp]="'title'">{{ claim.vehicle.vin }}</h3>
+        <p [lyTyp]="'body1'">Vehicle Model: {{ claim.vehicle.model }}</p>
+        <p [lyTyp]="'body1'">Vehicle Color: {{ claim.vehicle.color }}</p>
+        <p [lyTyp]="'body1'">Claim Status: {{ claim.vehicle.status }}</p>
       </ly-paper>
     </ly-grid>
   </ly-grid>

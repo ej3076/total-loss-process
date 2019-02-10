@@ -1,13 +1,15 @@
 'use strict';
+
 const express = require('express');
 const cors = require('cors');
 const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 // TODO: Use this for scoping endpoints...
 // const jwtAuthz = require('express-jwt-authz');
-const jwksRsa = require('jwks-rsa');
+
+const ClaimClient = require('./lib/claim-client');
 
 const PORT = process.env.PORT || 8080;
-const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
 const app = express();
 
@@ -34,41 +36,30 @@ const checkJwt = jwt({
 app.use(express.json());
 app.use(cors());
 
-// List all vehicles from blockchain
-app.get('/vehicles', async (_, res) => {
+// Retrieve a list of claims from the blockchain.
+app.get('/claims', async (_, res) => {
   try {
-    const VehicleClient = require('./lib/vehicle-client.js');
-    const client = new VehicleClient();
-
-    const resVehicleList = await client.listVehicles();
-    console.log(resVehicleList);
-    res.send(resVehicleList);
+    const client = new ClaimClient();
+    const claimsList = await client.listClaims();
+    console.log(claimsList);
+    res.send(claimsList);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
   }
 });
 
-// Post a new vehicle to the blockchain
-app.post('/vehicles', checkJwt, async (req, res) => {
+// Post a new claim to the blockchain.
+app.post('/claims', checkJwt, async (req, res) => {
   try {
     const privateKey = req.headers.private_key;
     if (typeof privateKey !== 'string') {
       throw new Error('Invalid request');
     }
-    const VehicleClient = require('./lib/vehicle-client.js');
-    const client = new VehicleClient(privateKey);
-
-    const newVehicle = {
-      vin: req.body.vin,
-      color: req.body.color,
-      model: req.body.model,
-      status: req.body.status,
-    };
-
-    const resPostVehicle = await client.createVehicle(newVehicle);
-    console.log(resPostVehicle);
-    res.send(resPostVehicle);
+    const client = new ClaimClient(privateKey);
+    const response = await client.createClaim(req.body);
+    console.log(response);
+    res.send(response);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
@@ -77,6 +68,4 @@ app.post('/vehicles', checkJwt, async (req, res) => {
 
 app.use('/keys', require('./routes/keys'));
 
-app.listen(PORT, () =>
-  console.log(`Server listening on port ${IS_PRODUCTION ? PORT : '8080'}.`),
-);
+app.listen(PORT, () => console.log(`Server listening on port ${PORT}.`));
