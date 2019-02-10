@@ -62,9 +62,7 @@ class ClaimState {
    */
   async _deserialize(data) {
     const ClaimType = await loadType('Claim');
-    return /** @type {Protos.Claim} */ (ClaimType.toObject(
-      ClaimType.decode(data),
-    ));
+    return /** @type {Protos.Claim} */ (ClaimType.decode(data).toJSON());
   }
 
   /**

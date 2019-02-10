@@ -30,6 +30,9 @@ class ClaimPayload {
     const PayloadType = await loadType('ClaimPayload');
     const payload = /** @type {Payload} */ (PayloadType.toObject(
       PayloadType.decode(buffer),
+      {
+        defaults: true,
+      }
     ));
     return new ClaimPayload(payload, PayloadType.Action);
   }
