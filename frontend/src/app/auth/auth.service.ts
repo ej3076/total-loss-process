@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 //Model imports
 import { AUTH0_CONFIG } from '../models/Authconfig';
+import { APP_METADATA } from '../models/Metadata';
 import { User } from '../models/User';
 
 //Auth0 imports
@@ -30,10 +31,7 @@ export class AuthService {
     audience: AUTH0_CONFIG.apiUrl,
   });
 
-  appMetadata: {
-    color: 'pink';
-    type: 'bitch';
-  };
+  id_token: any;
 
   constructor(
     public router: Router,
@@ -74,17 +72,23 @@ export class AuthService {
     });
   }
 
-  Callback = (err: Error | null, data: any) => void {};
-
   public initializeUser() {
     const auth0Manage = new auth0.Management({
       domain: AUTH0_CONFIG.domain,
       token: this._accessToken,
     });
     auth0Manage.patchUserMetadata(
-      this.user.user_id,
-      this.appMetadata,
-      this.auth0.Callback,
+      'google-oauth2|114534959726487294316',
+      APP_METADATA,
+      (err, result) => {
+        if (err) {
+          console.log('crap, an error happened...');
+          console.log(err);
+          return;
+        }
+        console.log('WOOOO! No error!');
+        console.log(result);
+      },
     );
   }
 
@@ -133,7 +137,6 @@ export class AuthService {
   getUser() {
     let _name: string;
     let decode = helper.decodeToken(this._idToken);
-    console.log(this.auth0);
 
     console.log(this._idToken);
 
@@ -144,7 +147,7 @@ export class AuthService {
     }
 
     this.user = {
-      user_id: decode.user_id,
+      userID: decode.user_id,
       firstName: _name,
       lastName: decode.family_name,
       email: decode.email,
