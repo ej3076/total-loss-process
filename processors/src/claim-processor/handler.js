@@ -15,7 +15,7 @@ class ClaimHandler extends TransactionHandler {
   /**
    * Main sawtooth transaction handler.
    *
-   * @param {Sawtooth.Transaction} transaction
+   * @param {Sawtooth.Protobuf.Transaction} transaction
    * @param {Sawtooth.Processor.Context} context
    */
   async apply(transaction, context) {

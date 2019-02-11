@@ -1,10 +1,9 @@
 {
   "private": true,
   "version": "1.0.0",
-  "main": "src/index.js",
   "scripts": {
-    "start": "node ./src/index.js",
-    "dev": "nodemon -L ./src/index.js"
+    "tp-claim:start": "node ./src/claim-processor/index.js",
+    "tp-claim:dev": "nodemon -L ./src/claim-processor/index.js"
   },
   "dependencies": {
     "protobufjs": "^6.8.8",

@@ -1,6 +1,6 @@
 'use strict';
 
-const { createFamily } = require('./utils');
+const createFamily = require('../family');
 
 const { FAMILY_NAME, FAMILY_NAMESPACE, calculateAddress } = createFamily(
   'claim',

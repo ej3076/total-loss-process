@@ -52,5 +52,5 @@ services:
     command: >-
       bash -c '
       npm ci &&
-      npm run dev -- tcp://validator:4004
+      npm run tp-claim:dev -- tcp://validator:4004
       '

@@ -3,7 +3,7 @@
 const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
 
 const { addressFromVIN } = require('./constants');
-const { loadType } = require('./proto');
+const { loadType } = require('../proto');
 
 class ClaimState {
   /**

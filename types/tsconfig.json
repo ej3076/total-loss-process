@@ -3,10 +3,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "protobufjs": ["../processor/node_modules/protobufjs"]
+      "protobufjs": ["../processors/node_modules/protobufjs"]
     },
     "typeRoots": [
-      "../processor/node_modules/@types"
+      "../processors/node_modules/@types"
     ]
   }
 }

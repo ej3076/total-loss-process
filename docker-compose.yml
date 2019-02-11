@@ -64,7 +64,7 @@ services:
   tp-claim:
     depends_on:
       - validator
-    command: npm start -- tcp://validator:4004
+    command: npm run tp-claim:start -- tcp://validator:4004
 
   # Settings Transaction Processor
   tp-settings:

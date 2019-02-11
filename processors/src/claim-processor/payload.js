@@ -1,6 +1,6 @@
 'use strict';
 
-const { loadType } = require('./proto');
+const { loadType } = require('../proto');
 
 /**
  * @typedef {typeof Protos.Payload.Actions.ClaimActions} Actions
