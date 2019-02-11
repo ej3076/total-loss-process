@@ -9,22 +9,22 @@ const STYLES = (theme: ThemeVariables) => ({
       color: theme.text.default,
       fontFamily: theme.typography.fontFamily,
       margin: 0,
-      direction: theme.direction
-    }
-  }
+      direction: theme.direction,
+    },
+  },
 });
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   readonly classes = this.theme.addStyleSheet(STYLES);
 
   auth: AuthService = null;
 
-  constructor(private theme: LyTheme2, private AuthService: AuthService) { 
+  constructor(private theme: LyTheme2, private AuthService: AuthService) {
     this.auth = AuthService;
   }
 

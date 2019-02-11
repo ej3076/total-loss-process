@@ -46,4 +46,36 @@ export class NewClaimComponent implements OnInit {
   sendNewClaim() {
     this.setClaim();
   }
+
+  hasEmptyFields(): boolean {
+    return this.areFieldsUntouched() || this.hasErroredFields();
+  }
+
+  areFieldsUntouched(): boolean {
+    return this.vin.untouched || this.color.untouched || this.model.untouched;
+  }
+
+  hasErroredFields(): boolean {
+    return (
+      this.vin.hasError('minlength') ||
+      this.vin.hasError('required') ||
+      this.color.hasError('required') ||
+      this.model.hasError('required')
+    );
+  }
+
+  checkIfSpecialChar(event) {
+    var eventCode;
+    eventCode = event.charCode;
+
+    // Only allow letters and numbers to be input.
+    return (
+      (eventCode > 64 && eventCode < 91) ||
+      (eventCode > 96 && eventCode < 123) ||
+      eventCode == 8 ||
+      eventCode == 9 ||
+      eventCode == 32 ||
+      (eventCode >= 48 && eventCode <= 57)
+    );
+  }
 }

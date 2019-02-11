@@ -1,9 +1,6 @@
 <div class="center-text">
-  <h2 lyTyp="display2" gutterBottom *ngIf="isAuthenticated()">
+  <h2 lyTyp="display2" gutterBottom *ngIf="isAuthenticated() && user">
     Hello, {{ user.firstName }}
-  </h2>
-  <h2 lyTyp="display2" gutterBottom *ngIf="!isAuthenticated()">
-    You are not logged in!
   </h2>
   <a
     routerLink="/new-claim"
@@ -11,8 +8,7 @@
     raised
     bg="accent"
     lyTyp="display2"
-    class="width-100 mth mbh"
-  >
+    class="width-100 mth mbh">
     Start a New Claim
   </a>
 </div>
