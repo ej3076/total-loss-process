@@ -9,10 +9,11 @@
               #_input
               lyNativeControl
               [formControl]="vin"
-              (keypress)="checkIfSpecialChar($event)"
               type="text"
               maxlength="17"
-              minlength="11"/>
+              minlength="11"
+              (input)="alphaNumericValidator($event)"
+              />
             <ly-hint>Must be between 11 and 17 characters</ly-hint>
             <ly-hint [align]="'after'">
               {{ vin.value?.length || 0 }}/17

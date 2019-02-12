@@ -64,18 +64,13 @@ export class NewClaimComponent implements OnInit {
     );
   }
 
-  checkIfSpecialChar(event) {
-    var eventCode;
-    eventCode = event.charCode;
+  public alphaNumericValidator(event: any) {
+    const charactersAllowed = /^[a-zA-Z0-9]*$/;   
 
-    // Only allow letters and numbers to be input.
-    return (
-      (eventCode > 64 && eventCode < 91) ||
-      (eventCode > 96 && eventCode < 123) ||
-      eventCode == 8 ||
-      eventCode == 9 ||
-      eventCode == 32 ||
-      (eventCode >= 48 && eventCode <= 57)
-    );
+    // If the value inputted does not match anything
+    // in the defined pattern, replace with nothing.
+    if (!charactersAllowed.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^a-zA-Z0-9]/g, "");
+    }
   }
 }
