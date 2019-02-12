@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 interface KeypairResponse {
   public_key: string;
@@ -15,7 +16,7 @@ const API_BASE = 'http://localhost:8080';
 export class MiddlewareService {
   private claims: Protos.Claim[];
 
-  constructor(private http: HttpClient, private auth: AuthService) {}
+  constructor(private http: HttpClient, private auth: AuthService, private router: Router) {}
 
   get user() {
     if (this.auth.isAuthenticated()) {
@@ -48,6 +49,14 @@ export class MiddlewareService {
       .post(`${API_BASE}/claims`, claim, {
         headers: this.headers,
       })
-      .subscribe();
+      .subscribe(
+        response => {},
+        err => {
+          console.log(err);
+        },
+        () => {
+          this.router.navigate(['view-claims']);
+        }
+      );
   }
 }
