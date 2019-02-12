@@ -46,4 +46,31 @@ export class NewClaimComponent implements OnInit {
   sendNewClaim() {
     this.setClaim();
   }
+
+  hasEmptyFields(): boolean {
+    return this.areFieldsUntouched() || this.hasErroredFields();
+  }
+
+  areFieldsUntouched(): boolean {
+    return this.vin.untouched || this.color.untouched || this.model.untouched;
+  }
+
+  hasErroredFields(): boolean {
+    return (
+      this.vin.hasError('minlength') ||
+      this.vin.hasError('required') ||
+      this.color.hasError('required') ||
+      this.model.hasError('required')
+    );
+  }
+
+  public alphaNumericValidator(event: any) {
+    const charactersAllowed = /^[a-zA-Z0-9]*$/;   
+
+    // If the value inputted does not match anything
+    // in the defined pattern, replace with nothing.
+    if (!charactersAllowed.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^a-zA-Z0-9]/g, "");
+    }
+  }
 }

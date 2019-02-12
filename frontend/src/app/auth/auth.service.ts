@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
 import { CookieService } from 'ngx-cookie-service';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -48,11 +47,10 @@ export class AuthService {
   public handleAuthentication(): void {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
-        window.location.hash = '';
         this.localLogin(authResult);
-        this.router.navigate(['/home']);
+        this.router.navigate(['']);
       } else if (err) {
-        this.router.navigate(['/home']);
+        this.router.navigate(['']);
         console.log(err);
       }
     });
@@ -73,7 +71,6 @@ export class AuthService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.localLogin(authResult);
       } else if (err) {
-        // alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
         this.logout();
       }
     });
@@ -84,10 +81,6 @@ export class AuthService {
     this._accessToken = '';
     this._idToken = '';
     this._expiresAt = 0;
-
-    this.cookieService.delete('access_token');
-    this.cookieService.delete('id_token');
-    this.cookieService.delete('expires_at');
 
     // Remove isLoggedIn flag from localStorage
     localStorage.removeItem('isLoggedIn');
