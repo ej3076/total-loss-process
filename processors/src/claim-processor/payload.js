@@ -1,5 +1,6 @@
 'use strict';
 
+const logger = require('../logger');
 const { loadType } = require('../proto');
 
 /**
@@ -32,8 +33,9 @@ class ClaimPayload {
       PayloadType.decode(buffer),
       {
         defaults: true,
-      }
+      },
     ));
+    logger.debug('Payload decoded', { data: { payload } });
     return new ClaimPayload(payload, PayloadType.Action);
   }
 }

@@ -2,15 +2,14 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "tp-claim:start": "node ./src/claim-processor/index.js",
-    "tp-claim:dev": "nodemon -L ./src/claim-processor/index.js"
+    "tp-claim:start": "node ./src/claim-processor/index.js"
   },
   "dependencies": {
     "protobufjs": "^6.8.8",
-    "sawtooth-sdk": "^1.0.5"
+    "sawtooth-sdk": "^1.0.5",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
-    "@types/node": "^10.12.24",
-    "nodemon": "^1.18.10"
+    "@types/node": "^10.12.24"
   }
 }

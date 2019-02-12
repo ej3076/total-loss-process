@@ -10,6 +10,7 @@ services:
     depends_on:
       - validator
     restart: on-failure
+    stop_signal: SIGKILL
     entrypoint: >-
       devmode-engine-rust
       --connect tcp://validator:5050
@@ -19,11 +20,11 @@ services:
     user: node
     working_dir: /usr/src/app
     volumes:
-      - ./middleware:/usr/src/app
       - ./protos:/usr/src/protos
+      - ./middleware:/usr/src/app
     command: >-
       bash -c '
-      npm ci &&
+      npm i --no-package-lock &&
       npm run dev
       '
 
@@ -34,11 +35,11 @@ services:
     ports:
       - 4200:4200
     volumes:
-      - ./frontend:/usr/src/app
       - ./types:/usr/src/types
+      - ./frontend:/usr/src/app
     command: >-
       bash -c '
-      npm ci &&
+      npm i --no-package-lock &&
       npm start -- --host 0.0.0.0
       '
 
@@ -46,11 +47,14 @@ services:
     image: node:11
     user: node
     working_dir: /usr/src/app
+    environment:
+      # Change this to "debug" if needed
+      LOG_LEVEL: info
     volumes:
-      - ./processor:/usr/src/app
       - ./protos:/usr/src/protos
+      - ./processors:/usr/src/app
     command: >-
       bash -c '
-      npm ci &&
-      npm run tp-claim:dev -- tcp://validator:4004
+      npm i --no-package-lock &&
+      npm run tp-claim:start -- tcp://validator:4004
       '

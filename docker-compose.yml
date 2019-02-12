@@ -8,6 +8,8 @@ services:
       - apparmor:unconfined
     ports:
       - 4004:4004
+    restart: on-failure
+    stop_signal: SIGKILL
     # start the validator with an empty genesis batch
     entrypoint: >-
       bash -c '
@@ -25,10 +27,12 @@ services:
   # Sawtooth REST API that communicates with the validator
   rest-api:
     image: hyperledger/sawtooth-rest-api:1.1
-    ports:
-      - 8008:8008
     depends_on:
       - validator
+    ports:
+      - 8008:8008
+    restart: on-failure
+    stop_signal: SIGKILL
     entrypoint: >-
       sawtooth-rest-api
       --connect tcp://validator:4004
@@ -39,6 +43,8 @@ services:
     image: hyperledger/sawtooth-shell:1.1
     depends_on:
       - rest-api
+    restart: on-failure
+    stop_signal: SIGKILL
     volumes:
       - ./cli.toml:/etc/sawtooth/cli.toml
     entrypoint: >-
@@ -53,17 +59,23 @@ services:
       - 8080:8080
     depends_on:
       - rest-api
+    restart: on-failure
+    stop_signal: SIGKILL
     command: npm start
 
   # Static web server for frontend app
   web:
     depends_on:
       - middleware
+    restart: on-failure
+    stop_signal: SIGKILL
 
   # Claim transaction processor
   tp-claim:
     depends_on:
       - validator
+    restart: on-failure
+    stop_signal: SIGKILL
     command: npm run tp-claim:start -- tcp://validator:4004
 
   # Settings Transaction Processor
@@ -71,6 +83,8 @@ services:
     image: hyperledger/sawtooth-settings-tp:1.1
     depends_on:
       - validator
+    restart: on-failure
+    stop_signal: SIGKILL
     entrypoint: >-
       settings-tp
       -vv
