@@ -134,11 +134,14 @@ declare namespace Sawtooth {
       /**
        * Queries the validator state for data at each of the addresses in the
        * given list. The addresses that have been set are returned in a list.
+       *
+       * NOTE: Values in the returned object are either a buffer, if the key
+       * exists, or an empty array if they don't exist.
        */
       getState<T extends string>(
         addresses: T[],
         timeout?: number,
-      ): Promise<{ [k in T]: Buffer }>;
+      ): Promise<{ [k in T]: Buffer | any[] }>;
       /**
        * Requests that each address in the provided dictionary be set in
        * validator state to its corresponding value. A list is returned

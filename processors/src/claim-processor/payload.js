@@ -1,6 +1,7 @@
 'use strict';
 
-const { loadType } = require('./proto');
+const logger = require('../logger');
+const { loadType } = require('../proto');
 
 /**
  * @typedef {typeof Protos.Payload.Actions.ClaimActions} Actions
@@ -30,7 +31,11 @@ class ClaimPayload {
     const PayloadType = await loadType('ClaimPayload');
     const payload = /** @type {Payload} */ (PayloadType.toObject(
       PayloadType.decode(buffer),
+      {
+        defaults: true,
+      },
     ));
+    logger.debug('Payload decoded', { data: { payload } });
     return new ClaimPayload(payload, PayloadType.Action);
   }
 }

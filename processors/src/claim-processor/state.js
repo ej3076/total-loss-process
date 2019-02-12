@@ -2,8 +2,9 @@
 
 const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
 
+const logger = require('../logger');
+const { loadType } = require('../proto');
 const { addressFromVIN } = require('./constants');
-const { loadType } = require('./proto');
 
 class ClaimState {
   /**
@@ -26,14 +27,16 @@ class ClaimState {
   async getClaim(vin) {
     const address = addressFromVIN(vin);
     if (this.cache.has(address)) {
+      logger.debug(`Address ${address} exists in cache. Fetching cached state`);
       return this.cache.get(address);
     }
     const state = await this.context.getState([address], this.timeout);
-    // TODO: Look into this to see exactly what is returned for non-existant values
-    if (!state[address].toString()) {
+    const serialized = state[address];
+    if (Array.isArray(serialized)) {
+      logger.debug(`Address ${address} does not yet exist on the blockchain`);
       return;
     }
-    return this._deserialize(state[address]);
+    return this._deserialize(serialized);
   }
 
   /**
@@ -64,6 +67,9 @@ class ClaimState {
     const ClaimType = await loadType('Claim');
     return /** @type {Protos.Claim} */ (ClaimType.toObject(
       ClaimType.decode(data),
+      {
+        defaults: true,
+      },
     ));
   }
 
@@ -77,6 +83,7 @@ class ClaimState {
     const ClaimType = await loadType('Claim');
     const err = ClaimType.verify(data);
     if (err) {
+      logger.error(`Error verifying Claim protobuf: ${err}`);
       throw new InvalidTransaction(err);
     }
     return /** @type {Buffer} */ (ClaimType.encode(data).finish());

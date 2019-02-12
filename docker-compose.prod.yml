@@ -19,5 +19,7 @@ services:
 
   tp-claim:
     image: fordtotalloss/tp-claim
-    build: ./processor
+    build:
+      context: .
+      dockerfile: ./processors/Dockerfile
 
