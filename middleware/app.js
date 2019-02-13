@@ -36,20 +36,7 @@ const checkJwt = jwt({
 app.use(express.json());
 app.use(cors());
 
-// Retrieve a list of claims from the blockchain.
-app.get('/claims', async (_, res) => {
-  try {
-    const client = new ClaimClient();
-    const claimsList = await client.listClaims();
-    console.log(claimsList);
-    res.send(claimsList);
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
-});
-
-// Post a new claim to the blockchain.
+// Insert a new claim into the blockchain.
 app.post('/claims', checkJwt, async (req, res) => {
   try {
     const privateKey = req.headers.private_key;
@@ -60,6 +47,50 @@ app.post('/claims', checkJwt, async (req, res) => {
     const response = await client.createClaim(req.body);
     console.log(response);
     res.send(response);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
+// Edit an existing claim on the blockchain using VIN.
+app.post('/claims/:vin', checkJwt, async (req, res) => {
+  try {
+    const privateKey = req.headers.private_key;
+    if (typeof privateKey !== 'string') {
+      throw new Error('Invalid request');
+    }
+    const client = new ClaimClient(privateKey);
+    const response = await client.editClaim(req.body);
+    console.log(response);
+    res.send(response);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
+// Retrieve a claim from the blockchain using VIN.
+app.get('/claims/:vin', async (req, res) => {
+  try {
+    const vin = req.params.vin;
+    const client = new ClaimClient();
+    const claimList = await client.getClaim(vin);
+    console.log(claimList);
+    res.send(claimList);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
+// Retrieve a list of claims from the blockchain.
+app.get('/claims', async (_, res) => {
+  try {
+    const client = new ClaimClient();
+    const claimsList = await client.listClaims();
+    console.log(claimsList);
+    res.send(claimsList);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
