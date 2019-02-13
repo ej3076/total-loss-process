@@ -1,9 +1,27 @@
 {
   "private": true,
   "scripts": {
+    "down": "docker-compose down -v",
     "start": "docker-compose up -d",
     "start:production": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d",
     "stop": "docker-compose stop",
-    "down": "docker-compose down -v"
+    "test": "jest",
+    "test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit"
+  },
+  "devDependencies": {
+    "jest": "^24.1.0",
+    "jest-junit": "^6.2.1"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.js"
+    ],
+    "coverageDirectory": "node_modules/.cache/coverage",
+    "roots": [
+      "<rootDir>/middleware/",
+      "<rootDir>/processors/"
+    ],
+    "testEnvironment": "node"
   }
 }
