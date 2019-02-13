@@ -71,7 +71,7 @@ class ClaimClient {
   }
 
   /**
-   * Edit an exiting claim on the blockchain.
+   * Edit an existing claim on the blockchain using VIN.
    *
    * @param {ClaimParam} claim - The claim data to edit.
    */
@@ -101,7 +101,7 @@ class ClaimClient {
   }
 
   /**
-   * Retrieve a claim from the blockchain.
+   * Retrieve a claim from the blockchain using VIN.
    *
    * @param {string} vin - The VIN of the vehicle associated with the claim.
    * @return {Promise<Protos.Claim>}
