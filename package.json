@@ -15,7 +15,9 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/*.js"
+      "**/*.js",
+      "!middleware/lib/api.js",
+      "!processors/src/logger.js"
     ],
     "coverageDirectory": "node_modules/.cache/coverage",
     "roots": [

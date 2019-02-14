@@ -1,6 +1,10 @@
 'use strict';
 
-const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
+const {
+  AuthorizationException,
+  InvalidTransaction,
+} = require('sawtooth-sdk/processor/exceptions');
+
 const { CryptoFactory } = require('sawtooth-sdk/signing');
 const {
   Secp256k1PrivateKey: PrivateKey,
@@ -8,14 +12,9 @@ const {
 } = require('sawtooth-sdk/signing/secp256k1');
 
 const { createBatch, ...utils } = require('./utils/client');
-const { createFamily } = require('./utils/processor');
+const createFamily = require('./utils/family');
 const { loadType } = require('./utils/proto');
 const API = require('./api');
-
-/**
- * `DeepPartial<Protos.Claim>` with required vin.
- * @typedef {DeepPartial<Protos.Claim> & { vehicle: { vin: string } }} ClaimParam
- */
 
 const { FAMILY_NAME, FAMILY_NAMESPACE, calculateAddress } = createFamily(
   'claim',
@@ -34,70 +33,37 @@ class ClaimClient {
        * A signer instance if a private key was given.
        * @type {Sawtooth.Signing.Signer}
        */
-      this.signer = new CryptoFactory(new Context()).newSigner(
+      this._signer = new CryptoFactory(new Context()).newSigner(
         PrivateKey.fromHex(privateKey),
       );
     }
   }
 
+  get signer() {
+    if (!this._signer) {
+      throw new AuthorizationException(
+        'Signer private key must be provided to use this method.',
+      );
+    }
+    return this._signer;
+  }
+
   /**
    * Insert a new claim into the blockchain.
    *
-   * @param {ClaimParam} claim - The claim data.
+   * @param {DeepPartial<Protos.Claim>} claim - The claim data.
    */
   async createClaim(claim) {
-    const PayloadType = await loadType('ClaimPayload');
-    const Actions = PayloadType.getEnum('Action');
-    const payload = {
-      action: Actions.CREATE_CLAIM,
-      data: claim,
-    };
-    const err = PayloadType.verify(payload);
-    if (err || !claim.vehicle || !claim.vehicle.vin) {
-      throw new InvalidTransaction(
-        err || 'VIN must be provided for all claim transactions',
-      );
-    }
-    const address = calculateAddress(claim.vehicle.vin);
-    return API.sendBatches(
-      createBatch(
-        this.signer,
-        createTransaction(this.signer, PayloadType.encode(payload).finish(), {
-          inputs: [address],
-          outputs: [address],
-        }),
-      ),
-    );
+    return this._batch('CREATE_CLAIM', claim);
   }
 
   /**
    * Edit an exiting claim on the blockchain.
    *
-   * @param {ClaimParam} claim - The claim data to edit.
+   * @param {DeepPartial<Protos.Claim>} claim - The claim data to edit.
    */
   async editClaim(claim) {
-    const PayloadType = await loadType('ClaimPayload');
-    const Actions = PayloadType.getEnum('Action');
-    const payload = {
-      action: Actions.EDIT_CLAIM,
-      data: claim,
-    };
-    const err = PayloadType.verify(payload);
-    if (err || !claim.vehicle || !claim.vehicle.vin) {
-      throw new InvalidTransaction(
-        err || 'VIN must be provided for all claim transactions',
-      );
-    }
-    const address = calculateAddress(claim.vehicle.vin);
-    return API.sendBatches(
-      createBatch(
-        this.signer,
-        createTransaction(this.signer, PayloadType.encode(payload).finish(), {
-          inputs: [address],
-          outputs: [address],
-        }),
-      ),
-    );
+    return this._batch('EDIT_CLAIM', claim);
   }
 
   /**
@@ -107,11 +73,8 @@ class ClaimClient {
    * @return {Promise<Protos.Claim>}
    */
   async getClaim(vin) {
-    const response = await API.getStateItem(calculateAddress(vin));
-    const ClaimType = await loadType('Claim');
-    return /** @type {Protos.Claim} */ (ClaimType.decode(
-      Buffer.from(response.data, 'base64'),
-    ).toJSON());
+    const { data } = await API.getStateItem(calculateAddress(vin));
+    return this._decode(data);
   }
 
   /**
@@ -125,12 +88,60 @@ class ClaimClient {
       ...params,
       address: FAMILY_NAMESPACE,
     });
-    const ClaimType = await loadType('Claim');
-    return data.map(state =>
-      /** @type {Protos.Claim} */ (ClaimType.decode(
-        Buffer.from(state.data, 'base64'),
-      ).toJSON()),
+    return Promise.all(data.map(state => this._decode(state.data)));
+  }
+
+  /**
+   * Abstraction for sending batch transactions.
+   *
+   * @private
+   * @param {keyof typeof Protos.Payload.Actions.ClaimActions} actionKey - Action to perform.
+   * @param {DeepPartial<Protos.Claim>} data                             - Claim data to send.
+   */
+  async _batch(actionKey, data) {
+    const PayloadType = await loadType('ClaimPayload');
+    const Actions = PayloadType.getEnum('Action');
+    const action = Actions[actionKey];
+    const payload = {
+      action,
+      data,
+    };
+    if (!data.vehicle || !data.vehicle.vin) {
+      throw new InvalidTransaction(
+        'VIN must be provided for all claim transactions',
+      );
+    }
+    const invalidReason = PayloadType.verify(payload);
+    if (invalidReason) {
+      throw new InvalidTransaction(invalidReason);
+    }
+    const address = calculateAddress(data.vehicle.vin);
+    return API.sendBatches(
+      createBatch(
+        this.signer,
+        createTransaction(this.signer, PayloadType.encode(payload).finish(), {
+          inputs: [address],
+          outputs: [address],
+        }),
+      ),
     );
+  }
+
+  /**
+   * Decodes a claim object from a base64 encoded protobuf string.
+   *
+   * @private
+   * @param {string} data - The encoded data.
+   * @return {Promise<Protos.Claim>}
+   */
+  async _decode(data) {
+    const ClaimType = await loadType('Claim');
+    return /** @type {Protos.Claim} */ (ClaimType.toObject(
+      ClaimType.decode(Buffer.from(data, 'base64')),
+      {
+        defaults: true,
+      },
+    ));
   }
 }
 

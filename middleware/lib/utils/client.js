@@ -2,7 +2,6 @@
 
 const { createHash, randomBytes } = require('crypto');
 
-const { AuthorizationException } = require('sawtooth-sdk/processor/exceptions');
 const sawtooth = require('sawtooth-sdk/protobuf');
 const { createContext } = require('sawtooth-sdk/signing');
 
@@ -23,11 +22,6 @@ const { createContext } = require('sawtooth-sdk/signing');
  * @return {Message<Sawtooth.Protobuf.Batch>}
  */
 exports.createBatch = (signer, ...transactions) => {
-  if (!signer) {
-    throw new AuthorizationException(
-      'Signer private key must be provided to use this method.',
-    );
-  }
   const header = sawtooth.BatchHeader.encode({
     signerPublicKey: signer.getPublicKey().asHex(),
     transactionIds: transactions.map(({ headerSignature }) => headerSignature),
@@ -67,11 +61,6 @@ exports.makeTransactionCreator = (familyName, familyVersion) => (
   payload,
   extraHeaders = {},
 ) => {
-  if (!signer) {
-    throw new AuthorizationException(
-      'Signer private key must be provided to use this method.',
-    );
-  }
   const header = sawtooth.TransactionHeader.encode({
     familyName,
     familyVersion,
