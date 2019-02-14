@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/total-loss-process
+    docker:
+      - image: circleci/node:11
+    steps:
+      - checkout
+      - run:
+          name: build dependencies
+          command: npm ci
+      - run:
+          name: build processors
+          working_directory: ~/total-loss-process/processors
+          command: npm ci
+      - run:
+          name: build middleware
+          working_directory: ~/total-loss-process/middleware
+          command: npm ci
+      - run:
+          name: test
+          environment:
+            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
+          command: npm run test:ci
+      - store_test_results:
+          path: reports/junit
+      - store_artifacts:
+          path: reports/junit
