@@ -5,7 +5,3 @@ type DeepPartial<T> = {
     ? ReadonlyArray<DeepPartial<U>>
     : DeepPartial<T[P]>
 };
-
-// prettier-ignore
-type PromiseReturnType<T extends (...args: any[]) => any> =
-  ReturnType<T> extends Promise<infer U> ? U : T;

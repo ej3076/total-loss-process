@@ -76,23 +76,15 @@ class ClaimState {
   /**
    * Serializes and returns data for a single address.
    *
-   * @param {DeepPartial<Protos.Claim>} data - Data to be serialized.
+   * @param {Protos.Claim} data - Data to be serialized.
    * @returns {Promise<Buffer>}
    */
   async _serialize(data) {
     const ClaimType = await loadType('Claim');
-    const VehicleType = ClaimType.lookupType('Vehicle');
-    const { vehicle } = /** @type {Protos.Claim} */ (data);
-    let err = ClaimType.verify(data);
+    const err = ClaimType.verify(data);
     if (err) {
+      logger.error(`Error verifying Claim protobuf: ${err}`);
       throw new InvalidTransaction(err);
-    }
-    err = VehicleType.verify(vehicle);
-    if (err) {
-      throw new InvalidTransaction(`VehicleType: ${err}`);
-    }
-    if (!vehicle.vin) {
-      throw new InvalidTransaction('VIN must be provided for all transactions');
     }
     return /** @type {Buffer} */ (ClaimType.encode(data).finish());
   }
