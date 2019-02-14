@@ -23,6 +23,6 @@ jobs:
             JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
           command: npm run test:ci
       - store_test_results:
-          path: reports/junit
+          path: reports/junit/js-test-results.xml
       - store_artifacts:
           path: reports/junit
