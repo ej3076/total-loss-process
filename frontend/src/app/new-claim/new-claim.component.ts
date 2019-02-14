@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { LyTheme2 } from '@alyle/ui';
 import { MiddlewareService } from '../middleware/middleware.service';
+import { Router } from '@angular/router';
 
 const STYLES = () => ({
   labelBefore: {
@@ -26,6 +27,7 @@ export class NewClaimComponent implements OnInit {
   constructor(
     private _theme: LyTheme2,
     private middlewareService: MiddlewareService,
+    private router: Router
   ) {
     this.appearance.setValue('outlined');
   }
