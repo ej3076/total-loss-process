@@ -22,15 +22,8 @@ const STYLES = (theme: ThemeVariables) => ({
 export class AppComponent {
   readonly classes = this.theme.addStyleSheet(STYLES);
 
-  auth: AuthService = null;
-
-  constructor(private theme: LyTheme2, private AuthService: AuthService) {
-    this.auth = AuthService;
-  }
+  constructor(private theme: LyTheme2, public auth: AuthService) {}
 
   ngOnInit() {
-    if (localStorage.getItem('isLoggedIn') === 'true') {
-      this.auth.renewTokens();
-    }
   }
 }

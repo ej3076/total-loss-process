@@ -1,111 +1,140 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { AUTH_CONFIG } from './auth.config';
 import * as auth0 from 'auth0-js';
-import { CookieService } from 'ngx-cookie-service';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { User } from '../models/User';
-
-const API_BASE = 'https://total-loss-process.auth0.com/api/v2/';
-const helper = new JwtHelperService();
+import { ENV } from '../core/env.config';
 
 @Injectable()
 export class AuthService {
-  private _idToken: string;
-  private _accessToken: string;
-  private _expiresAt: number;
-  private clientId = 't3sXyFtDUl0wFsHVsQsJbEa4en4bgPly';
-  private user: User;
-
-  auth0 = new auth0.WebAuth({
-    clientID: this.clientId,
-    domain: 'total-loss-process.auth0.com',
+  // Create Auth0 web auth instance
+  private _auth0 = new auth0.WebAuth({
+    clientID: AUTH_CONFIG.CLIENT_ID,
+    domain: AUTH_CONFIG.CLIENT_DOMAIN,
     responseType: 'token id_token',
-    redirectUri: 'http://localhost:4200/callback',
-    scope: 'openid profile',
-    audience: 'https://total-loss-process.auth0.com/api/v2/',
+    redirectUri: AUTH_CONFIG.REDIRECT,
+    audience: AUTH_CONFIG.AUDIENCE,
+    scope: AUTH_CONFIG.SCOPE
   });
-  id_token: any;
 
-  constructor(public router: Router, public cookieService: CookieService) {
-    this._idToken = '';
-    this._accessToken = '';
-    this._expiresAt = 0;
+  private auth0Manage: auth0.Management;
+
+  accessToken: string;
+  userProfile: any;
+  expiresAt: number;
+
+  // Create a stream of logged in status to communicate throughout app
+  loggedIn: boolean;
+  loggedIn$ = new BehaviorSubject<boolean>(this.loggedIn);
+  loggingIn: boolean;
+
+  constructor(private router: Router) {
+    // If app auth token is not expired, request new token
+    if (JSON.parse(localStorage.getItem('expires_at')) > Date.now()) {
+      this.renewToken();
+    }
   }
 
-  get accessToken(): string {
-    return this._accessToken;
+  setLoggedIn(value: boolean) {
+    // Update login status subject
+    this.loggedIn$.next(value);
+    this.loggedIn = value;
   }
 
-  get idToken(): string {
-    return this._idToken;
+  login() {
+    this._auth0.authorize({
+      scope: 'openid profile',
+    });
   }
 
-  public login(): void {
-    this.auth0.authorize();
-  }
-
-  public handleAuthentication(): void {
-    this.auth0.parseHash((err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        this.localLogin(authResult);
-        this.router.navigate(['']);
+  handleAuth() {
+    // When Auth0 hash parsed, get profile
+    this._auth0.parseHash((err, authResult) => {
+      console.log(authResult);
+      if (authResult && authResult.accessToken) {
+        window.location.hash = '';
+        this._getProfile(authResult);
       } else if (err) {
-        this.router.navigate(['']);
-        console.log(err);
+        console.error(`Error authenticating: ${err.error}`);
+      }
+      this.router.navigate(['/']);
+    });
+  }
+
+  private _getProfile(authResult) {
+    this.loggingIn = true;
+
+    //this.setManageApi(authResult.accessToken);
+    // Use access token to retrieve user's profile and set session
+    this._auth0.client.userInfo(authResult.accessToken, (err, profile) => {
+      if (profile) {
+        this._setSession(authResult, profile);
+      } else if (err) {
+        console.warn(`Error retrieving profile: ${err.error}`);
       }
     });
   }
 
-  private localLogin(authResult): void {
-    // Set isLoggedIn flag in localStorage
-    localStorage.setItem('isLoggedIn', 'true');
-    // Set the time that the access token will expire at
-    const expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
-    this._accessToken = authResult.accessToken;
-    this._idToken = authResult.idToken;
-    this._expiresAt = expiresAt;
+  private _setSession(authResult, profile?) {
+    this.expiresAt = (authResult.expiresIn * 1000) + Date.now();
+
+    // Store expiration in local storage to access in constructor
+    localStorage.setItem('expires_at', JSON.stringify(this.expiresAt));
+    this.accessToken = authResult.accessToken;
+    this.userProfile = profile;
+
+    // Update login status in loggedIn$ stream
+    this.setLoggedIn(true);
+    this.loggingIn = false;
   }
 
-  public renewTokens(): void {
-    this.auth0.checkSession({}, (err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        this.localLogin(authResult);
-      } else if (err) {
-        this.logout();
+  private _clearExpiration() {
+    // Remove token expiration from localStorage
+    localStorage.removeItem('expires_at');
+  }
+
+  logout() {
+    // Remove data from localStorage
+    this._clearExpiration();
+    
+    // End Auth0 authentication session
+    this._auth0.logout({
+      clientId: AUTH_CONFIG.CLIENT_ID,
+      returnTo: ENV.BASE_URI
+    });
+  }
+
+  get tokenValid(): boolean {
+    // Check if current time is past access token's expiration
+    return Date.now() < JSON.parse(localStorage.getItem('expires_at'));
+  }
+
+  renewToken() {
+    // Check for valid Auth0 session
+    this._auth0.checkSession({}, (err, authResult) => {
+      if (authResult && authResult.accessToken) {
+        this._getProfile(authResult);
+      } else {
+        this._clearExpiration();
       }
     });
   }
 
-  public logout(): void {
-    // Remove tokens and expiry time
-    this._accessToken = '';
-    this._idToken = '';
-    this._expiresAt = 0;
+  setManageApi(accessToken: string): void {
+    this.auth0Manage = new auth0.Management({
+      domain: AUTH_CONFIG.CLIENT_DOMAIN,
+      token: accessToken
+    });
 
-    // Remove isLoggedIn flag from localStorage
-    localStorage.removeItem('isLoggedIn');
-    // Go back to the home route
-    this.router.navigate(['/']);
-  }
+    // TODO: get user_id from profile to set private/public
+    // keys on a google login from middleware.
 
-  public isAuthenticated(): boolean {
-    // Check whether the current time is past the
-    // access token's expiry time
-    return new Date().getTime() < this._expiresAt;
-  }
-
-  getUser() {
-    const decoded = helper.decodeToken(this._idToken);
-
-    this.user = {
-      firstName: decoded.given_name || decoded.nickname || decoded.name,
-      lastName: decoded.family_name,
-      email: decoded.email,
-      picture: decoded.picture,
-      publicKey: decoded['https://total-loss-process.com/public_key'],
-      privateKey: decoded['https://total-loss-process.com/private_key'],
-    };
-
-    return this.user;
+    // this.auth0Manage.getUser('5c64c02df0ecb76fce5677ea', (err, user) => {
+    //   if (user) {
+    //     console.log(user);
+    //   } else if (err) {
+    //     console.log(err);
+    //   }
+    // })
   }
 }

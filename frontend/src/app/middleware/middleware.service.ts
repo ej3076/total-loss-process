@@ -18,9 +18,10 @@ export class MiddlewareService {
   constructor(private http: HttpClient, private auth: AuthService) {}
 
   get user() {
-    if (this.auth.isAuthenticated()) {
-      return this.auth.getUser();
+    if (this.auth.loggedIn) {
+      return this.auth.userProfile;
     }
+    
     throw new Error('User needs to be logged in');
   }
 

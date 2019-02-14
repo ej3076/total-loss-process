@@ -13,21 +13,14 @@ export class HomeComponent implements OnInit {
   user: User;
 
   constructor(
-    private auth: AuthService,
+    public auth: AuthService,
     private middleware: MiddlewareService,
   ) {}
 
   ngOnInit() {
-    if (this.isAuthenticated()) {
-      this.user = this.auth.getUser();
+    if (this.auth.loggedIn) {
+      console.log(this.auth.userProfile);
+      this.user = this.auth.userProfile;
     }
-  }
-
-  isAuthenticated(): boolean {
-    if (this.auth.isAuthenticated()) {
-      return true;
-    }
-
-    return false;
   }
 }

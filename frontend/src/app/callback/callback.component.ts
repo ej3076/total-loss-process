@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-callback',
@@ -9,12 +8,15 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrls: ['./callback.component.scss']
 })
 export class CallbackComponent implements OnInit {
-  constructor(private auth: AuthService, private router: Router, private cookie: CookieService) { }
+  constructor(private auth: AuthService, private router: Router) {
+    auth.handleAuth();
 
-  ngOnInit() {
-    this.auth.handleAuthentication();
 
-    this.router.navigate(['']);
-  }
+   }
 
+   ngOnInit() {}
+
+   generateKeys(): void {
+     
+   }
 }
