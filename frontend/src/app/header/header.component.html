@@ -21,22 +21,20 @@
                 <button 
                   ly-button color="accent" 
                   class="mll float-right" 
-                  *ngIf="authService.isAuthenticated()"
-                  (click)="authService.logout()"
+                  *ngIf="auth.loggedIn"
+                  (click)="auth.logout()"
                   >
                     Log Out
                 </button>
                 <button 
                   ly-button color="accent" 
                   class="mll float-right" 
-                  *ngIf="!authService.isAuthenticated()"
-                  (click)="authService.login()"
+                  *ngIf="!auth.loggedIn"
+                  (click)="auth.login()"
                   >
                     Log In
                 </button>
             </ly-grid>
         </ly-grid>
     </ly-toolbar>
-    
-    
 </header>

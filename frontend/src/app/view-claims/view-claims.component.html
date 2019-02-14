@@ -1,12 +1,27 @@
 <div>
   <ly-grid container [spacing]="16">
-    <ly-grid item [col]="6" *ngFor="let claim of claims">
-      <ly-paper [withClass]="classes.paper" [elevation]="2">
-        <h3 [lyTyp]="'title'">{{ claim.vehicle.vin }}</h3>
-        <p [lyTyp]="'body1'">Vehicle Model: {{ claim.vehicle.model }}</p>
-        <p [lyTyp]="'body1'">Vehicle Color: {{ claim.vehicle.color }}</p>
-        <p [lyTyp]="'body1'">Claim Status: {{ claim.vehicle.status }}</p>
-      </ly-paper>
-    </ly-grid>
+    <ng-template *ngIf="claims >= 0; else noClaims">
+      <ly-grid item [col]="6" *ngFor="let claim of claims">
+        <ly-paper [withClass]="classes.paper" [elevation]="2">
+          <h3 [lyTyp]="'title'">{{ claim.vehicle.vin }}</h3>
+          <p [lyTyp]="'body1'">Vehicle Model: {{ claim.vehicle.model }}</p>
+          <p [lyTyp]="'body1'">Vehicle Color: {{ claim.vehicle.color }}</p>
+          <p [lyTyp]="'body1'">Claim Status: {{ claim.status }}</p>
+        </ly-paper>
+      </ly-grid>
+    </ng-template>
   </ly-grid>
+
+  <ng-template #noClaims>
+      <ly-paper [withClass]="classes.noClaims" [elevation]="2">
+        <h3 [lyTyp]="'title'">No claims to view</h3>
+      </ly-paper>
+  </ng-template>
+
+  <ng-template *ngIf="responseError">
+    <ly-paper [withClass]="classes.noClaims" [elevation]="2">
+      <h3 [lyTyp]="'title'">Error getting Claims!</h3>
+      <p>{{ errorText }}</p>
+    </ly-paper>
+  </ng-template>
 </div>
