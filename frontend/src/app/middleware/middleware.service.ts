@@ -21,14 +21,14 @@ export class MiddlewareService {
     if (this.auth.loggedIn) {
       return this.auth.userProfile;
     }
-    
+
     throw new Error('User needs to be logged in');
   }
 
   private get headers() {
     return new HttpHeaders({
       Authorization: `Bearer ${this.auth.accessToken}`,
-      private_key: this.user.privateKey,
+      private_key: this.user['https://total-loss-process.com/private_key'],
     });
   }
 

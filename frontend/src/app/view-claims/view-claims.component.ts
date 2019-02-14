@@ -26,7 +26,7 @@ const STYLES = {
 export class ViewClaimsComponent implements OnInit {
   readonly classes = this._theme.addStyleSheet(STYLES);
 
-  private claims: Protos.Claim[];
+  private claims: Protos.Claim[] = [];
   private responseError: boolean;
   private errorText: string;
 
@@ -48,9 +48,9 @@ export class ViewClaimsComponent implements OnInit {
 
   setClaims(): void {
     this.middlewareService.getClaims().subscribe(
-      result => { this.claims = result; },
-      error => { 
-        this.responseError = true; 
+      result => { this.claims = [...result]; },
+      error => {
+        this.responseError = true;
         this.errorText = error;
       },
       () => {});
@@ -58,6 +58,6 @@ export class ViewClaimsComponent implements OnInit {
 
   openSnackBar() {
 
-    
+
   }
 }
