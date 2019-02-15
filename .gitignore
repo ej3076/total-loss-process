@@ -5,6 +5,7 @@ node_modules/
 
  # Files
 .DS_Store
+.env
 Thumbs.db
 npm-debug.log
 yarn-error.log
