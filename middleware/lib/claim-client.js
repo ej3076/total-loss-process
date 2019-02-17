@@ -84,13 +84,11 @@ class ClaimClient {
    */
   async editClaim(vin, { files, vehicle = {}, ...rest }) {
     if (vehicle.vin && vehicle.vin !== vin) {
-      throw new InvalidTransaction(
-        'VIN in edit data must match VIN requested.',
-      );
+      throw new InvalidTransaction('VIN in edit data must match VIN requested');
     }
-    if (files) {
+    if (files && Array.isArray(files) && files.length !== 0) {
       throw new InvalidTransaction(
-        'Files can not be modified using this endpoint.',
+        'Files can not be modified using this endpoint',
       );
     }
     const claim = await this.getClaim(vin);
