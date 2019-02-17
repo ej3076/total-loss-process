@@ -55,7 +55,9 @@ describe('ClaimClient', () => {
     });
 
     it('should edit claims correctly', async () => {
-      await expect(client.editClaim(CLAIM)).resolves.toMatchObject({
+      await expect(
+        client.editClaim(CLAIM.vehicle.vin, { vehicle: { color: 'red' } }),
+      ).resolves.toMatchObject({
         link: expect.any(String),
       });
     });
@@ -66,17 +68,12 @@ describe('ClaimClient', () => {
           'VIN must be provided for all claim transactions',
         ),
       );
-      await expect(client.editClaim({})).rejects.toThrow(
-        new InvalidTransaction(
-          'VIN must be provided for all claim transactions',
-        ),
-      );
     });
 
     it('should throw InvalidTransaction with invalid claim data', async () => {
       /** @type {any} */
-      const claim = { vehicle: { vin: '12345', color: Symbol('Red') } };
-      await expect(client.editClaim(claim)).rejects.toThrow(
+      const claim = { vehicle: { color: Symbol('Red') } };
+      await expect(client.editClaim(CLAIM.vehicle.vin, claim)).rejects.toThrow(
         new InvalidTransaction('data.vehicle.color: string expected'),
       );
     });
@@ -127,7 +124,7 @@ describe('ClaimClient', () => {
     });
 
     it('should throw errors when trying to edit claims unauthenticated', async () => {
-      await expect(client.editClaim(CLAIM)).rejects.toThrow(
+      await expect(client.editClaim(CLAIM.vehicle.vin, CLAIM)).rejects.toThrow(
         new AuthorizationException(
           'Signer private key must be provided to use this method.',
         ),

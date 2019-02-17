@@ -14,6 +14,7 @@ const {
 const { createBatch, ...utils } = require('./utils/client');
 const createFamily = require('./utils/family');
 const { loadType } = require('./utils/proto');
+const s3 = require('./utils/s3');
 const API = require('./api');
 
 const { FAMILY_NAME, FAMILY_NAMESPACE, calculateAddress } = createFamily(
@@ -49,6 +50,24 @@ class ClaimClient {
   }
 
   /**
+   * Add 1 or more files to an existing claim.
+   *
+   * @param {string} vin                  - The VIN of the claim.
+   * @param {Express.Multer.File[]} files - Array of uploaded files.
+   */
+  async addFiles(vin, files) {
+    const claim = await this.getClaim(vin);
+    await s3.maybeCreateBucket(vin);
+    return this._batch('EDIT_CLAIM', {
+      ...claim,
+      files: [
+        ...claim.files,
+        ...(await Promise.all(files.map(file => s3.uploadFile(vin, file)))),
+      ],
+    });
+  }
+
+  /**
    * Insert a new claim into the blockchain.
    *
    * @param {DeepPartial<Protos.Claim>} claim - The claim data.
@@ -60,10 +79,47 @@ class ClaimClient {
   /**
    * Edit an existing claim on the blockchain using VIN.
    *
+   * @param {string} vin                      - The VIN of the claim to edit.
    * @param {DeepPartial<Protos.Claim>} claim - The claim data to edit.
    */
-  async editClaim(claim) {
-    return this._batch('EDIT_CLAIM', claim);
+  async editClaim(vin, { files, vehicle = {}, ...rest }) {
+    if (vehicle.vin && vehicle.vin !== vin) {
+      throw new InvalidTransaction('VIN in edit data must match VIN requested');
+    }
+    if (files && Array.isArray(files) && files.length !== 0) {
+      throw new InvalidTransaction(
+        'Files can not be modified using this endpoint',
+      );
+    }
+    const claim = await this.getClaim(vin);
+    return this._batch('EDIT_CLAIM', {
+      ...rest,
+      vehicle: {
+        ...claim.vehicle,
+        ...vehicle,
+      },
+    });
+  }
+
+  /**
+   * Rename a single file in a claim.
+   *
+   * @param {string} vin  - The VIN associated with the file.
+   * @param {string} from - The current name of the file.
+   * @param {string} to   - The new name of the file.
+   */
+  async renameFile(vin, from, to) {
+    const claim = await this.getClaim(vin);
+    await s3.renameFile(vin, from, to);
+    return this._batch('EDIT_CLAIM', {
+      ...claim,
+      files: claim.files.map(file => {
+        if (file.name === from) {
+          return { ...file, name: to };
+        }
+        return file;
+      }),
+    });
   }
 
   /**
@@ -78,6 +134,16 @@ class ClaimClient {
   }
 
   /**
+   * Retrieve a single file for a given claim.
+   *
+   * @param {string} vin - The VIN of the claim.
+   * @param {Protos.File} fileProto - The file proto object.
+   */
+  async getFile(vin, fileProto) {
+    return s3.getFile(vin, fileProto.name, fileProto.hash);
+  }
+
+  /**
    * Retrive a list of claims from the blockchain.
    *
    * @param {Sawtooth.API.GetStateParams} [params] - Extra query parameters for the `/state` endpoint.
@@ -89,6 +155,21 @@ class ClaimClient {
       address: FAMILY_NAMESPACE,
     });
     return Promise.all(data.map(state => this._decode(state.data)));
+  }
+
+  /**
+   * Delete a single file from a claim.
+   *
+   * @param {string} vin  - The VIN of the associated claim.
+   * @param {string} name - The name of the file to remove.
+   */
+  async deleteFile(vin, name) {
+    const claim = await this.getClaim(vin);
+    await s3.deleteFile(vin, name);
+    return this._batch('EDIT_CLAIM', {
+      ...claim,
+      files: claim.files.filter(file => file.name !== name),
+    });
   }
 
   /**

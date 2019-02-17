@@ -74,16 +74,7 @@ class ClaimHandler extends TransactionHandler {
       throw new InvalidTransaction('Claim does not exist');
     }
     logger.debug(`Editing existing claim using VIN: ${vin}`);
-    return state.setClaim(vin, {
-      ...existingClaim,
-      ...claim,
-      files: [...existingClaim.files, ...claim.files],
-      vehicle: {
-        ...existingClaim.vehicle,
-        ...claim.vehicle,
-        vin,
-      },
-    });
+    return state.setClaim(vin, claim);
   }
 }
 

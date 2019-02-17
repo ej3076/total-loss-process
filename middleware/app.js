@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
@@ -61,7 +62,7 @@ app.post('/claims/:vin', checkJwt, async (req, res) => {
       throw new Error('Invalid request');
     }
     const client = new ClaimClient(privateKey);
-    const response = await client.editClaim(req.body);
+    const response = await client.editClaim(req.params.vin, req.body);
     console.log(response);
     res.send(response);
   } catch (err) {
