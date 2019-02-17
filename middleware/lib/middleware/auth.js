@@ -16,7 +16,7 @@ const checkJwt = jwt({
     jwksUri: `${AUTH0_BASE}/.well-known/jwks.json`,
   }),
   audience: `${AUTH0_BASE}/api/v2/`,
-  issuer: AUTH0_BASE,
+  issuer: `${AUTH0_BASE}/`,
   algorithms: ['RS256'],
 });
 
