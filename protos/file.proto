@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+message File {
+  // The computed hash of the file (the Amazon S3 `ETag`).
+  string hash = 1;
+
+  // The file name.
+  string name = 2;
+}

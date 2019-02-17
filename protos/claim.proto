@@ -1,22 +1,9 @@
 syntax = "proto3";
 
+import "file.proto";
 import "vehicle.proto";
 
 message Claim {
-  message File {
-    // SHA512 hash of the file.
-    string hash = 1;
-
-    // User-assigned name of the file (e.g. "The Vehicle Title").
-    string name = 2;
-
-    // The filename of the file (e.g. "2019-01-01-ford-title.pdf").
-    string filename = 3;
-
-    // The URL to the file (e.g. "http://bucket.s3.amazonaws.com/foo/bar/baz.pdf").
-    string url = 4;
-  }
-
   enum Status {
     // Initial data entry and settlement agreement being orchestrated by
     // the insurance company.
@@ -36,6 +23,6 @@ message Claim {
   // The status of the vehicle in the system.
   Status status = 2;
 
-  // A list of associated files.
+  // An array of sha256 hex digests of the associated files stored in s3.
   repeated File files = 3;
 }

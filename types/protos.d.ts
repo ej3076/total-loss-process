@@ -1,13 +1,13 @@
 declare namespace Protos {
+  interface File {
+    hash: string;
+    name: string;
+  }
+
   interface Claim {
-    vehicle: Vehicle;
+    files: File[];
     status: number;
-    files: Array<{
-      hash: string;
-      name: string;
-      filename: string;
-      url: string;
-    }>;
+    vehicle: Vehicle;
   }
 
   interface Vehicle {
