@@ -32,7 +32,7 @@ router.get('/:vin', async (req, res) => {
 });
 
 // Insert a new claim into the blockchain.
-router.post('/claims', authMiddleware, async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
   try {
     const client = new ClaimClient(req.privateKey);
     const response = await client.createClaim(req.body);
