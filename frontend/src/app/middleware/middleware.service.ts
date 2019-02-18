@@ -35,14 +35,6 @@ export class MiddlewareService {
     });
   }
 
-  private get fileUploadHeaders() {
-    return new HttpHeaders({
-      Authorization: `Bearer ${this.auth.accessToken}`,
-      private_key: this.user['https://total-loss-process.com/private_key'],
-      'Content-Type': 'multipart/form-data'
-    });
-  }
-
   generateKeypair() {
     return this.http
       .post<KeypairResponse>(`${API_BASE}/keys/generate`, null)
@@ -56,6 +48,27 @@ export class MiddlewareService {
   }
 
   getClaim(vin: string): Observable<Protos.Claim> {
+
+    // TODO: Remove mocked data.
+    // this.x = {
+    //   vehicle: {
+    //     vin: vin,
+    //     model: "Escape",
+    //     color: "Red",
+    //     year: 2005,
+    //     miles: 100023
+    //   },
+    //   status: 0,
+    //   files: [
+    //     {
+    //       hash: "1237-1232-1231fsef-123-sgseg",
+    //       name: "police-report.png"
+    //     }
+    //   ]
+    // }
+
+    // return of<Protos.Claim> (this.x);
+
     return this.http.get<Protos.Claim>(`${API_BASE}/claims/${vin}`, {
       headers: this.headers
     });
@@ -70,8 +83,11 @@ export class MiddlewareService {
   }
 
   addFiles(files: FileList, vin: string) {
+    let headers = this.headers;
+    headers.append('Content-Type', 'multipart/form-data');
+
     return this.http.post(`${API_BASE}/claims/${vin}/files`, files, {
-      headers: this.fileUploadHeaders
+      headers: headers
     });
   }
 }
