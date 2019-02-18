@@ -10,7 +10,7 @@ import { EditClaimComponent } from './edit-claim/edit-claim.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   {
-    path: 'add',
+    path: 'claims/new',
     component: NewClaimComponent,
     canActivate: [AuthGuardService],
   },
