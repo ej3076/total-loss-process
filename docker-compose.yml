@@ -62,7 +62,6 @@ services:
     environment:
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      NPM_CONFIG_STRICT_SSL: ${NPM_CONFIG_STRICT_SSL:-true}
     restart: on-failure
     stop_signal: SIGKILL
     command: npm start
@@ -71,8 +70,6 @@ services:
   web:
     depends_on:
       - middleware
-    environment:
-      NPM_CONFIG_STRICT_SSL: ${NPM_CONFIG_STRICT_SSL:-true}
     restart: on-failure
     stop_signal: SIGKILL
 
@@ -80,8 +77,6 @@ services:
   tp-claim:
     depends_on:
       - validator
-    environment:
-      NPM_CONFIG_STRICT_SSL: ${NPM_CONFIG_STRICT_SSL:-true}
     restart: on-failure
     stop_signal: SIGKILL
     command: npm run tp-claim:start -- tcp://validator:4004
