@@ -49,7 +49,6 @@ export class MiddlewareService {
   }
 
   getClaim(vin: string): Observable<Protos.Claim> {
-
     // TODO: Remove mocked data.
     // this.x = {
     //   vehicle: {

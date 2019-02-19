@@ -6,6 +6,13 @@
         <p [lyTyp]="'body1'">Vehicle Model: {{ claim.vehicle.model }}</p>
         <p [lyTyp]="'body1'">Vehicle Color: {{ claim.vehicle.color }}</p>
         <p [lyTyp]="'body1'">Claim Status: {{ claim.status }}</p>
+        <button
+          [routerLink]="[claim.vehicle.vin]"
+          ly-button
+          raised
+          bg="primary">
+            View Claim
+        </button>
       </ly-paper>
     </ly-grid>
   </ly-grid>
