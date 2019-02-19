@@ -47,7 +47,33 @@ describe('ClaimPayload', () => {
     expect(payload.action).toEqual(Actions.CREATE_CLAIM);
   });
 
-  it('should resolve to default values when given partial payload', async () => {
+  it('should resolve to default values when given partial payload and default = true', async () => {
+    const { color, year, model, ...data } = DATA.vehicle;
+    const payload = await ClaimPayload.fromBytes(
+      PayloadType.encode({
+        action: Actions.CREATE_CLAIM,
+        data: {
+          vehicle: {
+            ...data,
+          },
+        },
+      }).finish(),
+      true,
+    );
+    expect(payload.data).toEqual({
+      files: [],
+      status: 0,
+      vehicle: {
+        vin: '1234567890',
+        color: '',
+        miles: 1000,
+        model: '',
+        year: 0,
+      },
+    });
+  });
+
+  it('should not resolve to default values when given partial payload and default = false or undefined', async () => {
     const { color, year, model, ...data } = DATA.vehicle;
     const payload = await ClaimPayload.fromBytes(
       PayloadType.encode({
@@ -61,13 +87,9 @@ describe('ClaimPayload', () => {
     );
     expect(payload.data).toEqual({
       files: [],
-      status: 0,
       vehicle: {
         vin: '1234567890',
-        color: '',
         miles: 1000,
-        model: '',
-        year: 0,
       },
     });
   });

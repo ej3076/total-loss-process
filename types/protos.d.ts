@@ -1,5 +1,6 @@
 declare namespace Protos {
   interface File {
+    status: number;
     hash: string;
     name: string;
   }
@@ -21,6 +22,7 @@ declare namespace Protos {
   namespace Payload {
     namespace Actions {
       enum ClaimActions {
+        ERROR,
         CREATE_CLAIM,
         EDIT_CLAIM,
       }
