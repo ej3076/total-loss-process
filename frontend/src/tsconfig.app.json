@@ -6,5 +6,10 @@
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
+  ],
+  "include": [
+    "**/*.ts",
+    "../../types/protos.d.ts",
+    "../../types/globals.d.ts"
   ]
 }

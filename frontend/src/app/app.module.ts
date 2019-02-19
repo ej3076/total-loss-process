@@ -36,6 +36,7 @@ import { CallbackComponent } from './callback/callback.component';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth/auth.service';
 import { ViewClaimsComponent } from './view-claims/view-claims.component';
+import { EditClaimComponent } from './edit-claim/edit-claim.component';
 
 export class CustomMinimaLight extends MinimaLight {
   primary = {
@@ -83,7 +84,8 @@ export class CustomMinimaDark extends MinimaDark {
     HomeComponent,
     CallbackComponent,
     NewClaimComponent,
-    ViewClaimsComponent
+    ViewClaimsComponent,
+    EditClaimComponent
   ],
   imports: [
     BrowserModule,
