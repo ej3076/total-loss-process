@@ -2,6 +2,8 @@
 
 const S3 = require('aws-sdk/clients/s3');
 
+const { loadType } = require('./proto');
+
 const s3 = new S3();
 
 /**
@@ -14,21 +16,6 @@ const getBucketName = vin => `ford-capstone-wayne-state/${vin}`;
 /**
  * @typedef {import('aws-sdk').AWSError} AWSError
  */
-
-/**
- * Delete a single file from s3.
- *
- * @param {string} vin  - The VIN associated with the file.
- * @param {string} name - The name of the file to delete.
- */
-exports.deleteFile = (vin, name) => {
-  return s3
-    .deleteObject({
-      Bucket: getBucketName(vin),
-      Key: name,
-    })
-    .promise();
-};
 
 /**
  * Get a single file from S3 or throw a 412 "Precondition Failed" if hashes don't match.
@@ -83,7 +70,6 @@ exports.renameFile = async (vin, from, to) => {
       Key: from,
     })
     .promise();
-  return;
 };
 
 /**
@@ -94,6 +80,7 @@ exports.renameFile = async (vin, from, to) => {
  * @return {Promise<Protos.File>} The SHA512 hash digest of the file uploaded.
  */
 exports.uploadFile = async (vin, file) => {
+  const { ACTIVE } = (await loadType('File')).getEnum('Status');
   const { ETag: hash } = await s3
     .upload({
       Bucket: getBucketName(vin),
@@ -101,5 +88,9 @@ exports.uploadFile = async (vin, file) => {
       Body: file.buffer,
     })
     .promise();
-  return { hash, name };
+  return {
+    hash,
+    name,
+    status: ACTIVE,
+  };
 };
