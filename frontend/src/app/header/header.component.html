@@ -1,40 +1,42 @@
 <header class="head nav-bar">
     <ly-toolbar position="relative" bg="primary" [elevation]="5" class="auto-height">
-      <img src="../../assets/ford-logo.png" alt="Logo" class="center-to-page width-100 homepage-logo">
-        <ly-grid container [spacing]="6">
-            <ly-grid item col>
-                <button ly-button raised bg="accent" [lyMenuTriggerFor]="menu" class="float-right">Menu</button>
-                <ng-template #menu let-M>
-                  <ly-menu [ref]="M">
-                    <button class="justify-left" ly-button ly-menu-item routerLink="/home">
-                      <span>Home</span>
-                    </button>
-                    <button class="justify-left" ly-button ly-menu-item routerLink="/claims/new">
-                      <span>New Claim</span>
-                    </button>
-                    <button class="justify-left" ly-button ly-menu-item routerLink="/claims">
-                      <span>View Claims</span>
-                    </button>
-                  </ly-menu>
-                </ng-template>
+      <a routerLink='/' class="homepage-logo">
+        <img src="../../assets/ford-logo.png" alt="Logo" class="center-to-page width-100">
+      </a>
+      <ly-grid container [spacing]="6">
+          <ly-grid item col>
+              <button ly-button raised bg="accent" [lyMenuTriggerFor]="menu" class="float-right">Menu</button>
+              <ng-template #menu let-M>
+                <ly-menu [ref]="M">
+                  <button class="justify-left" ly-button ly-menu-item routerLink="/home">
+                    <span>Home</span>
+                  </button>
+                  <button class="justify-left" ly-button ly-menu-item routerLink="/claims/new">
+                    <span>New Claim</span>
+                  </button>
+                  <button class="justify-left" ly-button ly-menu-item routerLink="/claims">
+                    <span>View Claims</span>
+                  </button>
+                </ly-menu>
+              </ng-template>
 
-                <button 
-                  ly-button color="accent" 
-                  class="mll float-right" 
-                  *ngIf="auth.loggedIn"
-                  (click)="auth.logout()"
-                  >
-                    Log Out
-                </button>
-                <button 
-                  ly-button color="accent" 
-                  class="mll float-right" 
-                  *ngIf="!auth.loggedIn"
-                  (click)="auth.login()"
-                  >
-                    Log In
-                </button>
-            </ly-grid>
-        </ly-grid>
+              <button 
+                ly-button color="accent" 
+                class="mll float-right" 
+                *ngIf="auth.loggedIn"
+                (click)="auth.logout()"
+                >
+                  Log Out
+              </button>
+              <button 
+                ly-button color="accent" 
+                class="mll float-right" 
+                *ngIf="!auth.loggedIn"
+                (click)="auth.login()"
+                >
+                  Log In
+              </button>
+          </ly-grid>
+      </ly-grid>
     </ly-toolbar>
 </header>
