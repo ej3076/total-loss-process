@@ -77,6 +77,24 @@ describe('ClaimClient', () => {
         new InvalidTransaction('data.vehicle.color: string expected'),
       );
     });
+
+    it('should throw InvalidTransaction when provided VINs mismatch', async () => {
+      await expect(
+        client.editClaim('12345', { vehicle: { vin: '55555' } }),
+      ).rejects.toThrow(
+        new InvalidTransaction('VIN in edit data must match VIN requested'),
+      );
+    });
+
+    it('should throw InvalidTransaction when attempting to add files using editClaim', async () => {
+      await expect(
+        client.editClaim('12345', {
+          files: [{ hash: '12342', name: 'foo.txt', status: 0 }],
+        }),
+      ).rejects.toThrow(
+        new InvalidTransaction('Files can not be modified using this endpoint'),
+      );
+    });
   });
 
   describe('Not Authenticated', () => {
