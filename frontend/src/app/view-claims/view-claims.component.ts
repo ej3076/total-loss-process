@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { LyTheme2 } from '@alyle/ui';
 import { MiddlewareService } from '../middleware/middleware.service';
 import { AuthService } from '../auth/auth.service';
-import { LySnackBarDismiss } from '@alyle/ui/snack-bar';
-import { LySnackBarModule } from '@alyle/ui/snack-bar';
 
 const STYLES = {
   paper: {
@@ -27,6 +25,10 @@ export class ViewClaimsComponent implements OnInit {
   readonly classes = this._theme.addStyleSheet(STYLES);
 
   private claims: Protos.Claim[] = [];
+  private claims0: Protos.Claim[] = [];
+  private claims1: Protos.Claim[] = [];
+  private claims2: Protos.Claim[] = [];
+  private claims3: Protos.Claim[] = [];
   private responseError: boolean;
   private errorText: string;
 
@@ -42,10 +44,6 @@ export class ViewClaimsComponent implements OnInit {
     }
   }
 
-  afterDismissed(e: LySnackBarDismiss) {
-    console.log(e);
-  }
-
   setClaims(): void {
     this.middlewareService.getClaims().subscribe(
       result => { this.claims = [...result]; },
@@ -56,8 +54,22 @@ export class ViewClaimsComponent implements OnInit {
       () => {});
   }
 
-  openSnackBar() {
-
-
+  sortClaims(num): void{
+    var i: number;
+    for(i = num - 1; i >= 0; i--){
+      if(this.claims[i].status == 0){
+        console.log("I got one!");
+        this.claims0.push(this.claims[i])
+      }
+      if(this.claims[i].status == 1){
+        this.claims1.push(this.claims[i])
+      }
+      if(this.claims[i].status == 2){
+        this.claims2.push(this.claims[i])
+      }
+      if(this.claims[i].status == 3){
+        this.claims3.push(this.claims[i])
+      }
+    }
   }
 }
