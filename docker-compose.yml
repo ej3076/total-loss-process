@@ -1,16 +1,19 @@
 version: '3.6'
 
+x-shared:
+  &shared
+  restart: on-failure
+  stop_signal: SIGKILL
+
 services:
-  # Main validator
+  # Transaction validator
   validator:
+    <<: *shared
     image: hyperledger/sawtooth-validator:1.0
     security_opt:
       - apparmor:unconfined
     ports:
       - 4004:4004
-    restart: on-failure
-    stop_signal: SIGKILL
-    # start the validator with an empty genesis batch
     entrypoint: >-
       bash -c '
       sawadm keygen &&
@@ -24,29 +27,33 @@ services:
       --bind consensus:tcp://eth0:5050
       '
 
+  # Consensus engine
+  engine:
+    <<: *shared
+    depends_on:
+      - validator
+
   # Sawtooth REST API that communicates with the validator
   rest-api:
+    <<: *shared
     image: hyperledger/sawtooth-rest-api:1.1
     depends_on:
       - validator
     ports:
       - 8008:8008
-    restart: on-failure
-    stop_signal: SIGKILL
     entrypoint: >-
       sawtooth-rest-api
       --connect tcp://validator:4004
       --bind rest-api:8008
 
-  # Hyperledger Sawtooth CLI
+  # Sawtooth CLI
   shell:
+    <<: *shared
     image: hyperledger/sawtooth-shell:1.1
     depends_on:
       - rest-api
-    restart: on-failure
-    stop_signal: SIGKILL
     volumes:
-      - ./cli.toml:/etc/sawtooth/cli.toml
+      - ./etc/sawtooth/cli.toml:/etc/sawtooth/cli.toml
     entrypoint: >-
       bash -c '
       sawtooth keygen &&
@@ -55,6 +62,7 @@ services:
 
   # The web "middleware" service
   middleware:
+    <<: *shared
     ports:
       - 8080:8080
     depends_on:
@@ -62,32 +70,27 @@ services:
     environment:
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-    restart: on-failure
-    stop_signal: SIGKILL
     command: npm start
 
   # Static web server for frontend app
   web:
+    <<: *shared
     depends_on:
       - middleware
-    restart: on-failure
-    stop_signal: SIGKILL
 
   # Claim transaction processor
   tp-claim:
+    <<: *shared
     depends_on:
       - validator
-    restart: on-failure
-    stop_signal: SIGKILL
     command: npm run tp-claim:start -- tcp://validator:4004
 
   # Settings Transaction Processor
   tp-settings:
+    <<: *shared
     image: hyperledger/sawtooth-settings-tp:1.1
     depends_on:
       - validator
-    restart: on-failure
-    stop_signal: SIGKILL
     entrypoint: >-
       settings-tp
       -vv

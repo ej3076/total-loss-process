@@ -4,7 +4,10 @@ const S3 = require('aws-sdk/clients/s3');
 
 const { loadType } = require('./proto');
 
-const s3 = new S3();
+const s3 = new S3({
+  endpoint:
+    process.env.NODE_ENV !== 'production' ? 'http://localhost:4572' : undefined,
+});
 
 /**
  * Given a VIN return the bucket name
