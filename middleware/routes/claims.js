@@ -44,11 +44,25 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
+
 // Edit an existing claim on the blockchain using VIN.
 router.post('/:vin', authMiddleware, async (req, res) => {
   try {
     const client = new ClaimClient(req.privateKey);
     const response = await client.editClaim(req.params.vin, req.body);
+    console.log(response);
+    res.send(response);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
+// Add images to a claim using the Detailed Claim view.
+router.post('/:vin/:files', authMiddleware, async (req, res) => {
+  try {
+    const client = new ClaimClient(req.privateKey);
+    const response = await client.addFiles(req.params.vin, req.params.files);
     console.log(response);
     res.send(response);
   } catch (err) {
