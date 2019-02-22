@@ -27,15 +27,17 @@ class ClaimPayload {
    * ClaimPayload builder.
    *
    * @param {Buffer|Uint8Array} buffer - Raw payload buffer.
+   * @param {boolean} defaults         - Should payload proto be populated with default values?
    * @return {Promise<ClaimPayload>}
    */
-  static async fromBytes(buffer) {
+  static async fromBytes(buffer, defaults = false) {
     const PayloadType = await loadType('ClaimPayload');
     const ClaimType = PayloadType.lookupType('Claim');
     const payload = /** @type {Payload} */ (PayloadType.toObject(
       PayloadType.decode(buffer),
       {
-        defaults: true,
+        arrays: true,
+        defaults,
       },
     ));
     const err = ClaimType.verify(payload.data);

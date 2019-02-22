@@ -40,6 +40,7 @@ export class NewClaimComponent implements OnInit {
         model: this.model.value,
       },
     };
+    
     console.log(this.middlewareService.addClaim(claim));
   }
 

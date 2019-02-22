@@ -1,9 +1,19 @@
 syntax = "proto3";
 
 message File {
+  enum Status {
+    // File is active and visible.
+    ACTIVE = 0;
+    // File has been archived by the user.
+    ARCHIVED = 1;
+  }
+
   // The computed hash of the file (the Amazon S3 `ETag`).
   string hash = 1;
 
   // The file name.
   string name = 2;
+
+  // The file's status.
+  Status status = 3;
 }
