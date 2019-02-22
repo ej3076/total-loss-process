@@ -56,13 +56,39 @@ class ClaimClient {
    * @param {Express.Multer.File[]} files - Array of uploaded files.
    */
   async addFiles(vin, files) {
-    const claim = await this.getClaim(vin);
     await s3.maybeCreateBucket(vin);
     return this._batch('EDIT_CLAIM', {
-      ...claim,
+      vehicle: {
+        vin,
+      },
+      files: await Promise.all(files.map(file => s3.uploadFile(vin, file))),
+    });
+  }
+
+  /**
+   * Archive a single file from a claim.
+   *
+   * @param {string} vin  - The VIN of the associated claim.
+   * @param {string} name - The name of the file to remove.
+   */
+  async archiveFile(vin, name) {
+    const { files } = await this.getClaim(vin);
+    const file = files.find(f => f.name === name);
+    if (!file) {
+      throw new InvalidTransaction(
+        `Cannot archive file ${name}. File does not exist.`,
+      );
+    }
+    const { ARCHIVED } = (await loadType('File')).getEnum('Status');
+    return this._batch('EDIT_CLAIM', {
+      vehicle: {
+        vin,
+      },
       files: [
-        ...claim.files,
-        ...(await Promise.all(files.map(file => s3.uploadFile(vin, file)))),
+        {
+          ...file,
+          status: ARCHIVED,
+        },
       ],
     });
   }
@@ -91,12 +117,11 @@ class ClaimClient {
         'Files can not be modified using this endpoint',
       );
     }
-    const claim = await this.getClaim(vin);
     return this._batch('EDIT_CLAIM', {
       ...rest,
       vehicle: {
-        ...claim.vehicle,
         ...vehicle,
+        vin,
       },
     });
   }
@@ -109,16 +134,24 @@ class ClaimClient {
    * @param {string} to   - The new name of the file.
    */
   async renameFile(vin, from, to) {
-    const claim = await this.getClaim(vin);
+    const { files } = await this.getClaim(vin);
+    const file = files.find(f => f.name === from);
+    if (!file) {
+      throw new InvalidTransaction(
+        `Cannot rename file ${from}. File does not exist for VIN ${vin}`,
+      );
+    }
     await s3.renameFile(vin, from, to);
     return this._batch('EDIT_CLAIM', {
-      ...claim,
-      files: claim.files.map(file => {
-        if (file.name === from) {
-          return { ...file, name: to };
-        }
-        return file;
-      }),
+      vehicle: {
+        vin,
+      },
+      files: [
+        {
+          ...file,
+          name: to,
+        },
+      ],
     });
   }
 
@@ -155,21 +188,6 @@ class ClaimClient {
       address: FAMILY_NAMESPACE,
     });
     return Promise.all(data.map(state => this._decode(state.data)));
-  }
-
-  /**
-   * Delete a single file from a claim.
-   *
-   * @param {string} vin  - The VIN of the associated claim.
-   * @param {string} name - The name of the file to remove.
-   */
-  async deleteFile(vin, name) {
-    const claim = await this.getClaim(vin);
-    await s3.deleteFile(vin, name);
-    return this._batch('EDIT_CLAIM', {
-      ...claim,
-      files: claim.files.filter(file => file.name !== name),
-    });
   }
 
   /**

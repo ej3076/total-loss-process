@@ -4,10 +4,13 @@ import "claim.proto";
 
 message ClaimPayload {
   enum Action {
+    // Never used on purpose.
+    // This ensures that payload actions are always specified explicitly.
+    ERROR = 0;
     // Create a new claim.
-    CREATE_CLAIM = 0;
+    CREATE_CLAIM = 1;
     // Edit an existing claim.
-    EDIT_CLAIM = 1;
+    EDIT_CLAIM = 2;
   }
 
   // Action to be taken.
