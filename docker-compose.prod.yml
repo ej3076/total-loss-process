@@ -9,6 +9,8 @@ services:
   middleware:
     image: fordtotalloss/middleware
     build: ./middleware
+    environment:
+      NODE_ENV: production
 
   web:
     image: fordtotalloss/web
@@ -16,10 +18,14 @@ services:
     ports:
       - 80:80
       - 443:443
+    environment:
+      NODE_ENV: production
 
   tp-claim:
     image: fordtotalloss/tp-claim
     build:
       context: .
       dockerfile: ./processors/Dockerfile
+    environment:
+      NODE_ENV: production
 
