@@ -1,14 +1,11 @@
 <br>
-
-<button (click)="sortClaims(claims.length)">Click Me!!!</button>
-
 <ly-tabs [alignTabs]="'stretch'">
 
     <!--STATUS # 0-->
   <ly-tab>
     <button ly-tab-label>Awaiting Settlement Option</button>
-    <ly-grid *ngIf="claims0.length > 0; else noClaims" container [spacing]="16">
-        <ly-grid item [col]="12" *ngFor="let claim of claims0">
+    <ly-grid *ngIf="sortClaims(0).length > 0; else noClaims" container [spacing]="16">
+        <ly-grid item [col]="12" *ngFor="let claim of sortClaims(0)">
           <ly-paper [withClass]="classes.paper" [elevation]="2">
             <h3 [lyTyp]="'title'">{{ claim.vehicle.vin }}</h3>
             <p [lyTyp]="'body1'">Vehicle Model: {{ claim.vehicle.model }}</p>
@@ -21,10 +18,10 @@
 
   <!--STATUS # 1-->
   <ly-tab>
-    <button ly-tab-label>Finalize Loss</button>
-    <ly-grid *ngIf="claims1.length > 0; else noClaims" container [spacing]="16">
-        <ly-grid item [col]="12" *ngFor="let claim of claims1">
-          <ly-paper *ngIf="claim.status == 1" [withClass]="classes.paper" [elevation]="2">
+    <button ly-tab-label (click)="sortClaims(0)">Finalize Loss</button>
+    <ly-grid *ngIf="sortClaims(1).length > 0; else noClaims" container [spacing]="16">
+        <ly-grid item [col]="12" *ngFor="let claim of sortClaims(1)">
+          <ly-paper [withClass]="classes.paper" [elevation]="2">
             <h3 [lyTyp]="'title'">{{ claim.vehicle.vin }}</h3>
             <p [lyTyp]="'body1'">Vehicle Model: {{ claim.vehicle.model }}</p>
             <p [lyTyp]="'body1'">Vehicle Color: {{ claim.vehicle.color }}</p>
@@ -36,10 +33,10 @@
 
   <!--STATUS # 2-->
   <ly-tab>
-    <button ly-tab-label>At Auction</button>
-    <ly-grid *ngIf="claims2.length > 0; else noClaims" container [spacing]="16">
-        <ly-grid item [col]="12" *ngFor="let claim of claims2">
-          <ly-paper *ngIf="claim.status == 2" [withClass]="classes.paper" [elevation]="2">
+    <button ly-tab-label (click)="sortClaims(2)">At Auction</button>
+    <ly-grid *ngIf="sortClaims(2).length > 0; else noClaims" container [spacing]="16">
+        <ly-grid item [col]="12" *ngFor="let claim of sortClaims(2)">
+          <ly-paper [withClass]="classes.paper" [elevation]="2">
             <h3 [lyTyp]="'title'">{{ claim.vehicle.vin }}</h3>
             <p [lyTyp]="'body1'">Vehicle Model: {{ claim.vehicle.model }}</p>
             <p [lyTyp]="'body1'">Vehicle Color: {{ claim.vehicle.color }}</p>
@@ -51,10 +48,10 @@
 
   <!--STATUS # 3-->
   <ly-tab>
-    <button ly-tab-label>Claim Resolved</button>
-    <ly-grid *ngIf="claims3.length > 0; else noClaims" container [spacing]="16">
-        <ly-grid item [col]="12" *ngFor="let claim of claims3">
-          <ly-paper *ngIf="claim.status == 3; else noClaims" [withClass]="classes.paper" [elevation]="2">
+    <button ly-tab-label (click)="sortClaims(3)">Claim Resolved</button>
+    <ly-grid *ngIf="sortClaims(3).length > 0; else noClaims" container [spacing]="16">
+        <ly-grid item [col]="12" *ngFor="let claim of sortClaims(3)">
+          <ly-paper [withClass]="classes.paper" [elevation]="2">
             <h3 [lyTyp]="'title'">{{ claim.vehicle.vin }}</h3>
             <p [lyTyp]="'body1'">Vehicle Model: {{ claim.vehicle.model }}</p>
             <p [lyTyp]="'body1'">Vehicle Color: {{ claim.vehicle.color }}</p>

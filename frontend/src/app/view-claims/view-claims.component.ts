@@ -25,10 +25,7 @@ export class ViewClaimsComponent implements OnInit {
   readonly classes = this._theme.addStyleSheet(STYLES);
 
   private claims: Protos.Claim[] = [];
-  private claims0: Protos.Claim[] = [];
-  private claims1: Protos.Claim[] = [];
-  private claims2: Protos.Claim[] = [];
-  private claims3: Protos.Claim[] = [];
+  private visibleClaims: Protos.Claim[] = [];
   private responseError: boolean;
   private errorText: string;
 
@@ -41,6 +38,7 @@ export class ViewClaimsComponent implements OnInit {
   ngOnInit() {
     if (this.auth.loggedIn) {
       this.setClaims();
+      this.sortClaims(0);
     }
   }
 
@@ -54,22 +52,7 @@ export class ViewClaimsComponent implements OnInit {
       () => {});
   }
 
-  sortClaims(num): void{
-    var i: number;
-    for(i = num - 1; i >= 0; i--){
-      if(this.claims[i].status == 0){
-        console.log("I got one!");
-        this.claims0.push(this.claims[i])
-      }
-      if(this.claims[i].status == 1){
-        this.claims1.push(this.claims[i])
-      }
-      if(this.claims[i].status == 2){
-        this.claims2.push(this.claims[i])
-      }
-      if(this.claims[i].status == 3){
-        this.claims3.push(this.claims[i])
-      }
-    }
+  sortClaims(num): Protos.Claim[] {
+    return this.claims.filter(claim => claim.status === num);
   }
-}
+  }

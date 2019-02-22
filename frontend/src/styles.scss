@@ -7,6 +7,7 @@ html {
 .page {
   max-width: 1000px;
   margin: auto;
+  padding-bottom: 25px;
 }
 
 .head {
@@ -18,6 +19,8 @@ html {
 }
 
 .foot {
+  position: fixed;
+  bottom: 0;
   max-width: 1000px;
   left: 0;
   right: 0;
