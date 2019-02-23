@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { LyTheme2 } from '@alyle/ui';
 import { MiddlewareService } from '../middleware/middleware.service';
 import { AuthService } from '../auth/auth.service';
-import { LySnackBarDismiss } from '@alyle/ui/snack-bar';
-import { LySnackBarModule } from '@alyle/ui/snack-bar';
 
 const STYLES = {
   paper: {
@@ -27,6 +25,7 @@ export class ViewClaimsComponent implements OnInit {
   readonly classes = this._theme.addStyleSheet(STYLES);
 
   private claims: Protos.Claim[] = [];
+  private visibleClaims: Protos.Claim[] = [];
   private responseError: boolean;
   private errorText: string;
 
@@ -39,11 +38,8 @@ export class ViewClaimsComponent implements OnInit {
   ngOnInit() {
     if (this.auth.loggedIn) {
       this.setClaims();
+      this.sortClaims(0);
     }
-  }
-
-  afterDismissed(e: LySnackBarDismiss) {
-    console.log(e);
   }
 
   setClaims(): void {
@@ -56,8 +52,7 @@ export class ViewClaimsComponent implements OnInit {
       () => {});
   }
 
-  openSnackBar() {
-
-
+  sortClaims(num): Protos.Claim[] {
+    return this.claims.filter(claim => claim.status === num);
   }
-}
+  }
