@@ -15,7 +15,7 @@ services:
       DOCKER_HOST: unix:///var/run/docker.sock
     volumes:
       - ./etc/localstack/init.d:/docker-entrypoint-initaws.d
-      - /tmp/localstack:/tmp/localstack
+      - ./etc/localstack/tmp:/tmp/localstack
       - /var/run/docker.sock:/var/run/docker.sock
 
   # Consensus Engine using a simplified random-leader algorithm
