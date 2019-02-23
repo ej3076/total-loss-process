@@ -14,7 +14,7 @@ const s3 = new S3({
  *
  * @param {string} vin - The VIN
  */
-const getBucketName = vin => `ford-capstone-wayne-state.${vin}`;
+const getBucketName = vin => `ford-capstone-wayne-state/${vin}`;
 
 /**
  * @typedef {import('aws-sdk').AWSError} AWSError

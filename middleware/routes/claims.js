@@ -44,7 +44,6 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
-
 // Edit an existing claim on the blockchain using VIN.
 router.post('/:vin', authMiddleware, async (req, res) => {
   try {
