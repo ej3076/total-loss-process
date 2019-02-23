@@ -1,9 +1,12 @@
 'use strict';
 
 const router = require('express').Router();
+const multer = require('multer');
 
 const ClaimClient = require('../lib/claim-client');
 const authMiddleware = require('../lib/middleware/auth');
+
+const getFiles = multer().array('files');
 
 // Retrieve a list of claims from the blockchain.
 router.get('/', async (_, res) => {
@@ -49,6 +52,19 @@ router.post('/:vin', authMiddleware, async (req, res) => {
   try {
     const client = new ClaimClient(req.privateKey);
     const response = await client.editClaim(req.params.vin, req.body);
+    console.log(response);
+    res.send(response);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
+// Add images to a claim using the Detailed Claim view.
+router.post('/:vin/files', authMiddleware, getFiles, async (req, res) => {
+  try {
+    const client = new ClaimClient(req.privateKey);
+    const response = await client.addFiles(req.params.vin, req.files);
     console.log(response);
     res.send(response);
   } catch (err) {
