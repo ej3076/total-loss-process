@@ -52,10 +52,15 @@ class ClaimClient {
   /**
    * Add 1 or more files to an existing claim.
    *
-   * @param {string} vin                  - The VIN of the claim.
-   * @param {Express.Multer.File[]} files - Array of uploaded files.
+   * @param {string} vin                     - The VIN of the claim.
+   * @param {Express.Request['files']} files - Array of uploaded files.
    */
   async addFiles(vin, files) {
+    if (!Array.isArray(files)) {
+      throw new InvalidTransaction(
+        'files argument must be an array of Multer files.',
+      );
+    }
     await s3.maybeCreateBucket(vin);
     return this._batch('EDIT_CLAIM', {
       vehicle: {
