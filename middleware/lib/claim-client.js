@@ -61,7 +61,6 @@ class ClaimClient {
         'files argument must be an array of Multer files.',
       );
     }
-    await s3.maybeCreateBucket(vin);
     return this._batch('EDIT_CLAIM', {
       vehicle: {
         vin,
