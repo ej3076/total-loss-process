@@ -16,6 +16,7 @@
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "jwks-rsa": "^1.4.0",
+    "multer": "^1.4.1",
     "protobufjs": "^6.8.8",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
