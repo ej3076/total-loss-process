@@ -6,7 +6,7 @@ const multer = require('multer');
 const ClaimClient = require('../lib/claim-client');
 const authMiddleware = require('../lib/middleware/auth');
 
-const getFiles = multer().array('files');
+const getFiles = multer().array('files[]');
 
 // Retrieve a list of claims from the blockchain.
 router.get('/', async (_, res) => {

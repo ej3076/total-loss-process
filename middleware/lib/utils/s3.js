@@ -4,17 +4,17 @@ const S3 = require('aws-sdk/clients/s3');
 
 const { loadType } = require('./proto');
 
-const s3 = new S3({
-  endpoint:
-    process.env.NODE_ENV !== 'production' ? 'http://localhost:4572' : undefined,
-});
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+const Bucket = 'ford-capstone-wayne-state';
 
-/**
- * Given a VIN return the bucket name
- *
- * @param {string} vin - The VIN
- */
-const getBucketName = vin => `ford-capstone-wayne-state/${vin}`;
+const s3 = new S3(
+  IS_PRODUCTION
+    ? undefined
+    : {
+        endpoint: 'http://aws:4572',
+        s3ForcePathStyle: true,
+      },
+);
 
 /**
  * @typedef {import('aws-sdk').AWSError} AWSError
@@ -30,26 +30,8 @@ const getBucketName = vin => `ford-capstone-wayne-state/${vin}`;
  */
 exports.getFile = (vin, name, hash) => {
   return s3
-    .getObject({ Bucket: getBucketName(vin), Key: name, IfMatch: hash })
+    .getObject({ Bucket, Key: `${vin}/${name}`, IfMatch: hash })
     .promise();
-};
-
-/**
- * Create a bucket if it doesn't exist.
- *
- * @param {string} vin - A VIN number to be used as the bucket name.
- */
-exports.maybeCreateBucket = async vin => {
-  const params = { Bucket: getBucketName(vin) };
-  try {
-    await s3.headBucket(params).promise();
-    return;
-  } catch (e) {
-    if (e.code !== 'NoSuchBucket') {
-      throw e;
-    }
-  }
-  await s3.createBucket(params).promise();
 };
 
 /**
@@ -62,15 +44,15 @@ exports.maybeCreateBucket = async vin => {
 exports.renameFile = async (vin, from, to) => {
   await s3
     .copyObject({
-      Bucket: getBucketName(vin),
-      CopySource: `${getBucketName(vin)}/${from}`,
-      Key: to,
+      Bucket,
+      CopySource: `${vin}/${from}`,
+      Key: `${vin}/${to}`,
     })
     .promise();
   await s3
     .deleteObject({
-      Bucket: getBucketName(vin),
-      Key: from,
+      Bucket,
+      Key: `${vin}/${from}`,
     })
     .promise();
 };
@@ -84,11 +66,12 @@ exports.renameFile = async (vin, from, to) => {
  */
 exports.uploadFile = async (vin, file) => {
   const { ACTIVE } = (await loadType('File')).getEnum('Status');
+  const { buffer: Body, originalname: name } = file;
   const { ETag: hash } = await s3
     .upload({
-      Bucket: getBucketName(vin),
-      Key: file.originalname,
-      Body: file.buffer,
+      Bucket,
+      Key: `${vin}/${name}`,
+      Body,
     })
     .promise();
   return {
