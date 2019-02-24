@@ -18,17 +18,12 @@ export class EditClaimComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private service: MiddlewareService
-  ) { }
+  ) {}
 
   ngOnInit() {
-    const observable = this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this.service.getClaim(params.get('vin')))
-    );
+    const vin = this.route.snapshot.paramMap.get('vin');
 
-    observable.subscribe(claim => this.claim = claim);
-
-    console.log(this.claim);
+    this.service.getClaim(vin).subscribe(data => this.claim = data);
   }
 
   setFiles(event) {

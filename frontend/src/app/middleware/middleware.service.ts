@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { concatMap } from 'rxjs/operators';
 
 interface KeypairResponse {
   public_key: string;
@@ -49,7 +50,6 @@ export class MiddlewareService {
   }
 
   getClaim(vin: string): Observable<Protos.Claim> {
-
     // TODO: Remove mocked data.
     // this.x = {
     //   vehicle: {
@@ -80,20 +80,9 @@ export class MiddlewareService {
       .post(`${API_BASE}/claims`, claim, {
         headers: this.headers,
       })
-      .subscribe(
-        success => {
-          // Log when successful / errored navigation
-          this.router.navigate([`/claims/${claim.vehicle.vin}`]).then(
-            nav => {
-              console.log(nav);
-            },
-            error => {
-              console.log(error)
-            }
-          );
-        }
+      .subscribe( data => this.router.navigate([`/claims/${claim.vehicle.vin}`])
       );
-  }
+  };
 
   addFiles(files: FileList, vin: string) {
     let headers = this.headers;

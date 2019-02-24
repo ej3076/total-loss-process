@@ -18,23 +18,23 @@
                   </ly-menu>
                 </ng-template>
 
-                <button 
-                  ly-button color="accent" 
-                  class="mll float-right" 
-                  *ngIf="auth.loggedIn"
-                  (click)="auth.logout()"
-                  >
-                    Log Out
-                </button>
-                <button 
-                  ly-button color="accent" 
-                  class="mll float-right" 
-                  *ngIf="!auth.loggedIn"
-                  (click)="auth.login()"
-                  >
-                    Log In
-                </button>
-            </ly-grid>
-        </ly-grid>
+              <button 
+                ly-button color="accent" 
+                class="mll float-right" 
+                *ngIf="auth.loggedIn"
+                (click)="auth.logout()"
+                >
+                  Log Out
+              </button>
+              <button 
+                ly-button color="accent" 
+                class="mll float-right" 
+                *ngIf="!auth.loggedIn"
+                (click)="auth.login()"
+                >
+                  Log In
+              </button>
+          </ly-grid>
+      </ly-grid>
     </ly-toolbar>
 </header>

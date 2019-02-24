@@ -21,7 +21,8 @@ const routes: Routes = [
   },
   {
     path: 'claims/:vin',
-    component: EditClaimComponent
+    component: EditClaimComponent,
+    canActivate: [AuthGuardService],
   },
   { path: 'callback', component: CallbackComponent },
   { path: '**', component: HomeComponent },
