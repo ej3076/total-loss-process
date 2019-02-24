@@ -26,8 +26,8 @@ export class ViewClaimsComponent implements OnInit {
 
   private claims: Protos.Claim[] = [];
   private visibleClaims: Protos.Claim[] = [];
-  private responseError: boolean;
   private errorText: string;
+  responseError: boolean;
 
   constructor(
     private _theme: LyTheme2,
