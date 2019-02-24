@@ -18,13 +18,11 @@ export class EditClaimComponent implements OnInit {
   year = new FormControl('', [Validators.required]);
   
   cannotEdit: boolean;
-  readyToView: boolean;
 
-  private claim: Protos.Claim
+  claim: Protos.Claim
 
   files: FileList;
   vin: string;
-  polledStatus$;
 
   constructor(
     private route: ActivatedRoute,
@@ -78,8 +76,6 @@ export class EditClaimComponent implements OnInit {
       this.miles.enable();
       this.year.enable();
     }
-
-    console.log(this.claim);
   }
 
   setDefaultFormBehavior(data: Protos.Claim): void {
@@ -118,7 +114,7 @@ export class EditClaimComponent implements OnInit {
       }
     };
 
-    console.log(this.service.editClaim(claim));
+    this.service.editClaim(claim);
   }
 
   reloadComponent(): void {

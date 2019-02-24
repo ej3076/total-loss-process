@@ -10,18 +10,6 @@ interface KeypairResponse {
   private_key: string;
 }
 
-interface PostResponse {
-  link: string;
-}
-
-interface BlockchainResponse {
-  data: [
-    {
-      status: string
-    }
-  ]
-}
-
 const API_BASE = 'http://localhost:8080';
 
 @Injectable({
@@ -89,7 +77,7 @@ export class MiddlewareService {
 
   addClaim(claim: DeepPartial<Protos.Claim>) {
     return this.http
-      .post<PostResponse>(`${API_BASE}/claims`, claim, {
+      .post(`${API_BASE}/claims`, claim, {
         headers: this.headers,
       })
       .subscribe( 
