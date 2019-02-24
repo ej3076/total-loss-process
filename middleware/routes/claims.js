@@ -77,7 +77,38 @@ router.post('/:vin/files', authMiddleware, getFiles, async (req, res) => {
 router.get('/:vin/files/:filename', authMiddleware, async (req, res) => {
   try {
     const client = new ClaimClient(req.privateKey);
-    const response = await client.getFile(req.params.vin, req.params.filename, req.query.hash);
+    const hashQuery = req.query.hash;
+    if(!hashQuery) {
+      throw new Error('Hash query required');
+    } else {
+      const response = await client.getFile(req.params.vin, req.params.filename, hashQuery);
+      console.log(response);
+      res.send(response);
+    }
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
+// Archive a single file from a claim.
+router.post('/:vin/files/:filename/archive', authMiddleware, async (req, res) => {
+  try {
+    const client = new ClaimClient(req.privateKey);
+    const response = await client.archiveFile(req.params.vin, req.params.filename);
+    console.log(response);
+    res.send(response);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
+// Unarchive a single file from a claim.
+router.post('/:vin/files/:filename/unarchive', authMiddleware, async (req, res) => {
+  try {
+    const client = new ClaimClient(req.privateKey);
+    const response = await client.unarchiveFile(req.params.vin, req.params.filename);
     console.log(response);
     res.send(response);
   } catch (err) {
