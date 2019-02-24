@@ -73,4 +73,17 @@ router.post('/:vin/files', authMiddleware, getFiles, async (req, res) => {
   }
 });
 
+// Get a single file from S3.
+router.get('/:vin/file', authMiddleware, async (req, res) => {
+  try {
+    const client = new ClaimClient(req.privateKey);
+    const response = await client.getFile(req.params.vin, req.body);
+    console.log(response);
+    res.send(response);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
 module.exports = router;
