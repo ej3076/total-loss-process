@@ -74,10 +74,10 @@ router.post('/:vin/files', authMiddleware, getFiles, async (req, res) => {
 });
 
 // Get a single file from S3.
-router.get('/:vin/file', authMiddleware, async (req, res) => {
+router.get('/:vin/files/:filename', authMiddleware, async (req, res) => {
   try {
     const client = new ClaimClient(req.privateKey);
-    const response = await client.getFile(req.params.vin, req.body);
+    const response = await client.getFile(req.params.vin, req.params.filename, req.query.hash);
     console.log(response);
     res.send(response);
   } catch (err) {
