@@ -6,7 +6,7 @@
     <button ly-tab-label>Awaiting Settlement Option</button>
     <ly-grid *ngIf="sortClaims(0).length > 0; else noClaims" container [spacing]="16">
         <ly-grid item [col]="12" *ngFor="let claim of sortClaims(0)">
-          <ly-paper [withClass]="classes.paper" [elevation]="2">
+          <ly-paper [withClass]="classes.paper" [elevation]="2" routerLink='/claims/{{ claim.vehicle.vin }}'>
             <h3 [lyTyp]="'title'">{{ claim.vehicle.vin }}</h3>
             <p [lyTyp]="'body1'">Vehicle Model: {{ claim.vehicle.model }}</p>
             <p [lyTyp]="'body1'">Vehicle Color: {{ claim.vehicle.color }}</p>

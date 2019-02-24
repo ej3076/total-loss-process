@@ -1,6 +1,6 @@
 <div class="center-text">
   <h2 lyTyp="display2" gutterBottom *ngIf="auth.loggedIn">
-    Hello, {{ (auth.userProfile) ? auth.userProfile.name : 'friend'  }}!
+    Hello, {{ (auth.userProfile) ? auth.userProfile.nickname : 'friend'  }}!
   </h2>
   <a
     routerLink="/claims/new"

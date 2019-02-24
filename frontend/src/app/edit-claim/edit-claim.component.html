@@ -1,26 +1,125 @@
-<div class="mtl">
-  <ly-paper elevation="4">
-    <h1 [lyTyp]="'display2'" class="mbs">{{ claim.vehicle.vin }}</h1>
-    <hr>
-
-    <ly-grid container spacing="16 8@XSmall">
-      <ly-grid item col="4 12@XSmall">test</ly-grid>
-      <ly-grid item col="4 12@XSmall">test</ly-grid>
-      <ly-grid item col="4 12@XSmall">test</ly-grid>
-    </ly-grid>
-  </ly-paper>
-</div>
-
-<div class="mth">
-  <ly-paper elevation="4">
-    <form (ngSubmit)="submitFiles()">
-      <input type="file" (change)="setFiles($event)" multiple="multiple"/>
-
-      <button ly-button
-        bg="primary"
-        raised
-        type="submit"
-        >Submit</button>
-    </form>
-  </ly-paper>
-</div>
+<div *ngIf="claim; else loading">
+    <div class="mtl mbl">
+      <ly-paper elevation="4">
+        <ly-grid container spacing="16 8@XSmall">
+          <ly-grid item col="12 12@XSmall">
+            <h1 [lyTyp]="'display2'" class="mbs">{{ claim.vehicle.vin }}</h1>
+          </ly-grid>
+        </ly-grid>
+        <hr>
+  
+        <ly-grid container spacing="16 8@XSmall">
+          <ly-grid item col="4 12@XSmall">
+            <span>Model</span>
+            <ly-field fullWidth [appearance]="appearance.value" class="mtn">
+                <input
+                #_input
+                lyNativeControl
+                [formControl]="model"
+                type="text"
+                />
+            </ly-field>
+          </ly-grid>
+          <ly-grid item col="4 12@XSmall">
+            <span>Color</span>
+              <ly-field fullWidth [appearance]="appearance.value" class="mtn">
+                <input
+                #_input
+                lyNativeControl
+                [formControl]="color"
+                type="text"
+                />
+              </ly-field>
+          </ly-grid>
+          <ly-grid item col="4 12@XSmall">
+            <span>Mileage</span>
+              <ly-field fullWidth [appearance]="appearance.value" class="mtn">
+                <input
+                #_input
+                lyNativeControl
+                [formControl]="miles"
+                type="text"
+                />
+              </ly-field>
+          </ly-grid>
+          <ly-grid item col="4 12@XSmall">
+            <span>Year</span>
+            <ly-field fullWidth [appearance]="appearance.value" class="mtn">
+              <input
+              #_input
+              lyNativeControl
+              [formControl]="year"
+              type="text"
+              />
+            </ly-field>
+          </ly-grid>
+          <ly-grid item col="4 12@XSmall">
+          </ly-grid>
+          <ly-grid item col="4 12@XSmall">
+            <div class="width-100">
+              <button
+              (click)="fieldEditSwitch()"
+              ly-button
+              outlined
+              color="primary"
+              class="width-100 mth">
+                Edit Vehicle
+              </button>
+            </div>
+          </ly-grid>
+        </ly-grid>
+      </ly-paper>
+    </div>
+  
+    <div class="mth" *ngIf="claim.files.length > 0">
+      <ly-paper elevation="4">
+        <ly-grid container spacing="16 8@XSmall" *ngFor="let file of claim.files" class="mbm">
+            <ly-grid item col="9">
+              <p>{{ file.name }}</p>
+            </ly-grid>
+            <ly-grid item col="3">
+              <button ly-button raised bg="warn" (click)="deleteFile(file.hash)">Delete</button>
+            </ly-grid>
+        </ly-grid>
+      </ly-paper>
+    </div>
+  
+    <div class="mth">
+      <ly-paper elevation="4">
+        <ly-grid container spacing="16 8@XSmall">
+          <ly-grid item col="8 12@XSmall">
+            <div class="file-input-wrapper width-100">
+              <button ly-button raised bg="secondary" class="width-100">Upload Files</button>
+              <input type="file" (change)="setFiles($event)" multiple="multiple"/>
+            </div>
+          </ly-grid>
+          <ly-grid item col="4 12@XSmall">
+            <div class="width-100">
+              <button ly-button
+              bg="primary"
+              raised
+              type="submit"
+              class="width-100"
+              (click)="submitChanges()">
+                Submit All Edits
+              </button>
+            </div>
+          </ly-grid>
+        </ly-grid>
+  
+        <ly-grid container spacing="16 8@XSmall" *ngIf="files">
+          <ly-grid item col="12" *ngFor="let file of files" class="mbm">
+            <span>File Name: {{ file.name }}</span><br>
+            <span>File Size (in bytes): {{ file.size }}</span>
+          </ly-grid>
+        </ly-grid>
+      </ly-paper>
+    </div>
+  </div>
+  
+  <ng-template #loading>
+    <p>Loading...</p>
+    <br>
+    <br>
+    <p>If page gets stuck, please <a (click)="reloadComponent()">click here to reload</a></p>
+  </ng-template>

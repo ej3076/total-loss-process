@@ -3,10 +3,23 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { concatMap } from 'rxjs/operators';
 
 interface KeypairResponse {
   public_key: string;
   private_key: string;
+}
+
+interface PostResponse {
+  link: string;
+}
+
+interface BlockchainResponse {
+  data: [
+    {
+      status: string
+    }
+  ]
 }
 
 const API_BASE = 'http://localhost:8080';
@@ -49,7 +62,6 @@ export class MiddlewareService {
   }
 
   getClaim(vin: string): Observable<Protos.Claim> {
-
     // TODO: Remove mocked data.
     // this.x = {
     //   vehicle: {
@@ -77,23 +89,32 @@ export class MiddlewareService {
 
   addClaim(claim: DeepPartial<Protos.Claim>) {
     return this.http
-      .post(`${API_BASE}/claims`, claim, {
+      .post<PostResponse>(`${API_BASE}/claims`, claim, {
         headers: this.headers,
       })
+      .subscribe( 
+        data => {},
+        error => {},
+        () => this.router.navigate([`/claims/${claim.vehicle.vin}`])
+      );
+  };
+
+  editClaim(claim: DeepPartial<Protos.Claim>) {
+    console.log(claim);
+    return this.http
+      .post(`${API_BASE}/claims/${claim.vehicle.vin}`, claim, {
+        headers: this.headers
+      })
       .subscribe(
-        success => {
-          // Log when successful / errored navigation
-          this.router.navigate([`/claims/${claim.vehicle.vin}`]).then(
-            nav => {
-              console.log(nav);
-            },
-            error => {
-              console.log(error)
-            }
-          );
+        data => {},
+        error => {alert("Edit failed, please check console log")},
+        () => {
+          alert("Edit successful!");
+          this.router.navigateByUrl('/home', {skipLocationChange: true}).then(()=>
+            this.router.navigate([`/claims/${claim.vehicle.vin}`]));
         }
       );
-  }
+  };
 
   addFiles(files: FileList, vin: string) {
     let headers = this.headers;
@@ -107,6 +128,20 @@ export class MiddlewareService {
 
     return this.http.post(`${API_BASE}/claims/${vin}/files`, data, {
       headers: headers
+    })
+    .subscribe(
+      data => {},
+      error => {},
+      () => {
+        alert("File upload success!");
+
+      }
+    );
+  }
+
+  deleteFile(hash: string, vin: string) {
+    return this.http.delete(`${API_BASE}/claims/${vin}/files/${hash}`, {
+      headers: this.headers
     });
   }
 }
