@@ -10,7 +10,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./edit-claim.component.scss']
 })
 export class EditClaimComponent implements OnInit {
-  private claim: Protos.Claim
+  claim: Protos.Claim
 
   files: FileList;
 

@@ -83,7 +83,7 @@ export class MiddlewareService {
       .subscribe(
         success => {
           // Log when successful / errored navigation
-          this.router.navigate([`/claims`]).then(
+          this.router.navigate([`/claims/${claim.vehicle.vin}`]).then(
             nav => {
               console.log(nav);
             },
