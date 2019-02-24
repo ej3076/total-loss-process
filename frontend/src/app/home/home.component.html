@@ -2,13 +2,20 @@
   <h2 lyTyp="display2" gutterBottom *ngIf="auth.loggedIn">
     Hello, {{ (auth.userProfile) ? auth.userProfile.name : 'friend'  }}!
   </h2>
-  <a
-    routerLink="/claims/new"
-    ly-button
-    raised
-    bg="accent"
-    lyTyp="display2"
-    class="width-100 mth mbh">
-    Start a New Claim
-  </a>
+
+  <button ly-button raised outlined color="primary" size="large" lyType="title" class="width-100 mth mbh" routerLink="/claims/new"> Start a New Claim </button>
+<!--
+  <button ly-button raised outlined color="primary" class="width-100">Primary</button><br>
+  <button ly-button raised outlined color="accent" class="width-100">Accent</button><br>
+  <button ly-button raised outlined color="warn" class="width-100">Warn</button><br>
+  <button ly-button raised outlined color="secondary" class="width-100">Secondary</button><br>
+  <br>
+  <button ly-button raised color="primary" class="width-100">Primary</button><br>
+  <button ly-button raised color="accent" class="width-100">Accent</button><br>
+  <button ly-button raised color="warn" class="width-100">Warn</button><br>
+  <button ly-button raised color="secondary" class="width-100">Secondary</button><br>
+  <br>
+-->
+
+
 </div>

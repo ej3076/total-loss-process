@@ -44,8 +44,8 @@ export class CustomMinimaLight extends MinimaLight {
     contrast: '#fff'
   };
   accent = {
-    default: '#333333',
-    contrast: '#fff'
+    default: '#FFFFFF',
+    contrast: '#000'
   };
   warn = {
     default: '#D92E14',
@@ -59,12 +59,12 @@ export class CustomMinimaLight extends MinimaLight {
 
 export class CustomMinimaDark extends MinimaDark {
   primary = {
-    default: '#102B4E',
+    default: '#0978BC',
     contrast: '#fff'
   };
   accent = {
-    default: '#0978BC',
-    contrast: '#fff'
+    default: '#FFFFFF',
+    contrast: '#000',
   };
   warn = {
     default: '#D92E14',

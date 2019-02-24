@@ -1,9 +1,11 @@
 <header class="head nav-bar">
     <ly-toolbar position="relative" bg="primary" [elevation]="5" class="auto-height">
-      <img src="../../assets/ford-logo.png" alt="Logo" class="center-to-page width-100 homepage-logo" routerLink="/home">
+      <img src="../../assets/ford-logo.png" alt="Logo" class="center-to-page width-100 homepage-logo vspacing" routerLink="/home">
         <ly-grid container [spacing]="6">
             <ly-grid item col>
-                <button ly-button raised bg="accent" [lyMenuTriggerFor]="menu" class="float-right">Menu</button>
+                <button ly-button bg="primary" [lyMenuTriggerFor]="menu" class="float-left" appearance="icon">
+                  <ly-icon>menu</ly-icon>
+                </button>
                 <ng-template #menu let-M>
                   <ly-menu [ref]="M">
                     <button class="justify-left" ly-button ly-menu-item routerLink="/home">

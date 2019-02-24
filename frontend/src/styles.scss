@@ -44,6 +44,10 @@ html {
   float: right !important;
 }
 
+.float-center {
+  float: center !important;
+}
+
 .center-text {
   text-align: center;
 }
@@ -115,4 +119,13 @@ html {
 // Logo
 .homepage-logo {
   max-width: 15%;
+  float: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+img{
+  padding: 15px;
 }
