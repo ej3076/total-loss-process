@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     if (this.auth.loggedIn) {
-      console.log(this.auth.userProfile);
+      console.log(localStorage.getItem('link'));
       this.user = this.auth.userProfile;
     }
   }

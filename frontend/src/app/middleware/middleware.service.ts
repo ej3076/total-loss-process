@@ -10,6 +10,18 @@ interface KeypairResponse {
   private_key: string;
 }
 
+interface PostResponse {
+  link: string;
+}
+
+interface BlockchainResponse {
+  data: [
+    {
+      status: string
+    }
+  ]
+}
+
 const API_BASE = 'http://localhost:8080';
 
 @Injectable({
@@ -77,10 +89,30 @@ export class MiddlewareService {
 
   addClaim(claim: DeepPartial<Protos.Claim>) {
     return this.http
-      .post(`${API_BASE}/claims`, claim, {
+      .post<PostResponse>(`${API_BASE}/claims`, claim, {
         headers: this.headers,
       })
-      .subscribe( data => this.router.navigate([`/claims/${claim.vehicle.vin}`])
+      .subscribe( 
+        data => {},
+        error => {},
+        () => this.router.navigate([`/claims/${claim.vehicle.vin}`])
+      );
+  };
+
+  editClaim(claim: DeepPartial<Protos.Claim>) {
+    console.log(claim);
+    return this.http
+      .post(`${API_BASE}/claims/${claim.vehicle.vin}`, claim, {
+        headers: this.headers
+      })
+      .subscribe(
+        data => {},
+        error => {alert("Edit failed, please check console log")},
+        () => {
+          alert("Edit successful!");
+          this.router.navigateByUrl('/home', {skipLocationChange: true}).then(()=>
+            this.router.navigate([`/claims/${claim.vehicle.vin}`]));
+        }
       );
   };
 
@@ -96,6 +128,12 @@ export class MiddlewareService {
 
     return this.http.post(`${API_BASE}/claims/${vin}/files`, data, {
       headers: headers
+    });
+  }
+
+  deleteFile(hash: string, vin: string) {
+    return this.http.delete(`/claims/${vin}/files/${hash}`, {
+      headers: this.headers
     });
   }
 }

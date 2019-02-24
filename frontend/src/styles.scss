@@ -59,6 +59,10 @@ html {
   margin: auto;
 }
 
+.mal {
+  margin: 16px !important;
+}
+
 .mls {
   margin-left: 4px !important;
 }
@@ -68,7 +72,13 @@ html {
 .mll {
   margin-left: 16px !important;
 }
+.mlh {
+  margin-left: 32px !important;
+}
 
+.mtn {
+  margin-top: 0px !important;
+}
 .mts {
   margin-top: 4px !important;
 }
@@ -81,6 +91,19 @@ html {
 .mth {
   margin-top: 32px !important;
 }
+
+.mrs {
+  margin-right: 4px !important;
+}
+.mrm {
+  margin-right: 8px !important;
+}
+.mrl {
+  margin-right: 16px !important;
+
+.mrh {
+  margin-right: 32px !important;
+}}
 
 .mbs {
   margin-bottom: 4px !important;
@@ -103,6 +126,9 @@ html {
   height: auto !important;
 }
 
+.width-90 {
+  width: 90%;
+}
 .width-100 {
   width: 100%;
 }
@@ -115,4 +141,11 @@ html {
 // Logo
 .homepage-logo {
   max-width: 15%;
+}
+
+// Edit Claim Page
+.edit-claim-button {
+  position: absolute;
+  right: 10px;
+  top: 5px;
 }

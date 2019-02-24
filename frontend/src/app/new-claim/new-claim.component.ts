@@ -41,7 +41,7 @@ export class NewClaimComponent implements OnInit {
       },
     };
     
-    console.log(this.middlewareService.addClaim(claim));
+    this.middlewareService.addClaim(claim);
   }
 
   sendNewClaim() {
