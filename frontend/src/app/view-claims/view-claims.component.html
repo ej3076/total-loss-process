@@ -4,7 +4,7 @@
     <!--STATUS # 0-->
   <ly-tab>
     <button ly-tab-label>Awaiting Settlement Option</button>
-    <ly-grid *ngIf="sortClaims(0).length > 0; else hasClaims" container [spacing]="16">
+    <ly-grid *ngIf="sortClaims(0).length > 0; else noClaims" container [spacing]="16">
         <ly-grid item [col]="12" *ngFor="let claim of sortClaims(0)">
             <ly-paper [withClass]="classes.paper" [elevation]="2" routerLink='/claims/{{ claim.vehicle.vin }}'>
                 <h3 [lyTyp]="'title'">{{ claim.vehicle.vin }}</h3>
@@ -49,7 +49,7 @@
   <!--STATUS # 3-->
   <ly-tab>
     <button ly-tab-label (click)="sortClaims(3)">Claim Resolved</button>
-    <ly-grid *ngIf="sortClaims(3).length > 0; then hasClaims else noClaims" container [spacing]="16">
+    <ly-grid *ngIf="sortClaims(3).length > 0; else noClaims" container [spacing]="16">
         <ly-grid item [col]="12" *ngFor="let claim of sortClaims(3)">
           <ly-paper [withClass]="classes.paper" [elevation]="2">
             <h3 [lyTyp]="'title'">{{ claim.vehicle.vin }}</h3>
@@ -69,7 +69,7 @@
     </ly-paper>
   </ng-template>
 
-  <ng-template *ngIf="responseError">
+  <ng-template *ngIf= "responseError">
     <ly-paper [withClass]="classes.noClaims" [elevation]="2">
       <h3 [lyTyp]="'title'">Error getting Claims!</h3>
       <p>{{ errorText }}</p>
