@@ -70,20 +70,21 @@ class ClaimClient {
   }
 
   /**
-   * Archive a single file from a claim.
+   * Archive or restore a single file from a claim.
    *
    * @param {string} vin  - The VIN of the associated claim.
-   * @param {string} name - The name of the file to remove.
+   * @param {string} name - The name of the file to archive or restore.
+   * @param {string} status - The updated file status.
    */
-  async archiveFile(vin, name) {
+  async setFileStatus(vin, name, status) {
     const { files } = await this.getClaim(vin);
     const file = files.find(f => f.name === name);
     if (!file) {
       throw new InvalidTransaction(
-        `Cannot archive file ${name}. File does not exist.`,
+        `Cannot change status for file ${name}. File does not exist.`,
       );
     }
-    const { ARCHIVED } = (await loadType('File')).getEnum('Status');
+    const Status = (await loadType('File')).getEnum('Status');
     return this._batch('EDIT_CLAIM', {
       vehicle: {
         vin,
@@ -91,7 +92,7 @@ class ClaimClient {
       files: [
         {
           ...file,
-          status: ARCHIVED,
+          status: Status[status],
         },
       ],
     });
@@ -174,10 +175,11 @@ class ClaimClient {
    * Retrieve a single file for a given claim.
    *
    * @param {string} vin - The VIN of the claim.
-   * @param {Protos.File} fileProto - The file proto object.
+   * @param {string} name - The name of the file to retrieve.
+   * @param {string} hash - The hash of the file to retrieve.
    */
-  async getFile(vin, fileProto) {
-    return s3.getFile(vin, fileProto.name, fileProto.hash);
+  async getFile(vin, name, hash) {
+    return s3.getFile(vin, name, hash);
   }
 
   /**
