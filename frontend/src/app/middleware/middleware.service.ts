@@ -81,8 +81,8 @@ export class MiddlewareService {
         headers: this.headers,
       })
       .subscribe( 
-        data => {},
-        error => {},
+        data => undefined,
+        error => undefined,
         () => this.router.navigate([`/claims/${claim.vehicle.vin}`])
       );
   };
@@ -94,7 +94,7 @@ export class MiddlewareService {
         headers: this.headers
       })
       .subscribe(
-        data => {},
+        data => undefined,
         error => {alert("Edit failed, please check console log")},
         () => {
           alert("Edit successful!");
@@ -118,8 +118,8 @@ export class MiddlewareService {
       headers: headers
     })
     .subscribe(
-      data => {},
-      error => {},
+      data => undefined,
+      error => undefined,
       () => {
         alert("File upload success!");
 
