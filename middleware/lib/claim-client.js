@@ -70,20 +70,21 @@ class ClaimClient {
   }
 
   /**
-   * Archive a single file from a claim.
+   * Archive or restore a single file from a claim.
    *
    * @param {string} vin  - The VIN of the associated claim.
-   * @param {string} name - The name of the file to archive.
+   * @param {string} name - The name of the file to archive or restore.
+   * @param {string} status - The updated file status.
    */
-  async archiveFile(vin, name) {
+  async setFileStatus(vin, name, status) {
     const { files } = await this.getClaim(vin);
     const file = files.find(f => f.name === name);
     if (!file) {
       throw new InvalidTransaction(
-        `Cannot archive file ${name}. File does not exist.`,
+        `Cannot change status for file ${name}. File does not exist.`,
       );
     }
-    const { ARCHIVED } = (await loadType('File')).getEnum('Status');
+    const Status = (await loadType('File')).getEnum('Status');
     return this._batch('EDIT_CLAIM', {
       vehicle: {
         vin,
@@ -91,35 +92,7 @@ class ClaimClient {
       files: [
         {
           ...file,
-          status: ARCHIVED,
-        },
-      ],
-    });
-  }
-
-    /**
-   * Unarchive a single file from a claim.
-   *
-   * @param {string} vin  - The VIN of the associated claim.
-   * @param {string} name - The name of the file to unarchive.
-   */
-  async unarchiveFile(vin, name) {
-    const { files } = await this.getClaim(vin);
-    const file = files.find(f => f.name === name);
-    if (!file) {
-      throw new InvalidTransaction(
-        `Cannot unarchive file ${name}. File does not exist.`,
-      );
-    }
-    const { ACTIVE } = (await loadType('File')).getEnum('Status');
-    return this._batch('EDIT_CLAIM', {
-      vehicle: {
-        vin,
-      },
-      files: [
-        {
-          ...file,
-          status: ACTIVE,
+          status: Status[status],
         },
       ],
     });
