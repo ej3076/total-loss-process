@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
 html {
   height: auto;
@@ -28,20 +28,18 @@ html {
   margin-right: auto;
 }
 
-// Color Schemes
-.ford-gray {
-  background-color: #6f777e !important;
-}
 
-
-// General Styles
-
+// General Styles=
 .float-left {
   float: left !important;
 }
 
 .float-right {
   float: right !important;
+}
+
+.float-center {
+  float: center !important;
 }
 
 .center-text {
@@ -107,6 +105,15 @@ html {
   width: 100%;
 }
 
+.width-50 {
+  width: 48%;
+}
+
+.header-height {
+  height: 200px;
+}
+
+
 // Cards
 .form-card {
   max-width: 600px;
@@ -114,5 +121,14 @@ html {
 
 // Logo
 .homepage-logo {
-  max-width: 15%;
+  max-width: 20%;
+  float: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+img {
+  padding: 15px;
 }

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse, HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 //Created Components
 import { AppRoutingModule } from './app-routing.module';
@@ -14,22 +15,24 @@ import { HomeComponent } from './home/home.component';
 import { NewClaimComponent } from './new-claim/new-claim.component';
 
 //Alyle Components
+import { LyBadgeModule } from '@alyle/ui/badge';
 import { LyButtonModule } from '@alyle/ui/button';
-import { LyToolbarModule } from '@alyle/ui/toolbar';
+import { LyCardModule } from '@alyle/ui/card';
+import { LyCarouselModule } from '@alyle/ui/carousel'
+import { LyCheckboxModule } from '@alyle/ui/checkbox';
+import { LyDrawerModule, LyDrawer } from '@alyle/ui/drawer';
+import { LyFieldModule } from '@alyle/ui/field';
+import { LyGridModule } from '@alyle/ui/grid';
+import { LyIconModule } from '@alyle/ui/icon';
+import { LyMenuModule } from '@alyle/ui/menu';
+import { LyRadioModule } from '@alyle/ui/radio';
 import { LyResizingCroppingImageModule } from '@alyle/ui/resizing-cropping-images';
 import { LyTabsModule } from '@alyle/ui/tabs';
-import { LyTypographyModule } from '@alyle/ui/typography';
-import { LyMenuModule } from '@alyle/ui/menu';
-import { LyIconModule } from '@alyle/ui/icon';
-import { LyCardModule } from '@alyle/ui/card';
-import { LyGridModule } from '@alyle/ui/grid';
-import { LyBadgeModule } from '@alyle/ui/badge';
-import { MinimaLight, MinimaDark } from '@alyle/ui/themes/minima';
 import { LyThemeModule, LyCommonModule, PartialThemeVariables, LY_THEME, LY_THEME_GLOBAL_VARIABLES } from '@alyle/ui';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LyFieldModule } from '@alyle/ui/field';
-import { LyRadioModule } from '@alyle/ui/radio';
-import { LyCheckboxModule } from '@alyle/ui/checkbox';
+import { LyToolbarModule } from '@alyle/ui/toolbar';
+import { LyTypographyModule } from '@alyle/ui/typography';
+import { MinimaLight, MinimaDark } from '@alyle/ui/themes/minima';
+
 
 //Auth0 Components
 import { CallbackComponent } from './callback/callback.component';
@@ -44,8 +47,8 @@ export class CustomMinimaLight extends MinimaLight {
     contrast: '#fff'
   };
   accent = {
-    default: '#333333',
-    contrast: '#fff'
+    default: '#FFFFFF',
+    contrast: '#000'
   };
   warn = {
     default: '#D92E14',
@@ -59,12 +62,12 @@ export class CustomMinimaLight extends MinimaLight {
 
 export class CustomMinimaDark extends MinimaDark {
   primary = {
-    default: '#102B4E',
+    default: '#0978BC',
     contrast: '#fff'
   };
   accent = {
-    default: '#0978BC',
-    contrast: '#fff'
+    default: '#FFFFFF',
+    contrast: '#000',
   };
   warn = {
     default: '#D92E14',
@@ -109,7 +112,9 @@ export class CustomMinimaDark extends MinimaDark {
     ReactiveFormsModule,
     LyFieldModule,
     LyRadioModule,
-    LyCheckboxModule
+    LyCheckboxModule,
+    LyDrawerModule,
+    LyCarouselModule
   ],
   providers: [
     { provide: LY_THEME, useClass: CustomMinimaLight, multi: true },
