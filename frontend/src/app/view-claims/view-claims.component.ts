@@ -29,10 +29,6 @@ export class ViewClaimsComponent implements OnInit {
   private errorText: string;
   responseError: boolean;
 
-  public responseError: boolean;
-
-  public responseError: boolean;
-
   constructor(
     private _theme: LyTheme2,
     private middlewareService: MiddlewareService,
