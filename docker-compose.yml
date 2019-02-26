@@ -6,45 +6,19 @@ x-shared:
   stop_signal: SIGKILL
 
 services:
-  # Transaction validator
-  validator:
-    <<: *shared
-    image: hyperledger/sawtooth-validator:1.0
-    security_opt:
-      - apparmor:unconfined
+  # Locally mocked aws services
+  aws:
+    image: localstack/localstack
     ports:
-      - 4004:4004
-    entrypoint: >-
-      bash -c '
-      sawadm keygen &&
-      sawtooth keygen id_ecdsa &&
-      sawset genesis --key /root/.sawtooth/keys/id_ecdsa.priv &&
-      sawadm genesis config-genesis.batch &&
-      sawtooth-validator -vv
-      --endpoint tcp://validator:8800
-      --bind component:tcp://eth0:4004
-      --bind network:tcp://eth0:8800
-      --bind consensus:tcp://eth0:5050
-      '
-
-  # Consensus engine
-  engine:
-    <<: *shared
-    depends_on:
-      - validator
-
-  # Sawtooth REST API that communicates with the validator
-  rest-api:
-    <<: *shared
-    image: hyperledger/sawtooth-rest-api:1.1
-    depends_on:
-      - validator
-    ports:
-      - 8008:8008
-    entrypoint: >-
-      sawtooth-rest-api
-      --connect tcp://validator:4004
-      --bind rest-api:8008
+      - 4572:4572
+      - 8888:8080
+    environment:
+      SERVICES: s3
+      DOCKER_HOST: unix:///var/run/docker.sock
+    volumes:
+      - ./etc/localstack/init.d:/docker-entrypoint-initaws.d
+      - ./etc/localstack/tmp:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
 
   # Sawtooth CLI
   shell:
@@ -54,11 +28,58 @@ services:
       - rest-api
     volumes:
       - ./etc/sawtooth/cli.toml:/etc/sawtooth/cli.toml
-    entrypoint: >-
+    command: >-
       bash -c '
-      sawtooth keygen &&
-      tail -f /dev/null
+        sawtooth keygen &&
+        tail -f /dev/null
       '
+
+  # Transaction validator
+  validator:
+    <<: *shared
+    image: hyperledger/sawtooth-validator:1.0
+    security_opt:
+      - apparmor:unconfined
+    ports:
+      - 4004:4004
+    command: >-
+      bash -c '
+        sawadm keygen --force &&
+        sawset genesis \
+          --key /etc/sawtooth/keys/validator.priv &&
+        sawadm genesis config-genesis.batch &&
+        sawtooth-validator -v \
+          --endpoint tcp://validator:8800 \
+          --bind component:tcp://eth0:4004 \
+          --bind consensus:tcp://eth0:5050 \
+          --bind network:tcp://eth0:8800 \
+          --peering dynamic \
+          --scheduler serial \
+          --network-auth trust
+      '
+
+  # Consensus engine
+  engine:
+    <<: *shared
+    image: hyperledger/sawtooth-devmode-engine-rust:1.1
+    depends_on:
+      - validator
+    command:
+      devmode-engine-rust
+        --connect tcp://validator:5050
+
+  # Sawtooth REST API that communicates with the validator
+  rest-api:
+    <<: *shared
+    image: hyperledger/sawtooth-rest-api:1.1
+    depends_on:
+      - validator
+    ports:
+      - 8008:8008
+    command:
+      sawtooth-rest-api
+        --connect tcp://validator:4004
+        --bind rest-api:8008
 
   # The web "middleware" service
   middleware:
@@ -68,8 +89,8 @@ services:
     depends_on:
       - rest-api
     environment:
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID?AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY?AWS_SECRET_ACCESS_KEY}
     command: npm start
 
   # Static web server for frontend app
@@ -91,7 +112,6 @@ services:
     image: hyperledger/sawtooth-settings-tp:1.1
     depends_on:
       - validator
-    entrypoint: >-
-      settings-tp
-      -vv
-      --connect tcp://validator:4004
+    command:
+      settings-tp -v
+        --connect tcp://validator:4004

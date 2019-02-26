@@ -4,28 +4,22 @@
 version: '3.6'
 
 services:
-  # Build and run the middleware service from the Dockerfile, without mounting
-  # a volume for development
   middleware:
     image: fordtotalloss/middleware
-    build: ./middleware
-    environment:
-      NODE_ENV: production
+    build:
+      context: .
+      dockerfile: ./middleware/Dockerfile
 
   web:
     image: fordtotalloss/web
-    build: ./frontend
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
     ports:
-      - 80:80
-      - 443:443
-    environment:
-      NODE_ENV: production
+      - 4200:80
 
   tp-claim:
     image: fordtotalloss/tp-claim
     build:
       context: .
       dockerfile: ./processors/Dockerfile
-    environment:
-      NODE_ENV: production
-
