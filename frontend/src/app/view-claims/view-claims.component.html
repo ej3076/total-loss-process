@@ -69,7 +69,7 @@
     </ly-paper>
   </ng-template>
 
-  <ng-template *ngIf="responseError">
+  <ng-template *ngIf= "responseError">
     <ly-paper [withClass]="classes.noClaims" [elevation]="2">
       <h3 [lyTyp]="'title'">Error getting Claims!</h3>
       <p>{{ errorText }}</p>

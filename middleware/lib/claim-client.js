@@ -72,9 +72,9 @@ class ClaimClient {
   /**
    * Archive or restore a single file from a claim.
    *
-   * @param {string} vin  - The VIN of the associated claim.
-   * @param {string} name - The name of the file to archive or restore.
-   * @param {string} status - The updated file status.
+   * @param {string} vin                             - The VIN of the associated claim.
+   * @param {string} name                            - The name of the file to archive or restore.
+   * @param {keyof typeof Protos.File.Status} status - The updated file status.
    */
   async setFileStatus(vin, name, status) {
     const { files } = await this.getClaim(vin);
@@ -200,8 +200,8 @@ class ClaimClient {
    * Abstraction for sending batch transactions.
    *
    * @private
-   * @param {keyof typeof Protos.Payload.Actions.ClaimActions} actionKey - Action to perform.
-   * @param {DeepPartial<Protos.Claim>} data                             - Claim data to send.
+   * @param {keyof typeof Protos.ClaimPayload.Action} actionKey - Action to perform.
+   * @param {DeepPartial<Protos.Claim>} data                    - Claim data to send.
    */
   async _batch(actionKey, data) {
     const PayloadType = await loadType('ClaimPayload');

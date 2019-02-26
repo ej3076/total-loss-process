@@ -1,14 +1,27 @@
-<div class="center-text">
-  <h2 lyTyp="display2" gutterBottom *ngIf="auth.loggedIn">
-    Hello, {{ (auth.userProfile) ? auth.userProfile.nickname : 'friend'  }}!
-  </h2>
-  <a
-    routerLink="/claims/new"
-    ly-button
-    raised
-    bg="accent"
-    lyTyp="display2"
-    class="width-100 mth mbh">
-    Start a New Claim
-  </a>
+<div class="center-text mtl">
+
+  <!--Carousel of Images-->
+  <ly-carousel class="carousel mbl" touch hasProgressBar >
+    <ly-carousel-item *ngFor="let item of items" class="carouselItem" [srcImg]="item.img" [routerLink]="item.link">
+      <h1 *ngIf="item.dark" style="color:#FFF">{{ item.title }}</h1>
+      <h1 *ngIf="!item.dark" style="color:#000">{{ item.title }}</h1>
+    </ly-carousel-item>
+  </ly-carousel>
+
+  <div>
+    <!--Start New Claim Card-->
+    <ly-card raised [elevation]="1" class="float-left width-50 mth mls mbh">
+      <button ly-button raised outlined color="primary" size="large" lyType="title" class="width-100 button-xlarge" routerLink="/claims/new">
+        New Claim
+      </button>
+    </ly-card>
+
+    <!--View Claims Card-->
+    <ly-card raised [elevation]="1" class="float-right width-50 mth mbh">
+      <button ly-button raised outlined color="primary" size="large" lyType="title" class="width-100 button-xlarge" routerLink="/claims">
+        View Claims
+      </button>
+    </ly-card>
+  </div>
+
 </div>

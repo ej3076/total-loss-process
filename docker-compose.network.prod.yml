@@ -1,0 +1,196 @@
+#
+# This compose file should be paired with `docker-compose.prod.yml` for
+# simulating a large network of nodes.
+#
+version: '3.6'
+
+x-shared:
+  &shared
+  restart: on-failure
+  stop_signal: SIGKILL
+
+x-validator-opts:
+  &validator
+  <<: *shared
+  image: hyperledger/sawtooth-validator:1.0
+  security_opt:
+    - apparmor:unconfined
+
+x-engine-opts:
+  &engine
+  <<: *shared
+  image: hyperledger/sawtooth-devmode-engine-rust:1.1
+
+x-rest-api-opts:
+  &rest-api
+  <<: *shared
+  image: hyperledger/sawtooth-rest-api:1.1
+
+x-middleware-opts:
+  &middleware
+  <<: *shared
+  image: fordtotalloss/middleware
+  build:
+    context: .
+    dockerfile: ./middleware/Dockerfile
+  environment:
+    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID?AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY?AWS_SECRET_ACCESS_KEY}
+  command: npm start
+
+x-tp-claim-opts:
+  &tp-claim
+  <<: *shared
+  image: fordtotalloss/tp-claim
+  build:
+    context: .
+    dockerfile: ./processors/Dockerfile
+
+x-tp-settings-opts:
+  &tp-settings
+  <<: *shared
+  image: hyperledger/sawtooth-settings-tp:1.1
+
+services:
+  validator-1:
+    <<: *validator
+    depends_on:
+      - validator
+    command: >-
+      bash -c '
+        sawadm keygen --force &&
+        sawtooth-validator -v \
+          --endpoint tcp://validator-1:8800 \
+          --seeds tcp://validator:8800 \
+          --bind network:tcp://eth0:8800 \
+          --bind component:tcp://eth0:4004 \
+          --bind consensus:tcp://eth0:5050 \
+          --peering dynamic \
+          --scheduler serial \
+          --network-auth trust
+      '
+
+  validator-2:
+    <<: *validator
+    depends_on:
+      - validator
+    command: >-
+      bash -c '
+        sawadm keygen --force &&
+        sawtooth-validator -v \
+          --seeds tcp://validator:8800 \
+          --endpoint tcp://validator-2:8800 \
+          --bind network:tcp://eth0:8800 \
+          --bind component:tcp://eth0:4004 \
+          --bind consensus:tcp://eth0:5050 \
+          --peering dynamic \
+          --scheduler serial \
+          --network-auth trust
+      '
+
+  engine-1:
+    <<: *engine
+    depends_on:
+      - validator-1
+    command:
+      devmode-engine-rust
+        --connect tcp://validator-1:5050
+
+  engine-2:
+    <<: *engine
+    depends_on:
+      - validator-2
+    command:
+      devmode-engine-rust
+        --connect tcp://validator-2:5050
+
+  rest-api-1:
+    <<: *rest-api
+    depends_on:
+      - validator-1
+    command:
+      sawtooth-rest-api
+        --connect tcp://validator-1:4004
+        --bind rest-api-1:8008
+
+  rest-api-2:
+    <<: *rest-api
+    depends_on:
+      - validator-2
+    command:
+      sawtooth-rest-api
+        --connect tcp://validator-2:4004
+        --bind rest-api-2:8008
+
+  middleware-1:
+    <<: *middleware
+    depends_on:
+      - rest-api-1
+    environment:
+      REST_API_HOSTNAME: rest-api-1
+    ports:
+      - 8081:8080
+
+  middleware-2:
+    <<: *middleware
+    depends_on:
+      - rest-api-2
+    environment:
+      REST_API_HOSTNAME: rest-api-2
+    ports:
+      - 8082:8080
+
+  web-1:
+    <<: *shared
+    image: fordtotalloss/web-replica-1
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+      args:
+        api_port: 8081
+    depends_on:
+      - middleware-1
+    ports:
+      - 4201:80
+
+  web-2:
+    <<: *shared
+    image: fordtotalloss/web-replica-2
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+      args:
+        api_port: 8082
+    depends_on:
+      - middleware-2
+    ports:
+      - 4202:80
+
+  tp-claim-1:
+    <<: *tp-claim
+    depends_on:
+      - validator-1
+    command: npm run tp-claim:start -- tcp://validator-1:4004
+
+  tp-claim-2:
+    <<: *tp-claim
+    depends_on:
+      - validator-2
+    command: npm run tp-claim:start -- tcp://validator-2:4004
+
+  tp-settings-1:
+    <<: *tp-settings
+    depends_on:
+      - validator-1
+    command:
+      settings-tp -v
+        --connect tcp://validator-1:4004
+
+  tp-settings-2:
+    <<: *tp-settings
+    depends_on:
+      - validator-2
+    command:
+      settings-tp -v
+        --connect tcp://validator-2:4004
+
