@@ -50,26 +50,6 @@ export class MiddlewareService {
   }
 
   getClaim(vin: string): Observable<Protos.Claim> {
-    // TODO: Remove mocked data.
-    // this.x = {
-    //   vehicle: {
-    //     vin: vin,
-    //     model: "Escape",
-    //     color: "Red",
-    //     year: 2005,
-    //     miles: 100023
-    //   },
-    //   status: 0,
-    //   files: [
-    //     {
-    //       hash: "1237-1232-1231fsef-123-sgseg",
-    //       name: "police-report.png"
-    //     }
-    //   ]
-    // }
-
-    // return of<Protos.Claim> (this.x);
-
     return this.http.get<Protos.Claim>(`${API_BASE}/claims/${vin}`, {
       headers: this.headers
     });
@@ -81,8 +61,8 @@ export class MiddlewareService {
         headers: this.headers,
       })
       .subscribe( 
-        data => undefined,
-        error => undefined,
+        data => {},
+        undefined,
         () => this.router.navigate([`/claims/${claim.vehicle.vin}`])
       );
   };
@@ -94,7 +74,7 @@ export class MiddlewareService {
         headers: this.headers
       })
       .subscribe(
-        data => undefined,
+        data => {},
         error => {alert("Edit failed, please check console log")},
         () => {
           alert("Edit successful!");
@@ -118,8 +98,8 @@ export class MiddlewareService {
       headers: headers
     })
     .subscribe(
-      data => undefined,
-      error => undefined,
+      data => {},
+      undefined,
       () => {
         alert("File upload success!");
 
