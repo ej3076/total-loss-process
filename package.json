@@ -1,10 +1,18 @@
 {
   "private": true,
   "scripts": {
-    "down": "docker-compose down -v",
-    "start": "docker-compose up -d",
-    "start:production": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d",
-    "stop": "docker-compose stop",
+    "dc": "docker-compose -f docker-compose.yml -f docker-compose.override.yml",
+    "dc:production": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml",
+    "dc:production:network": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.network.prod.yml",
+    "down": "npm run dc -- down -v",
+    "down:production": "npm run dc:production -- down -v",
+    "down:production:network": "npm run dc:production:network -- down -v",
+    "logs": "npm run dc -- logs -f",
+    "logs:production": "npm run dc:production -- logs -f",
+    "logs:production:network": "npm run dc:production:network -- logs -f",
+    "start": "npm run dc -- up -d",
+    "start:production": "npm run dc:production -- up -d",
+    "start:production:network": "npm run dc:production:network -- up -d",
     "test": "jest",
     "test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit"
   },

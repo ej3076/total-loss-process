@@ -4,27 +4,6 @@
 version: '3.6'
 
 services:
-  # Locally mocked aws services
-  aws:
-    image: localstack/localstack
-    ports:
-      - 4572:4572
-      - 8081:8080
-    environment:
-      SERVICES: s3
-      DOCKER_HOST: unix:///var/run/docker.sock
-    volumes:
-      - ./etc/localstack/init.d:/docker-entrypoint-initaws.d
-      - ./etc/localstack/tmp:/tmp/localstack
-      - /var/run/docker.sock:/var/run/docker.sock
-
-  # Consensus Engine using a simplified random-leader algorithm
-  engine:
-    image: hyperledger/sawtooth-devmode-engine-rust:1.1
-    entrypoint: >-
-      devmode-engine-rust
-      --connect tcp://validator:5050
-
   middleware:
     image: node:11
     user: node
@@ -34,8 +13,8 @@ services:
       - ./middleware:/usr/src/app
     command: >-
       bash -c '
-      npm i --no-package-lock &&
-      npm run dev
+        npm i --no-package-lock &&
+        npm run dev
       '
 
   web:
@@ -49,22 +28,19 @@ services:
       - ./frontend:/usr/src/app
     command: >-
       bash -c '
-      npm i --no-package-lock &&
-      npm start -- --host 0.0.0.0
+        npm i --no-package-lock &&
+        npm start -- --host 0.0.0.0
       '
 
   tp-claim:
     image: node:11
     user: node
     working_dir: /usr/src/app
-    environment:
-      # Change this to "debug" if needed
-      LOG_LEVEL: info
     volumes:
       - ./protos:/usr/src/protos
       - ./processors:/usr/src/app
     command: >-
       bash -c '
-      npm i --no-package-lock &&
-      npm run tp-claim:start -- tcp://validator:4004
+        npm i --no-package-lock &&
+        npm run tp-claim:start -- tcp://validator:4004
       '

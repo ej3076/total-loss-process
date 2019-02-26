@@ -6,8 +6,8 @@ const logger = require('../logger');
 const { loadType } = require('../proto');
 
 /**
- * @typedef {typeof Protos.Payload.Actions.ClaimActions} Actions
- * @typedef {Protos.Payload.ClaimPayload} Payload
+ * @typedef {typeof Protos.ClaimPayload.Action} Actions
+ * @typedef {Protos.ClaimPayload} Payload
  */
 
 class ClaimPayload {

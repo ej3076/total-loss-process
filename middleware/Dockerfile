@@ -1,9 +1,10 @@
 FROM node:11
+ENV NODE_ENV production
 
 WORKDIR /usr/src/app
+COPY middleware/package*.json ./
 
-COPY package*.json ./
+RUN npm ci
 
-RUN npm install --only=production
-
-COPY . .
+COPY protos /usr/src/protos
+COPY middleware .

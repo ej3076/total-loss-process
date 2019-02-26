@@ -4,12 +4,14 @@ import { AuthService } from '../auth/auth.service';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 
+import { environment } from '../../environments/environment';
+
 interface KeypairResponse {
   public_key: string;
   private_key: string;
 }
 
-const API_BASE = 'http://localhost:8080';
+const { API_BASE } = environment;
 
 @Injectable({
   providedIn: 'root',
