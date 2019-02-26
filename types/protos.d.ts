@@ -1,6 +1,12 @@
 declare namespace Protos {
+  namespace File {
+    enum Status {
+      ACTIVE,
+      ARCHIVED,
+    }
+  }
   interface File {
-    status: number;
+    status: File.Status;
     hash: string;
     name: string;
   }
@@ -19,17 +25,15 @@ declare namespace Protos {
     color: string;
   }
 
-  namespace Payload {
-    namespace Actions {
-      enum ClaimActions {
-        ERROR,
-        CREATE_CLAIM,
-        EDIT_CLAIM,
-      }
+  namespace ClaimPayload {
+    enum Action {
+      ERROR,
+      CREATE_CLAIM,
+      EDIT_CLAIM,
     }
-    interface ClaimPayload {
-      action: Actions.ClaimActions;
-      data: Claim;
-    }
+  }
+  interface ClaimPayload {
+    action: ClaimPayload.Action;
+    data: Claim;
   }
 }
