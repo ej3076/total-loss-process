@@ -21,9 +21,5 @@ const STYLES = (theme: ThemeVariables) => ({
 })
 export class AppComponent {
   readonly classes = this.theme.addStyleSheet(STYLES);
-
   constructor(private theme: LyTheme2, public auth: AuthService) {}
-
-  ngOnInit() {
-  }
 }

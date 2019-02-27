@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MiddlewareService } from '../middleware/middleware.service';
-import { switchMap, concatMap, map } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
-import { timer, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-edit-claim',
   templateUrl: './edit-claim.component.html',
-  styleUrls: ['./edit-claim.component.scss']
+  styleUrls: ['./edit-claim.component.scss'],
 })
 export class EditClaimComponent implements OnInit {
   appearance = new FormControl();
@@ -16,39 +14,43 @@ export class EditClaimComponent implements OnInit {
   color = new FormControl('', [Validators.required]);
   miles = new FormControl('', [Validators.required]);
   year = new FormControl('', [Validators.required]);
-  
-  cannotEdit: boolean;
 
-  claim: Protos.Claim
-
-  files: FileList;
-  vin: string;
+  cannotEdit = true;
+  claim: Protos.Claim | undefined;
+  files: FileList | null = null;
+  vin = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private service: MiddlewareService
+    private service: MiddlewareService,
   ) {
     this.appearance.setValue('outlined');
   }
 
   ngOnInit() {
-    this.vin = this.route.snapshot.paramMap.get('vin');
-
+    const vin = this.route.snapshot.paramMap.get('vin');
+    if (!vin) {
+      this.router.navigate(['/']);
+      return;
+    }
+    this.vin = vin;
     this.service.getClaim(this.vin).subscribe(data => {
       this.claim = data;
       this.setDefaultFormBehavior(data);
     });
   }
 
-  setFiles(event) {
-    this.files = event.target.files;
+  setFiles(event: Event) {
+    if (event.currentTarget instanceof HTMLInputElement) {
+      this.files = event.currentTarget.files;
+    }
   }
 
   deleteFile(hash: string): void {
-    this.service.deleteFile(hash, this.claim.vehicle.vin).subscribe();
-
-    //TODO: show visual confirmation of deletion
+    // FIXME: This is not correct
+    this.service.deleteFile(hash, this.vin).subscribe();
+    // TODO: show visual confirmation of deletion
   }
 
   submitChanges() {
@@ -56,7 +58,7 @@ export class EditClaimComponent implements OnInit {
       this.service.addFiles(this.files, this.vin);
       this.reloadComponent();
     }
-    
+
     if (this.vehicleIsDirty()) {
       this.submitClaimEdit();
     }
@@ -91,34 +93,30 @@ export class EditClaimComponent implements OnInit {
   }
 
   vehicleIsDirty(): boolean {
-    if (
+    return (
       this.model.dirty ||
       this.color.dirty ||
       this.miles.dirty ||
       this.year.dirty
-    ) {
-      return true;
-    }
-
-    return false;
+    );
   }
 
   submitClaimEdit(): void {
-    const claim: DeepPartial<Protos.Claim> = {
+    const claim = {
       vehicle: {
         vin: this.vin,
         color: this.color.value,
         model: this.model.value,
         miles: +this.miles.value,
-        year: +this.year.value
-      }
+        year: +this.year.value,
+      },
     };
-
     this.service.editClaim(claim);
   }
 
   reloadComponent(): void {
-    this.router.navigateByUrl('/home', {skipLocationChange: true}).then(()=>
-      this.router.navigate([`/claims/${this.vin}`]));
+    this.router
+      .navigateByUrl('/', { skipLocationChange: true })
+      .then(() => this.router.navigate(['/claims', this.vin]));
   }
 }

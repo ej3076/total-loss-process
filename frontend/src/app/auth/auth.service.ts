@@ -1,140 +1,162 @@
 import { Injectable } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
-import { AUTH_CONFIG } from './auth.config';
-import * as auth0 from 'auth0-js';
-import { ENV } from '../core/env.config';
+import {
+  Auth0DecodedHash as DecodedHash,
+  Auth0UserProfile as User,
+  Management,
+  WebAuth,
+} from 'auth0-js';
+
+import { environment as env } from '../../environments/environment';
+
+interface KeypairResponse {
+  public_key: string;
+  private_key: string;
+}
 
 @Injectable()
 export class AuthService {
-  // Create Auth0 web auth instance
-  private _auth0 = new auth0.WebAuth({
-    clientID: AUTH_CONFIG.CLIENT_ID,
-    domain: AUTH_CONFIG.CLIENT_DOMAIN,
+  static readonly AUTH0_OPTIONS = {
+    clientID: 't3sXyFtDUl0wFsHVsQsJbEa4en4bgPly',
+    domain: 'total-loss-process.auth0.com',
     responseType: 'token id_token',
-    redirectUri: AUTH_CONFIG.REDIRECT,
-    audience: AUTH_CONFIG.AUDIENCE,
-    scope: AUTH_CONFIG.SCOPE
-  });
+    redirectUri: `${window.location.origin}/callback`,
+    audience: 'https://total-loss-process.auth0.com/api/v2/',
+    scope: [
+      'openid',
+      'profile',
+      'create:current_user_metadata',
+      'read:current_user',
+      'update:current_user_metadata',
+    ].join(' '),
+  };
 
-  private auth0Manage: auth0.Management;
+  // TODO: use this for snackbar alerts
+  errorMessage = '';
 
-  accessToken: string;
-  userProfile: any;
-  expiresAt: number;
-
-  // Create a stream of logged in status to communicate throughout app
-  loggedIn: boolean;
-  loggedIn$ = new BehaviorSubject<boolean>(this.loggedIn);
-  loggingIn: boolean;
+  private _accessToken = '';
+  private _isLoggedIn = false;
+  private _user: User | undefined;
+  private auth0: WebAuth;
 
   constructor(private router: Router) {
-    // If app auth token is not expired, request new token
-    if (JSON.parse(localStorage.getItem('expires_at')) > Date.now()) {
-      this.renewToken();
+    this.auth0 = new WebAuth(AuthService.AUTH0_OPTIONS);
+  }
+
+  get accessToken() {
+    if (!this._accessToken) {
+      throw new Error('User is not logged in.');
     }
+    return this._accessToken;
   }
 
-  setLoggedIn(value: boolean) {
-    // Update login status subject
-    this.loggedIn$.next(value);
-    this.loggedIn = value;
-  }
-
-  login() {
-    this._auth0.authorize({
-      scope: 'openid profile',
+  get headers() {
+    return new HttpHeaders({
+      Authorization: `Bearer ${this.accessToken}`,
+      private_key: this.user.user_metadata.private_key,
     });
   }
 
-  handleAuth() {
-    // When Auth0 hash parsed, get profile
-    this._auth0.parseHash((err, authResult) => {
-      console.log(authResult);
-      if (authResult && authResult.accessToken) {
-        window.location.hash = '';
-        this._getProfile(authResult);
-      } else if (err) {
-        console.error(`Error authenticating: ${err.error}`);
+  get isLoggedIn() {
+    return this._isLoggedIn;
+  }
+
+  get user(): User {
+    if (!this._user) {
+      throw new Error('User is not logged in.');
+    }
+    return this._user;
+  }
+
+  async authenticateCallback() {
+    this.auth0.parseHash((err, data) => {
+      if (err || !data) {
+        this.errorMessage = err
+          ? err.errorDescription
+          : 'Error fetching data from login provider.';
+        console.error(this.errorMessage);
+      } else {
+        this.setUser(data);
       }
       this.router.navigate(['/']);
     });
   }
 
-  private _getProfile(authResult) {
-    this.loggingIn = true;
-
-    //this.setManageApi(authResult.accessToken);
-    // Use access token to retrieve user's profile and set session
-    this._auth0.client.userInfo(authResult.accessToken, (err, profile) => {
-      if (profile) {
-        this._setSession(authResult, profile);
-      } else if (err) {
-        console.warn(`Error retrieving profile: ${err.error}`);
+  login() {
+    this.auth0.checkSession({}, (err, user) => {
+      if (err) {
+        return this.auth0.authorize();
       }
+      this.setUser(user);
     });
-  }
-
-  private _setSession(authResult, profile?) {
-    this.expiresAt = (authResult.expiresIn * 1000) + Date.now();
-
-    // Store expiration in local storage to access in constructor
-    localStorage.setItem('expires_at', JSON.stringify(this.expiresAt));
-    this.accessToken = authResult.accessToken;
-    this.userProfile = profile;
-
-    // Update login status in loggedIn$ stream
-    this.setLoggedIn(true);
-    this.loggingIn = false;
-  }
-
-  private _clearExpiration() {
-    // Remove token expiration from localStorage
-    localStorage.removeItem('expires_at');
   }
 
   logout() {
-    // Remove data from localStorage
-    this._clearExpiration();
-    
-    // End Auth0 authentication session
-    this._auth0.logout({
-      clientId: AUTH_CONFIG.CLIENT_ID,
-      returnTo: ENV.BASE_URI
-    });
+    this._isLoggedIn = false;
+    this._accessToken = '';
+    this._user = undefined;
+    this.auth0.logout({ returnTo: window.location.origin });
   }
 
-  get tokenValid(): boolean {
-    // Check if current time is past access token's expiration
-    return Date.now() < JSON.parse(localStorage.getItem('expires_at'));
+  private async generateKeypair(): Promise<KeypairResponse> {
+    return fetch(`${env.API_BASE}/keys/generate`, {
+      method: 'POST',
+    }).then(res => res.json());
   }
 
-  renewToken() {
-    // Check for valid Auth0 session
-    this._auth0.checkSession({}, (err, authResult) => {
-      if (authResult && authResult.accessToken) {
-        this._getProfile(authResult);
-      } else {
-        this._clearExpiration();
-      }
-    });
+  private async setUser({ accessToken }: DecodedHash) {
+    if (!accessToken) {
+      throw new Error('Error retrieving accessToken');
+    }
+    return new Promise<User>((resolve, reject) => {
+      this.auth0.client.userInfo(accessToken, async (err, userInfo) => {
+        if (err) {
+          return reject(new Error(err.errorDescription));
+        }
+        resolve(userInfo);
+      });
+    })
+      .then(({ sub }) => {
+        return new Promise<User>((resolve, reject) => {
+          new Management({
+            domain: AuthService.AUTH0_OPTIONS.domain,
+            token: accessToken,
+          }).getUser(sub, async (err, user) => {
+            if (err) {
+              return reject(new Error(err.errorDescription));
+            }
+            if (!user.user_metadata || !user.user_metadata.private_key) {
+              return resolve(this.setUserKeys(accessToken, sub));
+            }
+            resolve(user);
+          });
+        });
+      })
+      .then(user => {
+        this._user = user;
+        this._accessToken = accessToken;
+        this._isLoggedIn = true;
+      })
+      .catch(e => {
+        this.errorMessage = e.message;
+        console.error(this.errorMessage);
+      });
   }
 
-  setManageApi(accessToken: string): void {
-    this.auth0Manage = new auth0.Management({
-      domain: AUTH_CONFIG.CLIENT_DOMAIN,
-      token: accessToken
+  private async setUserKeys(accessToken: string, id: string): Promise<User> {
+    return new Promise((resolve, reject) => {
+      this.generateKeypair().then(keypair => {
+        new Management({
+          domain: AuthService.AUTH0_OPTIONS.domain,
+          token: accessToken,
+        }).patchUserMetadata(id, keypair, (err, user) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(user);
+        });
+      });
     });
-
-    // TODO: get user_id from profile to set private/public
-    // keys on a google login from middleware.
-
-    // this.auth0Manage.getUser('5c64c02df0ecb76fce5677ea', (err, user) => {
-    //   if (user) {
-    //     console.log(user);
-    //   } else if (err) {
-    //     console.log(err);
-    //   }
-    // })
   }
 }

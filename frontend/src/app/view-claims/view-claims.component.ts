@@ -13,7 +13,7 @@ const STYLES = {
     display: 'block',
     margin: '3rem auto auto auto',
     padding: '1em',
-  }
+  },
 };
 
 @Component({
@@ -24,10 +24,10 @@ const STYLES = {
 export class ViewClaimsComponent implements OnInit {
   readonly classes = this._theme.addStyleSheet(STYLES);
 
+  errorText = '';
+  responseError = false;
+
   private claims: Protos.Claim[] = [];
-  private visibleClaims: Protos.Claim[] = [];
-  private errorText: string;
-  responseError: boolean;
 
   constructor(
     private _theme: LyTheme2,
@@ -36,7 +36,7 @@ export class ViewClaimsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.auth.loggedIn) {
+    if (this.auth.isLoggedIn) {
       this.setClaims();
       this.sortClaims(0);
     }
@@ -44,15 +44,17 @@ export class ViewClaimsComponent implements OnInit {
 
   setClaims(): void {
     this.middlewareService.getClaims().subscribe(
-      result => { this.claims = [...result]; },
+      result => {
+        this.claims = [...result];
+      },
       error => {
         this.responseError = true;
         this.errorText = error;
       },
-      () => {});
+    );
   }
 
-  sortClaims(num): Protos.Claim[] {
+  sortClaims(num: number): Protos.Claim[] {
     return this.claims.filter(claim => claim.status === num);
   }
-  }
+}
