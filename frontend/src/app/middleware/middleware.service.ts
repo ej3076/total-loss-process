@@ -70,10 +70,7 @@ export class MiddlewareService {
 
     return this.http
       .post(`${API_BASE}/claims/${vin}/files`, data, {
-        headers: this.auth.headers.append(
-          'Content-Type',
-          'multipart/form-data',
-        ),
+        headers: this.auth.headers,
       })
       .subscribe(undefined, undefined, () => {
         alert('File upload success!');
