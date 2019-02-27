@@ -1,36 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { LyTheme2, ThemeVariables } from '@alyle/ui';
+import { Component } from '@angular/core';
+import { LyTheme2 } from '@alyle/ui';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss']
+  styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
+  private themes = {
+    light: 'minima-light',
+    dark: 'minima-dark',
+  };
+  private currentTheme = this.themes.light;
 
-  light = 'minima-light';
-  dark = 'minima-dark';
-  private _currentTheme = this.light;
-  changetheme = 'Dark Mode';
+  constructor(private theme: LyTheme2) {}
 
-  constructor(private theme: LyTheme2 ) { }
-
-  ngOnInit() {
+  get buttonText() {
+    return this.currentTheme === this.themes.light ? 'Dark Mode' : 'Light Mode';
   }
 
-  toggleTheme(){
-    if(this._currentTheme === this.dark){
-      this._currentTheme = this.light;
-      this.changetheme = 'Dark Mode';
-    }
-
-    else{
-      this._currentTheme = this.dark;
-      this.changetheme = 'Light Mode';
-    }
-    
-    this.theme.setTheme(this._currentTheme);
-
+  toggleTheme() {
+    this.currentTheme =
+      this.currentTheme === this.themes.light
+        ? this.themes.dark
+        : this.themes.light;
+    this.theme.setTheme(this.currentTheme);
   }
-
 }

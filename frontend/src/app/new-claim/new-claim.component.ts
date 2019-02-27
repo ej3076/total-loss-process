@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { LyTheme2 } from '@alyle/ui';
 import { MiddlewareService } from '../middleware/middleware.service';
@@ -15,13 +15,14 @@ const STYLES = () => ({
   styleUrls: ['./new-claim.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewClaimComponent implements OnInit {
-  appearance = new FormControl();
+export class NewClaimComponent {
 
-  vin = new FormControl('', [Validators.required, Validators.minLength(11)]);
-  model = new FormControl('', [Validators.required]);
-  color = new FormControl('', [Validators.required]);
   readonly classes = this._theme.addStyleSheet(STYLES);
+
+  appearance = new FormControl();
+  color = new FormControl('', [Validators.required]);
+  model = new FormControl('', [Validators.required]);
+  vin = new FormControl('', [Validators.required, Validators.minLength(11)]);
 
   constructor(
     private _theme: LyTheme2,
@@ -30,17 +31,15 @@ export class NewClaimComponent implements OnInit {
     this.appearance.setValue('outlined');
   }
 
-  ngOnInit() {}
-
   private setClaim() {
-    const claim: DeepPartial<Protos.Claim> = {
+    const claim = {
       vehicle: {
         vin: this.vin.value,
         color: this.color.value,
         model: this.model.value,
       },
     };
-    
+    // FIXME: Remove this
     console.log(this.middlewareService.addClaim(claim));
   }
 
@@ -66,12 +65,12 @@ export class NewClaimComponent implements OnInit {
   }
 
   public alphaNumericValidator(event: any) {
-    const charactersAllowed = /^[a-zA-Z0-9]*$/;   
+    const charactersAllowed = /^[a-zA-Z0-9]*$/;
 
     // If the value inputted does not match anything
     // in the defined pattern, replace with nothing.
     if (!charactersAllowed.test(event.target.value)) {
-      event.target.value = event.target.value.replace(/[^a-zA-Z0-9]/g, "");
+      event.target.value = event.target.value.replace(/[^a-zA-Z0-9]/g, '');
     }
   }
 }
