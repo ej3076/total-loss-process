@@ -33,5 +33,8 @@
       "<rootDir>/processors/"
     ],
     "testEnvironment": "node"
+  },
+  "dependencies": {
+    "@types/auth0-js": "^8.11.11"
   }
 }
