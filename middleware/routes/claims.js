@@ -78,7 +78,7 @@ router.get('/:vin/files/:filename', authMiddleware, async (req, res) => {
   try {
     const client = new ClaimClient(req.privateKey);
     const hashQuery = req.query.hash;
-    if(!hashQuery) {
+    if (!hashQuery) {
       throw new Error('Hash query required');
     }
     const response = await client.getFile(req.params.vin, req.params.filename, hashQuery);
@@ -91,29 +91,45 @@ router.get('/:vin/files/:filename', authMiddleware, async (req, res) => {
 });
 
 // Archive a single file from a claim.
-router.post('/:vin/files/:filename/archive', authMiddleware, async (req, res) => {
-  try {
-    const client = new ClaimClient(req.privateKey);
-    const response = await client.setFileStatus(req.params.vin, req.params.filename, 'ARCHIVED');
-    console.log(response);
-    res.send(response);
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
-});
+router.post(
+  '/:vin/files/:filename/archive',
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const client = new ClaimClient(req.privateKey);
+      const response = await client.setFileStatus(
+        req.params.vin,
+        req.params.filename,
+        'ARCHIVED',
+      );
+      console.log(response);
+      res.send(response);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  },
+);
 
 // Restore a single file from a claim.
-router.post('/:vin/files/:filename/restore', authMiddleware, async (req, res) => {
-  try {
-    const client = new ClaimClient(req.privateKey);
-    const response = await client.setFileStatus(req.params.vin, req.params.filename, 'ACTIVE');
-    console.log(response);
-    res.send(response);
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
-});
+router.post(
+  '/:vin/files/:filename/restore',
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const client = new ClaimClient(req.privateKey);
+      const response = await client.setFileStatus(
+        req.params.vin,
+        req.params.filename,
+        'ACTIVE',
+      );
+      console.log(response);
+      res.send(response);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  },
+);
 
 module.exports = router;
