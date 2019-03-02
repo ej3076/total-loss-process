@@ -134,7 +134,17 @@ export class EditClaimComponent implements OnInit {
   }
 
   downloadFile(hash: string, filename: string) {
-    this.service.downloadFile(this.vin, hash, filename);
+    this.service.downloadFile(this.vin, hash, filename).subscribe(blob => {
+      const url = URL.createObjectURL(new File([blob], filename));
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.download = filename;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
   }
 
   reloadComponent(): void {

@@ -89,11 +89,10 @@ export class MiddlewareService {
   downloadFile(vin: string, hash: string, filename: string) {
     return this.http.get<Blob>(`${API_BASE}/claims/${vin}/files/${filename}`, {
       headers: this.auth.headers,
-      params: { hash }
-    }).subscribe(
-      data => {
-        console.log(data);
-      }
-    );
+      params: {
+        hash: hash,
+      },
+      responseType: <any>'blob',
+    });
   }
 }

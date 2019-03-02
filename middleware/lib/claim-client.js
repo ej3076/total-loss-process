@@ -178,7 +178,7 @@ class ClaimClient {
    * @param {string} name - The name of the file to retrieve.
    * @param {string} hash - The hash of the file to retrieve.
    */
-  async getFile(vin, name, hash) {
+  getFile(vin, name, hash) {
     return s3.getFile(vin, name, hash);
   }
 

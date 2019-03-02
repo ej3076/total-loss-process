@@ -74,16 +74,29 @@ router.post('/:vin/files', authMiddleware, getFiles, async (req, res) => {
 });
 
 // Get a single file from S3.
-router.get('/:vin/files/:filename', authMiddleware, async (req, res) => {
+router.get('/:vin/files/:filename', authMiddleware, async (req, res, next) => {
   try {
     const client = new ClaimClient(req.privateKey);
     const hashQuery = req.query.hash;
     if (!hashQuery) {
       throw new Error('Hash query required');
     }
-    const response = await client.getFile(req.params.vin, req.params.filename, hashQuery);
-    console.log(response);
-    res.send(response);
+    const s3request = client.getFile(
+      req.params.vin,
+      req.params.filename,
+      hashQuery,
+    );
+    s3request.on('httpHeaders', (_, s3Headers) => {
+      ['content-type', 'last-modified', 'etag', 'cache-control'].forEach(
+        header => {
+          res.set(header, s3Headers[header]);
+        },
+      );
+    });
+    s3request
+      .createReadStream()
+      .on('error', err => next(err))
+      .pipe(res);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
