@@ -29,9 +29,7 @@ const s3 = new S3(
  * @throws {AWSError} Error with `statusCode` 412 if there is a mismatch in hashes.
  */
 exports.getFile = (vin, name, hash) => {
-  return s3
-    .getObject({ Bucket, Key: `${vin}/${name}`, IfMatch: hash })
-    .promise();
+  return s3.getObject({ Bucket, Key: `${vin}/${name}`, IfMatch: hash });
 };
 
 /**
@@ -72,6 +70,7 @@ exports.uploadFile = async (vin, file) => {
       Bucket,
       Key: `${vin}/${name}`,
       Body,
+      ContentType: file.mimetype,
     })
     .promise();
   return {

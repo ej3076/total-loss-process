@@ -91,12 +91,9 @@ export class MiddlewareService {
     return this.http.get<Blob>(`${API_BASE}/claims/${vin}/files/${filename}`, {
       headers: this.auth.headers,
       params: {
-        hash: hash
-      }
-    }).subscribe(
-      data => {
-        console.log(data);
-      }
-    );
+        hash: hash,
+      },
+      responseType: <any>'blob',
+    });
   }
 }
