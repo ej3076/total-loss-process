@@ -52,10 +52,10 @@ export class EditClaimComponent implements OnInit {
     this.service
       .deleteFile(filename, this.vin)
       .subscribe(
-      undefined,
-      error => console.log(error),
+        undefined,
+        error => console.log(error),
         () => alert('FILE DELETED'),
-    );
+      );
     // TODO: show visual confirmation of deletion
   }
 

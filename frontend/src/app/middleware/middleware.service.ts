@@ -82,7 +82,7 @@ export class MiddlewareService {
     return this.http.post(
       `${API_BASE}/claims/${vin}/files/${filename}/archive`,
       {
-      headers: this.auth.headers,
+        headers: this.auth.headers,
       },
     );
   }

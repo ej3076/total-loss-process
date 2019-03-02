@@ -95,19 +95,19 @@ router.post(
   '/:vin/files/:filename/archive',
   authMiddleware,
   async (req, res) => {
-  try {
-    const client = new ClaimClient(req.privateKey);
+    try {
+      const client = new ClaimClient(req.privateKey);
       const response = await client.setFileStatus(
         req.params.vin,
         req.params.filename,
         'ARCHIVED',
       );
-    console.log(response);
-    res.send(response);
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
+      console.log(response);
+      res.send(response);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
   },
 );
 
@@ -116,19 +116,19 @@ router.post(
   '/:vin/files/:filename/restore',
   authMiddleware,
   async (req, res) => {
-  try {
-    const client = new ClaimClient(req.privateKey);
+    try {
+      const client = new ClaimClient(req.privateKey);
       const response = await client.setFileStatus(
         req.params.vin,
         req.params.filename,
         'ACTIVE',
       );
-    console.log(response);
-    res.send(response);
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
+      console.log(response);
+      res.send(response);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
   },
 );
 
