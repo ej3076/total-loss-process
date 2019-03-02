@@ -9,11 +9,6 @@ const alyleStyle = (theme: ThemeVariables) => ({
     margin: '.2em',
     padding: '.8em',
   },
-  paper2: {
-    display: 'block',
-    margin: '.2em',
-    padding: '.8em',
-  },
   noClaims: {
     display: 'block',
     margin: '3rem auto auto auto',
@@ -56,7 +51,6 @@ export class ViewClaimsComponent implements OnInit {
   ngOnInit() {
     if (this.auth.isLoggedIn) {
       this.setClaims();
-      this.sortClaims(0);
     }
   }
 
