@@ -47,9 +47,13 @@ export class EditClaimComponent implements OnInit {
     }
   }
 
-  deleteFile(hash: string): void {
+  deleteFile(filename: string): void {
     // FIXME: This is not correct
-    this.service.deleteFile(hash, this.vin).subscribe();
+    this.service.deleteFile(filename, this.vin).subscribe(
+      data => undefined,
+      error => console.log(error),
+      () => alert('FILE DELETED')
+    );
     // TODO: show visual confirmation of deletion
   }
 
@@ -112,6 +116,10 @@ export class EditClaimComponent implements OnInit {
       },
     };
     this.service.editClaim(claim);
+  }
+
+  downloadFile(hash: string, filename: string) {
+    this.service.downloadFile(this.vin, hash, filename);
   }
 
   reloadComponent(): void {
