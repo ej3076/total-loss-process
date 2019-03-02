@@ -6,8 +6,22 @@ hide stereotype
 
 skinparam rectangle {
   roundCorner<<api>> 25
-  roundCorner<<tp-claim>> 25
+  roundCorner<<tp>> 25
   roundCorner<<validator>> 25
+  roundCorner<<mw>> 25
+
+  backgroundColor<<validator>> LightBlue
+  backgroundColor<<engine>> LightCyan
+  backgroundColor<<inter>> LightCyan
+  backgroundColor<<cp>> LightCyan
+  backgroundColor<<tp>> Orange
+  backgroundColor<<api>> Aquamarine
+  backgroundColor<<mw>> Aquamarine
+  padding 5
+}
+
+skinparam database {
+  backgroundColor<<state>> LightCyan
 }
 
 actor User
@@ -18,48 +32,49 @@ cloud "<$aws>" {
   }
 }
 
+rectangle "Web" as web
+
 cloud Host {
   left to right direction
-  rectangle "Web" as web
-  rectangle "Middleware" as mw
+  rectangle "Middleware" <<mw>> as mw
 
-  node "Node" {
-    rectangle "Consensus Engine" as engine
+  folder "Node" {
+  rectangle "Consensus Engine" <<engine>> as engine
     rectangle "Validator" <<validator>> as validator {
-      rectangle "Interconnect" as inter
-      rectangle "Consensus Proxy" as cp
-      database "State"
+      rectangle "Interconnect" <<inter>> as inter
+      rectangle "Consensus Proxy" <<cp>> as cp
+      database "State" <<state>>
     }
     rectangle "REST API" <<api>> as api
-    rectangle "Claim Transaction Processor" <<tp-claim>> as tpclaim
-    rectangle "Settings Transaction Processor" <<tp-claim>> as tpsettings
+    rectangle "Claim Transaction Processor" <<tp>> as tpclaim
+    rectangle "Settings Transaction Processor" <<tp>> as tpsettings
   }
 }
 
 cloud Host2 {
-  rectangle "Validator Node" as v2 {
+  folder "Node" as v2 {
     rectangle Validator <<validator>> as validator2
   }
 }
 
 cloud Host3 {
-  rectangle "Validator Node" as v3 {
+  folder "Node" as v3 {
     rectangle Validator <<validator>> as validator3
   }
 }
 
 bucket <-- mw
 
-User --> web
-web -- mw
-mw -- api
-api -- inter
-inter -- tpclaim
-inter -- tpsettings
-engine -- cp
+User --> web : http 80
+web -up-> mw : http 8080
+mw --> api : tcp 8008
+api --> inter : tcp 4004
+inter <.. tpclaim : tcp 4004
+inter <.. tpsettings : tcp 4004
+engine ..> cp : tcp 5050
 
-validator -- validator2
-validator2 -- validator3
-validator3 -- validator
+validator -- validator2 : tcp 8800
+validator2 -- validator3 : tcp 8800
+validator3 -- validator : tcp 8800
 
 @enduml
