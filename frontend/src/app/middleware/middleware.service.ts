@@ -77,10 +77,23 @@ export class MiddlewareService {
       });
   }
 
-  // FIXME: this is not correct
-  deleteFile(hash: string, vin: string) {
-    return this.http.delete(`${API_BASE}/claims/${vin}/files/${hash}`, {
+  deleteFile(filename: string, vin: string) {
+    // FIXME: Unauthorized even though authorization token exists?
+    return this.http.post(`${API_BASE}/claims/${vin}/files/${filename}/archive`, {
       headers: this.auth.headers,
     });
+  }
+
+  downloadFile(vin: string, hash: string, filename: string) {
+    return this.http.get<Blob>(`${API_BASE}/claims/${vin}/files/${filename}`, {
+      headers: this.auth.headers,
+      params: {
+        hash: hash
+      }
+    }).subscribe(
+      data => {
+        console.log(data);
+      }
+    );
   }
 }
