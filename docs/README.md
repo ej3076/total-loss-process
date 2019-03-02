@@ -1,1 +1,1 @@
-Paste UML diagrams here to generate images: http://www.plantuml.com/plantuml/uml
+Paste UML diagrams here to generate better looking images: http://www.plantuml.com/plantuml/uml
