@@ -4,30 +4,25 @@
 #
 version: '3.6'
 
-x-shared:
-  &shared
+x-shared: &shared
   restart: on-failure
   stop_signal: SIGKILL
 
-x-validator-opts:
-  &validator
+x-validator-opts: &validator
   <<: *shared
   image: hyperledger/sawtooth-validator:1.0
   security_opt:
     - apparmor:unconfined
 
-x-engine-opts:
-  &engine
+x-engine-opts: &engine
   <<: *shared
   image: hyperledger/sawtooth-devmode-engine-rust:1.1
 
-x-rest-api-opts:
-  &rest-api
+x-rest-api-opts: &rest-api
   <<: *shared
   image: hyperledger/sawtooth-rest-api:1.1
 
-x-middleware-opts:
-  &middleware
+x-middleware-opts: &middleware
   <<: *shared
   image: fordtotalloss/middleware
   build:
@@ -38,16 +33,14 @@ x-middleware-opts:
     AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY?AWS_SECRET_ACCESS_KEY}
   command: npm start
 
-x-tp-claim-opts:
-  &tp-claim
+x-tp-claim-opts: &tp-claim
   <<: *shared
   image: fordtotalloss/tp-claim
   build:
     context: .
     dockerfile: ./processors/Dockerfile
 
-x-tp-settings-opts:
-  &tp-settings
+x-tp-settings-opts: &tp-settings
   <<: *shared
   image: hyperledger/sawtooth-settings-tp:1.1
 
@@ -92,35 +85,31 @@ services:
     <<: *engine
     depends_on:
       - validator-1
-    command:
-      devmode-engine-rust
-        --connect tcp://validator-1:5050
+    command: devmode-engine-rust
+      --connect tcp://validator-1:5050
 
   engine-2:
     <<: *engine
     depends_on:
       - validator-2
-    command:
-      devmode-engine-rust
-        --connect tcp://validator-2:5050
+    command: devmode-engine-rust
+      --connect tcp://validator-2:5050
 
   rest-api-1:
     <<: *rest-api
     depends_on:
       - validator-1
-    command:
-      sawtooth-rest-api
-        --connect tcp://validator-1:4004
-        --bind rest-api-1:8008
+    command: sawtooth-rest-api
+      --connect tcp://validator-1:4004
+      --bind rest-api-1:8008
 
   rest-api-2:
     <<: *rest-api
     depends_on:
       - validator-2
-    command:
-      sawtooth-rest-api
-        --connect tcp://validator-2:4004
-        --bind rest-api-2:8008
+    command: sawtooth-rest-api
+      --connect tcp://validator-2:4004
+      --bind rest-api-2:8008
 
   middleware-1:
     <<: *middleware
@@ -182,15 +171,12 @@ services:
     <<: *tp-settings
     depends_on:
       - validator-1
-    command:
-      settings-tp -v
-        --connect tcp://validator-1:4004
+    command: settings-tp -v
+      --connect tcp://validator-1:4004
 
   tp-settings-2:
     <<: *tp-settings
     depends_on:
       - validator-2
-    command:
-      settings-tp -v
-        --connect tcp://validator-2:4004
-
+    command: settings-tp -v
+      --connect tcp://validator-2:4004
