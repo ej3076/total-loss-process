@@ -74,7 +74,7 @@ export class MiddlewareService {
       });
   }
 
-  deleteFile(filename: string, vin: string) {
+  archiveFile(filename: string, vin: string) {
     return this.http.post(`${API_BASE}/claims/${vin}/files/${filename}/archive`, null, {
       headers: this.auth.headers,
     });

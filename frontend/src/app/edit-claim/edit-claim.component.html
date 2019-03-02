@@ -77,17 +77,14 @@
             <ly-grid item col="6">
               <p>{{ file.name }}</p>
             </ly-grid>
-            <!-- TODO: Fix unauthorized delete error -->
             <ly-grid item col="3" *ngIf="file.status === 0; else restoreTemplate">
-              <button ly-button raised bg="warn" (click)="deleteFile(file.name)" class="width-100">Delete</button>
+              <button ly-button raised bg="warn" (click)="archiveFile(file.name)" class="width-100">Delete</button>
             </ly-grid>
-
             <ng-template #restoreTemplate>
               <ly-grid item col="6">
                 <button ly-button raised outlined color="primary" (click)="restoreFile(file.name)" class="width-100">Restore</button>
               </ly-grid>
             </ng-template>
-            
             <ly-grid item col="3" *ngIf="file.status === 0">
               <button ly-button raised bg="primary" (click)="downloadFile(file.hash, file.name)" class="width-100">Download</button>
             </ly-grid>
@@ -127,7 +124,7 @@
       </ly-paper>
     </div>
   </div>
-
+  
   <ng-template #loading>
     <p>Loading...</p>
     <br>

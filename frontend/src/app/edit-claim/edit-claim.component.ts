@@ -47,8 +47,8 @@ export class EditClaimComponent implements OnInit {
     }
   }
 
-  deleteFile(filename: string): void {
-    this.service.deleteFile(filename, this.vin).subscribe(
+  archiveFile(filename: string): void {
+    this.service.archiveFile(filename, this.vin).subscribe(
       undefined,
       error => console.log(error),
       () => {
