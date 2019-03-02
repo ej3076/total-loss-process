@@ -48,19 +48,34 @@ export class EditClaimComponent implements OnInit {
   }
 
   deleteFile(filename: string): void {
-    // FIXME: This is not correct
     this.service.deleteFile(filename, this.vin).subscribe(
       undefined,
       error => console.log(error),
-      () => alert('FILE DELETED')
+      () => {
+        alert('FILE DELETED');
+        this.reloadComponent();
+      }
     );
-    // TODO: show visual confirmation of deletion
+  }
+
+  restoreFile(filename: string): void {
+    this.service.restoreFile(filename, this.vin).subscribe(
+      undefined,
+      error => console.log(error),
+      () => {
+        alert('FILE RESTORED');
+        this.reloadComponent();
+      }
+    );
   }
 
   submitChanges() {
     if (this.files) {
-      this.service.addFiles(this.files, this.vin);
-      this.reloadComponent();
+      this.service.addFiles(this.files, this.vin)
+        .subscribe(undefined, undefined, () => {
+          alert('File upload success!');
+          this.reloadComponent();
+        });
     }
 
     if (this.vehicleIsDirty()) {

@@ -71,15 +71,17 @@ export class MiddlewareService {
     return this.http
       .post(`${API_BASE}/claims/${vin}/files`, data, {
         headers: this.auth.headers,
-      })
-      .subscribe(undefined, undefined, () => {
-        alert('File upload success!');
       });
   }
 
   deleteFile(filename: string, vin: string) {
-    // FIXME: Unauthorized even though authorization token exists?
-    return this.http.post(`${API_BASE}/claims/${vin}/files/${filename}/archive`, {
+    return this.http.post(`${API_BASE}/claims/${vin}/files/${filename}/archive`, null, {
+      headers: this.auth.headers,
+    });
+  }
+
+  restoreFile(filename: string, vin: string) {
+    return this.http.post(`${API_BASE}/claims/${vin}/files/${filename}/restore`, null, {
       headers: this.auth.headers,
     });
   }
@@ -87,9 +89,7 @@ export class MiddlewareService {
   downloadFile(vin: string, hash: string, filename: string) {
     return this.http.get<Blob>(`${API_BASE}/claims/${vin}/files/${filename}`, {
       headers: this.auth.headers,
-      params: {
-        hash: hash
-      }
+      params: { hash }
     }).subscribe(
       data => {
         console.log(data);
