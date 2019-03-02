@@ -78,7 +78,7 @@
               <p>{{ file.name }}</p>
             </ly-grid>
             <ly-grid item col="3" *ngIf="file.status === 0; else restoreTemplate">
-              <button ly-button raised bg="warn" (click)="archiveFile(file.name)" class="width-100">Delete</button>
+              <button ly-button raised bg="warn" (click)="archiveFile(file.name)" class="width-100">Archive</button>
             </ly-grid>
             <ng-template #restoreTemplate>
               <ly-grid item col="6">

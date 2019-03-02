@@ -52,7 +52,7 @@ export class EditClaimComponent implements OnInit {
       undefined,
       error => console.log(error),
       () => {
-        alert('FILE DELETED');
+        alert('FILE ARCHIVED');
         this.reloadComponent();
       }
     );
