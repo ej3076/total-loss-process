@@ -1,0 +1,65 @@
+@startuml
+
+!includeurl https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5/aws.puml
+
+hide stereotype
+
+skinparam rectangle {
+  roundCorner<<api>> 25
+  roundCorner<<tp-claim>> 25
+  roundCorner<<validator>> 25
+}
+
+actor User
+
+cloud "<$aws>" {
+  folder s3 {
+    node "s3://ford-capstone-wayne-state" as bucket
+  }
+}
+
+cloud Host {
+  left to right direction
+  rectangle "Web" as web
+  rectangle "Middleware" as mw
+
+  node "Node" {
+    rectangle "Consensus Engine" as engine
+    rectangle "Validator" <<validator>> as validator {
+      rectangle "Interconnect" as inter
+      rectangle "Consensus Proxy" as cp
+      database "State"
+    }
+    rectangle "REST API" <<api>> as api
+    rectangle "Claim Transaction Processor" <<tp-claim>> as tpclaim
+    rectangle "Settings Transaction Processor" <<tp-claim>> as tpsettings
+  }
+}
+
+cloud Host2 {
+  rectangle "Validator Node" as v2 {
+    rectangle Validator <<validator>> as validator2
+  }
+}
+
+cloud Host3 {
+  rectangle "Validator Node" as v3 {
+    rectangle Validator <<validator>> as validator3
+  }
+}
+
+bucket <-- mw
+
+User --> web
+web -- mw
+mw -- api
+api -- inter
+inter -- tpclaim
+inter -- tpsettings
+engine -- cp
+
+validator -- validator2
+validator2 -- validator3
+validator3 -- validator
+
+@enduml
