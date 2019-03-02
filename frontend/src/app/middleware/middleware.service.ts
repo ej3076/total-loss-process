@@ -79,9 +79,12 @@ export class MiddlewareService {
 
   deleteFile(filename: string, vin: string) {
     // FIXME: Unauthorized even though authorization token exists?
-    return this.http.post(`${API_BASE}/claims/${vin}/files/${filename}/archive`, {
+    return this.http.post(
+      `${API_BASE}/claims/${vin}/files/${filename}/archive`,
+      {
       headers: this.auth.headers,
-    });
+      },
+    );
   }
 
   downloadFile(vin: string, hash: string, filename: string) {

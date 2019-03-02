@@ -7,7 +7,7 @@
           </ly-grid>
         </ly-grid>
         <hr>
-  
+
         <ly-grid container spacing="16 8@XSmall">
           <ly-grid item col="4 12@XSmall">
             <span>Model</span>
@@ -70,7 +70,7 @@
         </ly-grid>
       </ly-paper>
     </div>
-  
+
     <div class="mth" *ngIf="claim.files.length > 0">
       <ly-paper elevation="4">
         <ly-grid container spacing="16 8@XSmall" *ngFor="let file of claim.files" class="mbm">
@@ -87,7 +87,7 @@
         </ly-grid>
       </ly-paper>
     </div>
-  
+
     <div class="mth">
       <ly-paper elevation="4">
         <ly-grid container spacing="16 8@XSmall">
@@ -110,7 +110,7 @@
             </div>
           </ly-grid>
         </ly-grid>
-  
+
         <ly-grid container spacing="16 8@XSmall" *ngIf="files">
           <ly-grid item col="12" *ngFor="let file of files" class="mbm">
             <span>File Name: {{ file.name }}</span><br>
@@ -120,7 +120,7 @@
       </ly-paper>
     </div>
   </div>
-  
+
   <ng-template #loading>
     <p>Loading...</p>
     <br>
