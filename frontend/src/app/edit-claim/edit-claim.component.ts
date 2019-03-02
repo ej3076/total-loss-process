@@ -50,7 +50,7 @@ export class EditClaimComponent implements OnInit {
   deleteFile(filename: string): void {
     // FIXME: This is not correct
     this.service.deleteFile(filename, this.vin).subscribe(
-      data => undefined,
+      undefined,
       error => console.log(error),
       () => alert('FILE DELETED')
     );
