@@ -14,9 +14,6 @@ const alyleStyle = (theme: ThemeVariables) => ({
     margin: '3rem auto auto auto',
     padding: '1em',
   },
-  headerColor: {
-    color: theme.offPrimary.default,
-  },
   claim: {
     padding: '16px',
     borderRadius: '4px',
