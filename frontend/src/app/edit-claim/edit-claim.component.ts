@@ -86,7 +86,7 @@ export class EditClaimComponent implements OnInit {
   fieldEditSwitch(): void {
     this.cannotEdit = !this.cannotEdit;
 
-    if (!this.cannotEdit) {
+    if (this.cannotEdit) {
       this.model.disable();
       this.color.disable();
       this.miles.disable();
