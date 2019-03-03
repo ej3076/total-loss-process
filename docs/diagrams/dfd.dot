@@ -1,0 +1,21 @@
+digraph dfd {
+  node [shape=record];
+
+  // external entities
+  user [label="User" shape=box];
+
+  // processes
+  middleware [label="{<f0> P1.0|<f1> Middleware\n\n\n}" shape=Mrecord];
+  validator [label="{<f0> P1.1|<f1> Validator\n\n\n}" shape=Mrecord];
+  processor [label="{<f0> P1.2|<f1> Transaction Processor\n\n\n}" shape=Mrecord];
+
+  // storage
+  s3 [label="{<f0>D1.0|<f1>AWS S3}"];
+  state [label="{<f0>D2.0|<f1>State}"];
+
+  user -> middleware [label="Create/edit claims"];
+  middleware -> validator [label="Validate entry"];
+  validator -> processor [label="Process entry"];
+  processor -> state [label="Store data on blockchain"];
+  middleware -> s3 [label="Store files"];
+}
