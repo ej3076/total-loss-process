@@ -7,6 +7,7 @@
     "down": "npm run dc -- down -v",
     "down:production": "npm run dc:production -- down -v",
     "down:production:network": "npm run dc:production:network -- down -v",
+    "lint:prettier": "prettier --check '**/*.{js,json,css,md,scss,ts,html,yml}'",
     "logs": "npm run dc -- logs -f",
     "logs:production": "npm run dc:production -- logs -f",
     "logs:production:network": "npm run dc:production:network -- logs -f",
@@ -16,9 +17,10 @@
     "test": "jest",
     "test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit"
   },
-  "devDependencies": {
-    "jest": "^24.1.0",
-    "jest-junit": "^6.3.0"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "jest": {
     "collectCoverage": true,
@@ -34,7 +36,17 @@
     ],
     "testEnvironment": "node"
   },
-  "dependencies": {
-    "@types/auth0-js": "^8.11.11"
+  "lint-staged": {
+    "*.{js,json,css,md,scss,ts,html,yml}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^1.3.1",
+    "jest": "^24.1.0",
+    "jest-junit": "^6.3.0",
+    "lint-staged": "^8.1.5",
+    "prettier": "^1.16.4"
   }
 }
