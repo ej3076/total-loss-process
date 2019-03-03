@@ -39,8 +39,6 @@ services:
     image: hyperledger/sawtooth-validator:1.0
     security_opt:
       - apparmor:unconfined
-    ports:
-      - 4004:4004
     command: >-
       bash -c '
         sawadm keygen --force &&
