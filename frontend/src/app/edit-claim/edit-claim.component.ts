@@ -47,22 +47,35 @@ export class EditClaimComponent implements OnInit {
     }
   }
 
-  deleteFile(filename: string): void {
-    // FIXME: This is not correct
-    this.service
-      .deleteFile(filename, this.vin)
-      .subscribe(
-        undefined,
-        error => console.log(error),
-        () => alert('FILE DELETED'),
-      );
-    // TODO: show visual confirmation of deletion
+  archiveFile(filename: string): void {
+    this.service.archiveFile(filename, this.vin).subscribe(
+      undefined,
+      error => console.log(error),
+      () => {
+        alert('FILE ARCHIVED');
+        this.reloadComponent();
+      }
+    );
+  }
+
+  restoreFile(filename: string): void {
+    this.service.restoreFile(filename, this.vin).subscribe(
+      undefined,
+      error => console.log(error),
+      () => {
+        alert('FILE RESTORED');
+        this.reloadComponent();
+      }
+    );
   }
 
   submitChanges() {
     if (this.files) {
-      this.service.addFiles(this.files, this.vin);
-      this.reloadComponent();
+      this.service.addFiles(this.files, this.vin)
+        .subscribe(undefined, undefined, () => {
+          alert('File upload success!');
+          this.reloadComponent();
+        });
     }
 
     if (this.vehicleIsDirty()) {
@@ -73,7 +86,7 @@ export class EditClaimComponent implements OnInit {
   fieldEditSwitch(): void {
     this.cannotEdit = !this.cannotEdit;
 
-    if (!this.cannotEdit) {
+    if (this.cannotEdit) {
       this.model.disable();
       this.color.disable();
       this.miles.disable();
