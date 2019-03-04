@@ -1,20 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { LyTheme2 } from '@alyle/ui';
+import { LyTheme2, ThemeVariables } from '@alyle/ui';
 import { MiddlewareService } from '../middleware/middleware.service';
 import { AuthService } from '../auth/auth.service';
 
-const STYLES = {
+const alyleStyle = (theme: ThemeVariables) => ({
   paper: {
     display: 'block',
-    margin: '.5em',
-    padding: '1em',
+    margin: '.2em',
+    padding: '.8em',
   },
   noClaims: {
     display: 'block',
     margin: '3rem auto auto auto',
     padding: '1em',
   },
-};
+  claim: {
+    padding: '16px',
+    borderRadius: '4px',
+  },
+  claimLink: {
+    color: theme.primary.default,
+    '&:hover': {
+      color: theme.warn.default,
+    },
+  },
+});
 
 @Component({
   selector: 'app-view-claims',
@@ -22,7 +32,7 @@ const STYLES = {
   styleUrls: ['./view-claims.component.scss'],
 })
 export class ViewClaimsComponent implements OnInit {
-  readonly classes = this._theme.addStyleSheet(STYLES);
+  readonly classes = this._theme.addStyleSheet(alyleStyle);
 
   errorText = '';
   responseError = false;
@@ -38,7 +48,6 @@ export class ViewClaimsComponent implements OnInit {
   ngOnInit() {
     if (this.auth.isLoggedIn) {
       this.setClaims();
-      this.sortClaims(0);
     }
   }
 
