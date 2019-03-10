@@ -43,7 +43,7 @@ exports.renameFile = async (vin, from, to) => {
   await s3
     .copyObject({
       Bucket,
-      CopySource: `${vin}/${from}`,
+      CopySource: `${Bucket}/${vin}/${from}`,
       Key: `${vin}/${to}`,
     })
     .promise();
