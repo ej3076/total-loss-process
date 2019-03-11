@@ -32,6 +32,12 @@ export class MiddlewareService {
     });
   }
 
+  deleteClaim(vin: string): Observable<Object> {
+    return this.http.delete(`${API_BASE}/claims/${vin}`, {
+      headers: this.auth.headers,
+    });
+  }
+
   addClaim(claim: MinimalClaim) {
     return this.http
       .post(`${API_BASE}/claims`, claim, {
@@ -68,22 +74,29 @@ export class MiddlewareService {
       data.append('files[]', file);
     }
 
-    return this.http
-      .post(`${API_BASE}/claims/${vin}/files`, data, {
-        headers: this.auth.headers,
-      });
+    return this.http.post(`${API_BASE}/claims/${vin}/files`, data, {
+      headers: this.auth.headers,
+    });
   }
 
   archiveFile(filename: string, vin: string) {
-    return this.http.post(`${API_BASE}/claims/${vin}/files/${filename}/archive`, null, {
-      headers: this.auth.headers,
-    });
+    return this.http.post(
+      `${API_BASE}/claims/${vin}/files/${filename}/archive`,
+      null,
+      {
+        headers: this.auth.headers,
+      },
+    );
   }
 
   restoreFile(filename: string, vin: string) {
-    return this.http.post(`${API_BASE}/claims/${vin}/files/${filename}/restore`, null, {
-      headers: this.auth.headers,
-    });
+    return this.http.post(
+      `${API_BASE}/claims/${vin}/files/${filename}/restore`,
+      null,
+      {
+        headers: this.auth.headers,
+      },
+    );
   }
 
   downloadFile(vin: string, hash: string, filename: string) {

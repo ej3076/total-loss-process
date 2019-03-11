@@ -1,0 +1,81 @@
+<ly-card>
+  <ly-card-content>
+    <div class="mrl mll">
+      <ly-grid container spacing="16 8@XSmall">
+        <ly-grid item col="12 12@XSmall">
+          <h1 lyTyp="headline" gutterBottom>Files On Claim</h1>
+        </ly-grid>
+      </ly-grid>
+      <hr />
+      <div *ngFor="let file of claim.files">
+        <ly-grid container spacing="16 8@XSmall" class="mbm">
+          <ly-grid item col="6">
+            <h2 lyTyp="title" gutterBottom>{{ file.name }}</h2>
+          </ly-grid>
+          <ly-grid item col="3" *ngIf="file.status === 0">
+            <button
+              ly-button
+              raised
+              bg="warn"
+              (click)="archiveFile(file.name)"
+              class="width-100"
+            >
+              Archive
+            </button>
+          </ly-grid>
+          <ly-grid item col="6" *ngIf="file.status === 1">
+            <button
+              ly-button
+              raised
+              outlined
+              color="primary"
+              (click)="restoreFile(file.name)"
+              class="width-100"
+            >
+              Restore
+            </button>
+          </ly-grid>
+          <ly-grid item col="3" *ngIf="file.status === 0">
+            <button
+              ly-button
+              raised
+              bg="primary"
+              (click)="downloadFile(file.hash, file.name)"
+              class="width-100"
+            >
+              Download
+            </button>
+          </ly-grid>
+        </ly-grid>
+      </div>
+      <ly-grid container spacing="16 8@XSmall">
+        <ly-grid item col="8">
+          <div class="file-input-wrapper width-100">
+            <button ly-button raised bg="secondary" class="width-100">
+              Select Files to Upload
+            </button>
+            <input
+              type="file"
+              (change)="updateFileList($event)"
+              multiple="multiple"
+            />
+          </div>
+        </ly-grid>
+        <ly-grid item col="4">
+          <a (click)="submitFiles()">
+            <button ly-button raised bg="primary" class="width-100">
+              Upload Files
+            </button>
+          </a>
+        </ly-grid>
+      </ly-grid>
+      <ly-grid container spacing="16 8@XSmall" *ngIf="files">
+        <ly-grid item col="12" *ngFor="let file of files" class="mbm">
+          <span>File Name: {{ file.name }}</span
+          ><br />
+          <span>File Size (in bytes): {{ file.size }}</span>
+        </ly-grid>
+      </ly-grid>
+    </div>
+  </ly-card-content>
+</ly-card>
