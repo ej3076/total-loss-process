@@ -39,10 +39,49 @@ exports.getState = async qs => get('/state', { qs });
 exports.getStatus = async () => get('/status');
 
 /**
- * Sends 1 or more batches to the validator to be handled and returns the response.
+ * Sends 1 or more batches to the validator to be handled and returns the
+ * response as an unparsed JSON string.
  *
  * @param {import('protobufjs').Message[]} batches - 1 or more batches to be sent.
- * @return {Promise<Sawtooth.API.PostBatchesResponse>}
+ * @return {Promise<string>}
  */
 exports.sendBatches = async (...batches) =>
   post('/batches', { body: sawtooth.BatchList.encode({ batches }).finish() });
+
+/**
+ * Helper method that takes a response from `postBatches` and pings the
+ * returned link until it either commits or errors.
+ *
+ * @param {Sawtooth.API.PostBatchesResponse} response - Response from the `POST /batches` endpoint.
+ * @param {number} [interval=100] - Interval to ping link endpoint.
+ * @return {Promise<void>}
+ */
+exports.pingBatchResponse = ({ link }, interval = 100) => {
+  if (typeof link !== 'string') {
+    throw new Error('Batch response link not found in response object');
+  }
+  const url = new URL(link);
+  const endpoint = `${url.pathname}${url.search}`;
+  return new Promise((resolve, reject) => {
+    const intervalId = setInterval(async () => {
+      /**
+       * @type {Sawtooth.API.GetBatchStatusResponse}
+       */
+      const response = await get(endpoint);
+      for (const batch of response.data) {
+        if (batch.status !== 'PENDING') {
+          clearInterval(intervalId);
+          switch (batch.status) {
+            case 'COMMITTED':
+              return resolve();
+            case 'INVALID':
+              return reject(new Error(batch.invalid_transactions[0].message));
+            case 'UNKNOWN':
+            default:
+              return reject(new Error('Batch status unable to be resolved.'));
+          }
+        }
+      }
+    }, interval);
+  });
+};

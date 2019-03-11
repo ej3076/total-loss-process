@@ -154,29 +154,23 @@ router.post(
 );
 
 // Rename a single file in a claim.
-router.post(
-  '/:vin/files/:filename',
-  authMiddleware,
-  async (req, res) => {
-    try {
-      if (typeof req.body.name !== 'string') {
-        throw new Error(
-          'New file name string is required',
-          );
-        }
-      const client = new ClaimClient(req.privateKey);
-      const response = await client.renameFile(
-        req.params.vin,
-        req.params.filename,
-        req.body.name,
-      );
-      console.log(response);
-      res.send(response);
-    } catch (err) {
-      console.log(err);
-      res.sendStatus(500);
+router.post('/:vin/files/:filename', authMiddleware, async (req, res) => {
+  try {
+    if (typeof req.body.name !== 'string') {
+      throw new Error('New file name string is required');
     }
-  },
-);
+    const client = new ClaimClient(req.privateKey);
+    const response = await client.renameFile(
+      req.params.vin,
+      req.params.filename,
+      req.body.name,
+    );
+    console.log(response);
+    res.send(response);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
 
 module.exports = router;

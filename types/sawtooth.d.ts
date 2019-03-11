@@ -1,5 +1,61 @@
 declare namespace Sawtooth {
   namespace API {
+    type Response<T = undefined> = {
+      data: T;
+      link: string;
+    };
+    type PagedResponse<T> = Response<T> & {
+      /**
+       * Address of head block.
+       */
+      head: string;
+      /**
+       * Paging for response.
+       */
+      paging: Paging;
+    };
+
+    type GetBatchStatusResponse = Response<BatchStatusObj[]>;
+    /**
+     * `data` is a base64 encoded string of state data for the individual item.
+     */
+    type GetStateItemResponse = Response<string> & { head: string };
+    type GetStateResponse = PagedResponse<State[]>;
+    type GetStatusResponse = Response<Status>;
+    type PostBatchesResponse = Response;
+
+    type BatchStatus = 'COMMITTED' | 'INVALID' | 'PENDING' | 'UNKNOWN';
+
+    interface BatchStatusObj {
+      /**
+       * Id of batch transaction.
+       */
+      id: string;
+      /**
+       * Status of batch transaction.
+       */
+      status: BatchStatus;
+      /**
+       * Array of invalid transactions.
+       */
+      invalid_transactions: InvalidTransaction[];
+    }
+
+    interface InvalidTransaction {
+      /**
+       * Id of transaction.
+       **/
+      id: string;
+      /**
+       * Error message associated with invalid transaction.
+       */
+      message: string;
+      /**
+       * Binary byte string that I have no idea what is for.
+       */
+      extended_data: string;
+    }
+
     interface Paging {
       /**
        * Start address.
@@ -17,6 +73,28 @@ declare namespace Sawtooth {
        * URL to next item.
        */
       next: string;
+    }
+
+    interface State {
+      /**
+       * Address of item on the blockchain.
+       */
+      address: string;
+      /**
+       * Base64 encoded string of encoded data.
+       */
+      data: string;
+    }
+
+    interface Status {
+      /**
+       * Endpoint URI.
+       */
+      endpoint: string;
+      /**
+       * Peers on the network.
+       */
+      peers: Array<{ endpoint: string }>;
     }
 
     interface GetBlocksParams {
@@ -61,71 +139,6 @@ declare namespace Sawtooth {
        * Should the list should be reversed.
        */
       reverse?: boolean;
-    }
-
-    interface GetStateItemResponse {
-      /**
-       * Base64 encoded string of state data for the individual item.
-       */
-      data: string;
-      /**
-       * The item's address.
-       */
-      head: string;
-      /**
-       * URL that resolves to the state for this item.
-       */
-      link: string;
-    }
-
-    interface GetStateResponse {
-      /**
-       * Array of state items.
-       */
-      data: Array<{
-        /**
-         * Address of item on the blockchain.
-         */
-        address: string;
-        /**
-         * Base64 encoded string of encoded data.
-         */
-        data: string;
-      }>;
-      /**
-       * Address of head block.
-       */
-      head: string;
-      /**
-       * URL that resolves to head block.
-       */
-      link: string;
-      /**
-       * Paging for response.
-       */
-      paging: Paging;
-    }
-
-    interface GetStatusResponse {
-      /**
-       * Validator status data.
-       */
-      data: {
-        endpoint: string;
-        peers: Array<{ endpoint: string }>;
-      };
-      /**
-       * Link to this endpoint.
-       */
-      link: string;
-    }
-
-    interface PostBatchesResponse {
-      /**
-       * URL to a `/batch_statuses` endpoint to be polled to check the status
-       * of submitted batches.
-       */
-      link: string;
     }
   }
 
