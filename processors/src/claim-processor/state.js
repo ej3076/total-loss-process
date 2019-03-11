@@ -19,6 +19,17 @@ class ClaimState {
   }
 
   /**
+   * Deletes an existing claim.
+   *
+   * @param {string} vin - The VIN number of the claim.
+   */
+  async deleteClaim(vin) {
+    const address = addressFromVIN(vin);
+    this.cache.delete(address);
+    return this.context.deleteState([address], this.timeout);
+  }
+
+  /**
    * Retrieves and deserlializes a claim's data.
    *
    * @param {string} vin - The VIN number of the claim.

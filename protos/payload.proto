@@ -9,8 +9,10 @@ message ClaimPayload {
     ERROR = 0;
     // Create a new claim.
     CREATE_CLAIM = 1;
+    // Delete an existing claim.
+    DELETE_CLAIM = 2;
     // Edit an existing claim.
-    EDIT_CLAIM = 2;
+    EDIT_CLAIM = 3;
   }
 
   // Action to be taken.
