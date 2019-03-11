@@ -32,6 +32,7 @@
             <ly-label>Vehicle Model</ly-label>
             <input #_input lyNativeControl [formControl]="model" type="text" />
             <span style="color: orangered">Required</span>
+            <ly-hint [align]="'after'"></ly-hint>
             <ly-error *ngIf="model.hasError('required')">
               Model of vehicle is required
             </ly-error>
@@ -51,11 +52,12 @@
               (input)="numberValidator($event)"
             />
             <span style="color: orangered">Required</span>
+            <ly-hint [align]="'after'"></ly-hint>
             <ly-error *ngIf="year.hasError('required')">
               Year of vehicle is required
             </ly-error>
             <ly-error *ngIf="year.hasError('minlength')">
-              Must be between 4 digits
+              Must be 4 digits
             </ly-error>
           </ly-field>
         </ly-grid>

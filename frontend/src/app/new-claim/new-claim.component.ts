@@ -39,8 +39,8 @@ export class NewClaimComponent {
         vin: this.vin.value,
         model: this.model.value,
         //acv: this.acv.value,
-        year: this.year.value,
-        miles: this.miles.value,
+        //year: this.year.value,
+        //miles: this.miles.value,
         color: this.color.value,
       },
     };
