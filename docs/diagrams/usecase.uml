@@ -1,0 +1,45 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5/aws.puml
+
+note "Insurance Agent Only" as InsuranceOnly1
+note "Insurance Agent Only" as InsuranceOnly2
+note "Only if there are archived files on claim" as RestoreNote
+
+(Login with Email) as (VOLogin)
+(Login with Company Email) as (Login)
+(Create New Claim) as (Create)
+(View Claims) as (View)
+(Edit Claim Information) as (Edit)
+(Attach File/Document) as (Upload)
+(Download File/Document) as (Download)
+(Archive File/Document) as (Archive)
+(Restore File/Document) as (Restore)
+(Delete Claim) as (Delete)
+
+:Vehicle Owner: as Owner
+:Insurance Agent: as Insurance
+:DMV Employee: as DMV
+:FMCC Employee: as FMCC
+:Salvage Yard Employee: as Salvage
+
+Salvage --> Login
+FMCC --> Login
+DMV --> Login
+Insurance --> Login
+Owner --> VOLogin
+
+Login --> View
+VOLogin --> View
+Login .. InsuranceOnly1
+InsuranceOnly1 .. Create
+
+View --> Edit
+View --> Upload
+View --> Download
+
+Edit --> Archive
+Edit .. RestoreNote
+RestoreNote .. Restore
+Edit .. InsuranceOnly2
+InsuranceOnly2 .. Delete
+@enduml

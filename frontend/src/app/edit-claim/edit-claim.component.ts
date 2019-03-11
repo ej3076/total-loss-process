@@ -54,7 +54,7 @@ export class EditClaimComponent implements OnInit {
       () => {
         alert('FILE ARCHIVED');
         this.reloadComponent();
-      }
+      },
     );
   }
 
@@ -65,13 +65,14 @@ export class EditClaimComponent implements OnInit {
       () => {
         alert('FILE RESTORED');
         this.reloadComponent();
-      }
+      },
     );
   }
 
   submitChanges() {
     if (this.files) {
-      this.service.addFiles(this.files, this.vin)
+      this.service
+        .addFiles(this.files, this.vin)
         .subscribe(undefined, undefined, () => {
           alert('File upload success!');
           this.reloadComponent();
@@ -87,6 +88,7 @@ export class EditClaimComponent implements OnInit {
     this.cannotEdit = !this.cannotEdit;
 
     if (this.cannotEdit) {
+      console.log('Hello');
       this.model.disable();
       this.color.disable();
       this.miles.disable();

@@ -1,143 +1,193 @@
 <div *ngIf="claim; else loading" class="mbh">
-    <div class="mtl mbl">
-      <ly-paper elevation="4">
-        <div class="mrl mll">
-          <ly-grid container spacing="16 8@XSmall">
-            <ly-grid item col="12 12@XSmall">
-              <h1 [lyTyp]="'display2'" class="mbs">VIN #: {{ claim.vehicle.vin }}</h1>
-            </ly-grid>
+  <div class="mtl mbl">
+    <h1 [lyTyp]="display1" class="mth" color="offPrimary">
+      Edit Claim
+    </h1>
+    <ly-paper elevation="4" class="mtm">
+      <div class="mrl mll">
+        <ly-grid container spacing="16 8@XSmall">
+          <ly-grid item col="12 12@XSmall">
+            <h1 [lyTyp]="'display2'" class="mbs">
+              {{ claim.vehicle.vin }}
+            </h1>
           </ly-grid>
-          <hr>
+        </ly-grid>
+        <hr />
 
-          <ly-grid container spacing="16 8@XSmall">
-            <ly-grid item col="4 12@XSmall">
-              <span>Model</span>
-              <ly-field fullWidth [appearance]="appearance.value" class="mtn">
-                <input
+        <ly-grid container spacing="16 8@XSmall">
+          <ly-grid item col="4 12@XSmall">
+            <span>Model</span>
+            <ly-field fullWidth [appearance]="appearance.value" class="mtn">
+              <input
                 #_input
                 lyNativeControl
                 [formControl]="model"
                 type="text"
-                />
-              </ly-field>
-            </ly-grid>
-            <ly-grid item col="4 12@XSmall">
-              <span>Color</span>
-                <ly-field fullWidth [appearance]="appearance.value" class="mtn">
-                  <input
-                  #_input
-                  lyNativeControl
-                  [formControl]="color"
-                  type="text"
-                  />
-                </ly-field>
-            </ly-grid>
-            <ly-grid item col="4 12@XSmall">
-              <span>Mileage</span>
-                <ly-field fullWidth [appearance]="appearance.value" class="mtn">
-                  <input
-                  #_input
-                  lyNativeControl
-                  [formControl]="miles"
-                  type="text"
-                  />
-                </ly-field>
-            </ly-grid>
-            <ly-grid item col="4 12@XSmall">
-              <span>Year</span>
-              <ly-field fullWidth [appearance]="appearance.value" class="mtn">
-                <input
+              />
+            </ly-field>
+          </ly-grid>
+          <ly-grid item col="4 12@XSmall">
+            <span>Color</span>
+            <ly-field fullWidth [appearance]="appearance.value" class="mtn">
+              <input
                 #_input
                 lyNativeControl
-                [formControl]="year"
+                [formControl]="color"
                 type="text"
-                />
-              </ly-field>
-            </ly-grid>
-            <ly-grid item col="4 12@XSmall">
-            </ly-grid>
-            <ly-grid item col="4 12@XSmall">
-              <div class="width-100">
-                <button
+              />
+            </ly-field>
+          </ly-grid>
+          <ly-grid item col="4 12@XSmall">
+            <span>Mileage</span>
+            <ly-field fullWidth [appearance]="appearance.value" class="mtn">
+              <input
+                #_input
+                lyNativeControl
+                [formControl]="miles"
+                type="text"
+              />
+            </ly-field>
+          </ly-grid>
+          <ly-grid item col="4 12@XSmall">
+            <span>Year</span>
+            <ly-field fullWidth [appearance]="appearance.value" class="mtn">
+              <input #_input lyNativeControl [formControl]="year" type="text" />
+            </ly-field>
+          </ly-grid>
+          <ly-grid item col="4 12@XSmall"> </ly-grid>
+          <ly-grid item col="4 12@XSmall">
+            <div class="width-100">
+              <button
                 (click)="fieldEditSwitch()"
                 ly-button
                 outlined
                 color="primary"
-                class="width-100 mth">
-                  <span *ngIf="cannotEdit">Edit Vehicle</span>
-                  <span *ngIf="!cannotEdit">Stop Editing Vehicle</span>
-                </button>
-              </div>
-            </ly-grid>
+                class="width-100 mth"
+              >
+                <span *ngIf="cannotEdit">Edit Vehicle</span>
+                <span *ngIf="!cannotEdit">Stop Editing Vehicle</span>
+              </button>
+            </div>
           </ly-grid>
-        </div>
-        <div *ngIf="!cannotEdit" class="mrl mll">
-          <ly-grid container spacing="16 8@XSmall">
-            <ly-grid item col="8 12@XSmall">
-              <div class="file-input-wrapper width-100">
-                <button ly-button raised bg="secondary" class="width-100">Upload Files</button>
-                <input type="file" (change)="setFiles($event)" multiple="multiple"/>
-              </div>
-            </ly-grid>
-            <ly-grid item col="4 12@XSmall">
-              <div class="width-100">
-                <button ly-button
+        </ly-grid>
+      </div>
+      <div *ngIf="!cannotEdit" class="mrl mll">
+        <ly-grid container spacing="16 8@XSmall">
+          <ly-grid item col="8 12@XSmall">
+            <div class="file-input-wrapper width-100">
+              <button ly-button raised bg="secondary" class="width-100">
+                Upload Files
+              </button>
+              <input
+                type="file"
+                (change)="setFiles($event)"
+                multiple="multiple"
+              />
+            </div>
+          </ly-grid>
+          <ly-grid item col="4 12@XSmall">
+            <div class="width-100">
+              <button
+                ly-button
                 bg="primary"
                 raised
                 type="submit"
                 class="width-100"
-                (click)="submitChanges()">
-                  Upload Files and Edit Vehicle Fields
-                </button>
-              </div>
-            </ly-grid>
+                (click)="submitChanges()"
+              >
+                Upload Files and Edit Vehicle Fields
+              </button>
+            </div>
           </ly-grid>
-          <ly-grid container spacing="16 8@XSmall" *ngIf="files">
-            <ly-grid item col="12" *ngFor="let file of files" class="mbm">
-              <span>File Name: {{ file.name }}</span><br>
-              <span>File Size (in bytes): {{ file.size }}</span>
-            </ly-grid>
+        </ly-grid>
+        <ly-grid container spacing="16 8@XSmall" *ngIf="files">
+          <ly-grid item col="12" *ngFor="let file of files" class="mbm">
+            <span>File Name: {{ file.name }}</span
+            ><br />
+            <span>File Size (in bytes): {{ file.size }}</span>
           </ly-grid>
-        </div>
-      </ly-paper>
-    </div>
-
-    <div class="mth" *ngIf="claim.files.length > 0">
-      <ly-paper elevation="4">
-        <div class="mrl mll">
-          <ly-grid container spacing="16 8@XSmall">
-            <ly-grid item col="12 12@XSmall">
-                <h1 lyTyp="headline" gutterBottom>Files On Claim</h1>
-            </ly-grid>
-          </ly-grid>
-          <hr>
-          <div *ngFor="let file of claim.files">
-            <ly-grid container spacing="16 8@XSmall" class="mbm" *ngIf="file.status === 0 || !cannotEdit">
-              <ly-grid item col="6">
-                  <h2 lyTyp="title" gutterBottom>{{ file.name }}</h2>
-              </ly-grid>
-              <ly-grid item col="3" *ngIf="file.status === 0 && !cannotEdit">
-                <button ly-button raised bg="warn" (click)="archiveFile(file.name)" class="width-100">Archive</button>
-              </ly-grid>
-              <ly-grid item col="6" *ngIf="file.status === 1 && !cannotEdit">
-                <button ly-button raised outlined color="primary" (click)="restoreFile(file.name)" class="width-100">Restore</button>
-              </ly-grid>
-              <ly-grid item col="3" *ngIf="file.status === 0 && !cannotEdit">
-                <button ly-button raised bg="primary" (click)="downloadFile(file.hash, file.name)" class="width-100">Download</button>
-              </ly-grid>
-              <ly-grid item col="6" *ngIf="file.status === 0 && cannotEdit">
-                <button ly-button raised bg="primary" (click)="downloadFile(file.hash, file.name)" class="width-100">Download</button>
-              </ly-grid>
-            </ly-grid>
-          </div>
-        </div>
-      </ly-paper>
-    </div>
+        </ly-grid>
+      </div>
+    </ly-paper>
   </div>
 
-  <ng-template #loading>
-    <p>Loading...</p>
-    <br>
-    <br>
-    <p>If page gets stuck, please <a (click)="reloadComponent()">click here to reload</a></p>
-  </ng-template>
+  <div class="mth" *ngIf="claim.files.length > 0">
+    <ly-paper elevation="4">
+      <div class="mrl mll">
+        <ly-grid container spacing="16 8@XSmall">
+          <ly-grid item col="12 12@XSmall">
+            <h1 lyTyp="headline" gutterBottom>Files On Claim</h1>
+          </ly-grid>
+        </ly-grid>
+        <hr />
+        <div *ngFor="let file of claim.files">
+          <ly-grid
+            container
+            spacing="16 8@XSmall"
+            class="mbm"
+            *ngIf="file.status === 0 || !cannotEdit"
+          >
+            <ly-grid item col="6">
+              <h2 lyTyp="title" gutterBottom>{{ file.name }}</h2>
+            </ly-grid>
+            <ly-grid item col="3" *ngIf="file.status === 0 && !cannotEdit">
+              <button
+                ly-button
+                raised
+                bg="warn"
+                (click)="archiveFile(file.name)"
+                class="width-100"
+              >
+                Archive
+              </button>
+            </ly-grid>
+            <ly-grid item col="6" *ngIf="file.status === 1 && !cannotEdit">
+              <button
+                ly-button
+                raised
+                outlined
+                color="primary"
+                (click)="restoreFile(file.name)"
+                class="width-100"
+              >
+                Restore
+              </button>
+            </ly-grid>
+            <ly-grid item col="3" *ngIf="file.status === 0 && !cannotEdit">
+              <button
+                ly-button
+                raised
+                bg="primary"
+                (click)="downloadFile(file.hash, file.name)"
+                class="width-100"
+              >
+                Download
+              </button>
+            </ly-grid>
+            <ly-grid item col="6" *ngIf="file.status === 0 && cannotEdit">
+              <button
+                ly-button
+                raised
+                bg="primary"
+                (click)="downloadFile(file.hash, file.name)"
+                class="width-100"
+              >
+                Download
+              </button>
+            </ly-grid>
+          </ly-grid>
+        </div>
+      </div>
+    </ly-paper>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p>Loading...</p>
+  <br />
+  <br />
+  <p>
+    If page gets stuck, please
+    <a (click)="reloadComponent()">click here to reload</a>
+  </p>
+</ng-template>
