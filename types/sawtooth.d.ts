@@ -150,15 +150,12 @@ declare namespace Sawtooth {
       setState<T extends Record<string, Buffer>, U extends keyof T>(
         state: T,
         timeout?: number,
-      ): Promise<[U]>;
+      ): Promise<U[]>;
       /**
        * Requests that each of the provided addresses be unset in validator
        * state. A list of successfully deleted addresses is returned.
        */
-      deleteState<T extends string>(
-        addresses: T[],
-        timeout?: number,
-      ): Promise<[T]>;
+      deleteState(addresses: string[], timeout?: number): Promise<string[]>;
       /**
        * Add a blob to the execution result for this transaction.
        */

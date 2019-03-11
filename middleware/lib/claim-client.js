@@ -108,6 +108,15 @@ class ClaimClient {
   }
 
   /**
+   * Delete a claim for a given VIN from the blockchain.
+   *
+   * @param {string} vin - The VIN of the claim to delete.
+   */
+  async deleteClaim(vin) {
+    return this._batch('DELETE_CLAIM', { vehicle: { vin } });
+  }
+
+  /**
    * Edit an existing claim on the blockchain using VIN.
    *
    * @param {string} vin                      - The VIN of the claim to edit.
