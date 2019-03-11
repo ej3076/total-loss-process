@@ -38,12 +38,13 @@ export class NewClaimComponent {
       vehicle: {
         vin: this.vin.value,
         model: this.model.value,
-        //acv: this.acv.value,
-        //year: this.year.value,
-        //miles: this.miles.value,
+        // acv: this.acv.value,
+        // year: this.year.value,
+        // miles: this.miles.value,
         color: this.color.value,
       },
     };
+
     // FIXME: Remove this
     console.log(this.middlewareService.addClaim(claim));
   }

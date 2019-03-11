@@ -19,7 +19,6 @@ import { CallbackComponent } from './callback/callback.component';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth/auth.service';
 import { ViewClaimsComponent } from './view-claims/view-claims.component';
-import { EditClaimComponent } from './edit-claim/edit-claim.component';
 import { EditClaimModule } from './modules/edit-claim/edit-claim.module';
 import { AlyleModule } from './modules/alyle/alyle.module';
 
@@ -32,7 +31,6 @@ import { AlyleModule } from './modules/alyle/alyle.module';
     CallbackComponent,
     NewClaimComponent,
     ViewClaimsComponent,
-    EditClaimComponent,
   ],
   imports: [
     BrowserModule,

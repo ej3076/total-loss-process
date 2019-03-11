@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ThemeVariables, LyTheme2 } from '@alyle/ui';
 import { MiddlewareService } from 'src/app/middleware/middleware.service';
-import { AuthService } from 'src/app/auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
