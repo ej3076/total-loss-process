@@ -30,6 +30,9 @@ module.exports = {
   },
   async getStatus() {},
   async sendBatches() {
-    return Promise.resolve({ link: '' });
+    return Promise.resolve(JSON.stringify({ link: '' }));
+  },
+  async pingBatchResponse() {
+    return Promise.resolve();
   },
 };

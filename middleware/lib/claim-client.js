@@ -230,7 +230,7 @@ class ClaimClient {
       throw new InvalidTransaction(invalidReason);
     }
     const address = calculateAddress(data.vehicle.vin);
-    return API.sendBatches(
+    const response = await API.sendBatches(
       createBatch(
         this.signer,
         createTransaction(this.signer, PayloadType.encode(payload).finish(), {
@@ -239,6 +239,7 @@ class ClaimClient {
         }),
       ),
     );
+    return API.pingBatchResponse(JSON.parse(response));
   }
 
   /**
