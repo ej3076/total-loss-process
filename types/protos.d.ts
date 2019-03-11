@@ -30,6 +30,7 @@ declare namespace Protos {
     enum Action {
       ERROR,
       CREATE_CLAIM,
+      DELETE_CLAIM,
       EDIT_CLAIM,
     }
   }

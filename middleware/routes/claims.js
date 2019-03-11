@@ -8,6 +8,14 @@ const authMiddleware = require('../lib/middleware/auth');
 
 const getFiles = multer().array('files[]');
 
+// Delete a claim from the blockchain.
+router.delete('/:vin', authMiddleware, async (req, res) => {
+  const client = new ClaimClient(req.privateKey);
+  const deletedClaims = await client.deleteClaim(req.params.vin);
+  console.log(deletedClaims);
+  res.send(deletedClaims);
+});
+
 // Retrieve a list of claims from the blockchain.
 router.get('/', async (_, res) => {
   try {

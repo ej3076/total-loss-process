@@ -137,4 +137,11 @@ describe('ClaimState', () => {
       );
     });
   });
+
+  describe('deleteClaim()', () => {
+    it('should call deleteState correctly', async () => {
+      await state.deleteClaim('1234567890');
+      expect(context.deleteState).toBeCalledWith([ADDRESS], state.timeout);
+    });
+  });
 });
