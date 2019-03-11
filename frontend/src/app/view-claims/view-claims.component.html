@@ -1,9 +1,4 @@
-<h1
-  [lyTyp]="display1"
-  [withClass]="classes.headerColor"
-  class="mth"
-  color="offPrimary"
->
+<h1 [lyTyp]="display1" class="mth" color="offPrimary">
   View Claims
 </h1>
 <ly-tabs [alignTabs]="'stretch'">
@@ -21,9 +16,9 @@
         style="width: 100%"
         outlined
       >
-        <ly-grid item [col]="12" *ngFor="let claim of sortClaims(0)">
+        <ly-grid item col="12" *ngFor="let claim of sortClaims(0)">
           <ly-grid container>
-            <ly-grid item [col]="3" [lyTyp]="'title'">
+            <ly-grid item col="4 12@Small 12@XSmall" [lyTyp]="'title'">
               <a
                 [withClass]="classes.claimLink"
                 routerLink="/claims/{{ claim.vehicle.vin }}"
@@ -31,13 +26,13 @@
                 <p [lyTyp]="'headline'">{{ claim.vehicle.vin }}</p>
               </a>
             </ly-grid>
-            <ly-grid item [col]="3" [lyTyp]="'title'"
+            <ly-grid item col="3 12@Small 12@XSmall" [lyTyp]="'title'"
               >Model: {{ claim.vehicle.model }}</ly-grid
             >
-            <ly-grid item [col]="3" [lyTyp]="'title'"
+            <ly-grid item col="3 12@Small 12@XSmall" [lyTyp]="'title'"
               >Color: {{ claim.vehicle.color }}</ly-grid
             >
-            <ly-grid item [col]="3" [lyTyp]="'title'"
+            <ly-grid item col="2 12@Small 12@XSmall" [lyTyp]="'title'"
               >Claim Status: {{ claim.status }}</ly-grid
             >
           </ly-grid>
@@ -61,9 +56,9 @@
         style="width: 100%"
         outlined
       >
-        <ly-grid item [col]="12" *ngFor="let claim of sortClaims(1)">
+        <ly-grid item col="12" *ngFor="let claim of sortClaims(1)">
           <ly-grid container>
-            <ly-grid item [col]="3" [lyTyp]="'title'">
+            <ly-grid item col="3" [lyTyp]="'title'">
               <a
                 [withClass]="classes.claimLink"
                 routerLink="/claims/{{ claim.vehicle.vin }}"
@@ -71,13 +66,13 @@
                 <p [lyTyp]="'headline'">{{ claim.vehicle.vin }}</p>
               </a>
             </ly-grid>
-            <ly-grid item [col]="3" [lyTyp]="'title'"
+            <ly-grid item col="3" [lyTyp]="'title'"
               >Model: {{ claim.vehicle.model }}</ly-grid
             >
-            <ly-grid item [col]="3" [lyTyp]="'title'"
+            <ly-grid item col="3" [lyTyp]="'title'"
               >Color: {{ claim.vehicle.color }}</ly-grid
             >
-            <ly-grid item [col]="3" [lyTyp]="'title'"
+            <ly-grid item col="3" [lyTyp]="'title'"
               >Claim Status: {{ claim.status }}</ly-grid
             >
           </ly-grid>
@@ -101,9 +96,9 @@
         style="width: 100%"
         outlined
       >
-        <ly-grid item [col]="12" *ngFor="let claim of sortClaims(2)">
+        <ly-grid item col="12" *ngFor="let claim of sortClaims(2)">
           <ly-grid container>
-            <ly-grid item [col]="3" [lyTyp]="'title'">
+            <ly-grid item col="3" [lyTyp]="'title'">
               <a
                 [withClass]="classes.claimLink"
                 routerLink="/claims/{{ claim.vehicle.vin }}"
@@ -111,13 +106,13 @@
                 <p [lyTyp]="'headline'">{{ claim.vehicle.vin }}</p>
               </a>
             </ly-grid>
-            <ly-grid item [col]="3" [lyTyp]="'title'"
+            <ly-grid item col="3" [lyTyp]="'title'"
               >Model: {{ claim.vehicle.model }}</ly-grid
             >
-            <ly-grid item [col]="3" [lyTyp]="'title'"
+            <ly-grid item col="3" [lyTyp]="'title'"
               >Color: {{ claim.vehicle.color }}</ly-grid
             >
-            <ly-grid item [col]="3" [lyTyp]="'title'"
+            <ly-grid item col="3" [lyTyp]="'title'"
               >Claim Status: {{ claim.status }}</ly-grid
             >
           </ly-grid>
@@ -141,9 +136,9 @@
         style="width: 100%"
         outlined
       >
-        <ly-grid item [col]="12" *ngFor="let claim of sortClaims(3)">
+        <ly-grid item col="12" *ngFor="let claim of sortClaims(3)">
           <ly-grid container>
-            <ly-grid item [col]="3" [lyTyp]="'title'">
+            <ly-grid item col="3" [lyTyp]="'title'">
               <a
                 [withClass]="classes.claimLink"
                 routerLink="/claims/{{ claim.vehicle.vin }}"
@@ -151,13 +146,13 @@
                 <p [lyTyp]="'headline'">{{ claim.vehicle.vin }}</p>
               </a>
             </ly-grid>
-            <ly-grid item [col]="3" [lyTyp]="'title'"
+            <ly-grid item col="3" [lyTyp]="'title'"
               >Model: {{ claim.vehicle.model }}</ly-grid
             >
-            <ly-grid item [col]="3" [lyTyp]="'title'"
+            <ly-grid item col="3" [lyTyp]="'title'"
               >Color: {{ claim.vehicle.color }}</ly-grid
             >
-            <ly-grid item [col]="3" [lyTyp]="'title'"
+            <ly-grid item col="3" [lyTyp]="'title'"
               >Claim Status: {{ claim.status }}</ly-grid
             >
           </ly-grid>

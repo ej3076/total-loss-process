@@ -23,6 +23,7 @@ declare namespace Protos {
     year: number;
     miles: number;
     color: string;
+    //acv: number;
   }
 
   namespace ClaimPayload {

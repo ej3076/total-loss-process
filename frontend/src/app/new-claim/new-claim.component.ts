@@ -16,13 +16,15 @@ const STYLES = () => ({
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewClaimComponent {
-
   readonly classes = this._theme.addStyleSheet(STYLES);
 
   appearance = new FormControl();
-  color = new FormControl('', [Validators.required]);
-  model = new FormControl('', [Validators.required]);
   vin = new FormControl('', [Validators.required, Validators.minLength(11)]);
+  model = new FormControl('', [Validators.required]);
+  year = new FormControl('', [Validators.required, Validators.minLength(4)]);
+  acv = new FormControl('');
+  miles = new FormControl('');
+  color = new FormControl('');
 
   constructor(
     private _theme: LyTheme2,
@@ -35,8 +37,11 @@ export class NewClaimComponent {
     const claim = {
       vehicle: {
         vin: this.vin.value,
-        color: this.color.value,
         model: this.model.value,
+        //acv: this.acv.value,
+        year: this.year.value,
+        miles: this.miles.value,
+        color: this.color.value,
       },
     };
     // FIXME: Remove this
@@ -52,16 +57,25 @@ export class NewClaimComponent {
   }
 
   areFieldsUntouched(): boolean {
-    return this.vin.untouched || this.color.untouched || this.model.untouched;
+    return !(this.vin.value && this.model.value && this.year.value);
   }
 
   hasErroredFields(): boolean {
     return (
       this.vin.hasError('minlength') ||
       this.vin.hasError('required') ||
-      this.color.hasError('required') ||
+      this.year.hasError('minlength') ||
+      this.year.hasError('required') ||
       this.model.hasError('required')
     );
+  }
+
+  public numberValidator(event: any) {
+    const charactersAllowed = /^[0-9]*$/;
+
+    if (!charactersAllowed.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^0-9]/g, '');
+    }
   }
 
   public alphaNumericValidator(event: any) {
