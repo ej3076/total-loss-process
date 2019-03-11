@@ -88,6 +88,7 @@ export class EditClaimComponent implements OnInit {
     this.cannotEdit = !this.cannotEdit;
 
     if (this.cannotEdit) {
+      console.log('Hello');
       this.model.disable();
       this.color.disable();
       this.miles.disable();

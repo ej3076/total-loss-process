@@ -37,6 +37,10 @@ class ClaimHandler extends TransactionHandler {
         logger.info('Processing action: CREATE_CLAIM');
         return this.createClaim(dataWithDefaults, state);
       }
+      case Actions.DELETE_CLAIM: {
+        logger.info('Processing action: DELETE_CLAIM');
+        return this.deleteClaim(payload.data, state);
+      }
       case Actions.EDIT_CLAIM: {
         logger.info('Processing action: EDIT_CLAIM');
         return this.editClaim(payload.data, state);
@@ -64,6 +68,17 @@ class ClaimHandler extends TransactionHandler {
     }
     logger.debug(`Creating new claim using VIN: ${vin}`);
     return state.setClaim(vin, claim);
+  }
+
+  /**
+   * DELETE_CLAIM action handler.
+   *
+   * @param {Protos.Claim} claim
+   * @param {ClaimState} state
+   */
+  async deleteClaim(claim, state) {
+    const { vin } = claim.vehicle;
+    return state.deleteClaim(vin);
   }
 
   /**

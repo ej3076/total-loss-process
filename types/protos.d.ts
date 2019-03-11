@@ -23,12 +23,14 @@ declare namespace Protos {
     year: number;
     miles: number;
     color: string;
+    //acv: number;
   }
 
   namespace ClaimPayload {
     enum Action {
       ERROR,
       CREATE_CLAIM,
+      DELETE_CLAIM,
       EDIT_CLAIM,
     }
   }
