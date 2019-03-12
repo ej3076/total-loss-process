@@ -49,7 +49,6 @@ export class MiddlewareService {
   }
 
   editClaim(claim: MinimalClaim) {
-    console.log(claim);
     return this.http
       .post(`${API_BASE}/claims/${claim.vehicle.vin}`, claim, {
         headers: this.auth.headers,
@@ -62,7 +61,7 @@ export class MiddlewareService {
         },
         () => {
           alert('Edit successful!');
-          this.router.navigateByUrl('/claims');
+          this.reloadComponent(claim.vehicle.vin);
         },
       );
   }
@@ -107,5 +106,11 @@ export class MiddlewareService {
       },
       responseType: <any>'blob',
     });
+  }
+
+  reloadComponent(vin: string): void {
+    this.router
+      .navigateByUrl('/', { skipLocationChange: true })
+      .then(() => this.router.navigate([`/claims/${vin}`]));
   }
 }

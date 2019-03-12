@@ -7,7 +7,7 @@
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts",
-    "../../types/protos.d.ts",
-    "../../types/globals.d.ts"
+    "../../../types/protos.d.ts",
+    "../../../types/globals.d.ts"
   ]
 }

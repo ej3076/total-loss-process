@@ -74,4 +74,23 @@ export class EditClaimComponent implements OnInit {
       },
     );
   }
+
+  editClaim(status: number = 0, increment: number = 0): void {
+    if (this.claim) {
+      const claim = {
+        status: status + increment,
+        vehicle: {
+          vin: this.vin,
+        },
+      };
+
+      if (status < 0) {
+        alert('Status cannot be reversed at the first state.');
+      } else if (status > 3) {
+        alert('Status cannot be progressed past the final state.');
+      } else {
+        this.service.editClaim(claim);
+      }
+    }
+  }
 }

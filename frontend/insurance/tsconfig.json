@@ -27,5 +27,5 @@
       }
     ]
   },
-  "include": ["**/*", "../types/protos.d.ts", "../types/globals.d.ts"]
+  "include": ["**/*", "../../types/protos.d.ts", "../../types/globals.d.ts"]
 }

@@ -7,59 +7,113 @@
     <div [formGroup]="vehicleForm">
       <ly-grid container spacing="16 8@XSmall">
         <ly-grid item col="12">
-          <h1 lyTyp="display1" color="offPrimary">Model</h1>
-          <h1 lyTyp="headline" *ngIf="!isEditing">{{ claim.vehicle.model }}</h1>
-          <ly-field
-            *ngIf="isEditing"
-            fullWidth
-            [appearance]="appearance.value"
-            class="mtn"
+          <h1
+            lyTyp="display1"
+            color="offPrimary"
+            class="center-text edit-claim-border width-75 auto-margin"
           >
-            <input
-              #_input
-              lyNativeControl
-              formControlName="model"
-              type="text"
-            />
-            <span style="color:orangered">Required</span>
-          </ly-field>
+            Model
+          </h1>
+          <h1 lyTyp="headline" *ngIf="!isEditing" class="center-text">
+            {{ claim.vehicle.model }}
+          </h1>
+          <div class="auto-margin center-text width-75">
+            <ly-field
+              *ngIf="isEditing"
+              fullWidth
+              [appearance]="appearance.value"
+              class="mts mbn"
+            >
+              <input
+                #_input
+                lyNativeControl
+                formControlName="model"
+                type="text"
+                class="center-text"
+              />
+              <ly-hint
+                ><span *ngIf="isEditing" style="color:orangered;"
+                  >Required</span
+                ></ly-hint
+              >
+            </ly-field>
+          </div>
         </ly-grid>
         <hr *ngIf="!isEditing" />
         <ly-grid item col="12">
-          <h1 lyTyp="display1" color="offPrimary">Year</h1>
-          <h1 lyTyp="headline" *ngIf="!isEditing">{{ claim.vehicle.year }}</h1>
-          <ly-field
-            *ngIf="isEditing"
-            fullWidth
-            [appearance]="appearance.value"
-            class="mtn"
+          <h1
+            lyTyp="display1"
+            color="offPrimary"
+            class="center-text edit-claim-border width-75 auto-margin"
           >
-            <input #_input lyNativeControl formControlName="year" type="text" />
-            <span style="color:orangered">Required</span>
-          </ly-field>
+            Year
+          </h1>
+          <h1 lyTyp="headline" *ngIf="!isEditing" class="center-text">
+            {{ claim.vehicle.year }}
+          </h1>
+          <div class="auto-margin center-text width-75">
+            <ly-field
+              *ngIf="isEditing"
+              fullWidth
+              [appearance]="appearance.value"
+              class="mts mbn"
+            >
+              <input
+                #_input
+                lyNativeControl
+                formControlName="year"
+                type="text"
+                class="center-text"
+              />
+              <ly-hint
+                ><span *ngIf="isEditing" style="color:orangered;"
+                  >Required</span
+                ></ly-hint
+              >
+            </ly-field>
+          </div>
         </ly-grid>
         <hr *ngIf="!isEditing" />
         <ly-grid item col="12">
-          <h1 lyTyp="display1" color="offPrimary">Color</h1>
-          <h1 lyTyp="headline" *ngIf="!isEditing">{{ claim.vehicle.color }}</h1>
-          <ly-field
-            *ngIf="isEditing"
-            fullWidth
-            [appearance]="appearance.value"
-            class="mtn"
+          <h1
+            lyTyp="display1"
+            color="offPrimary"
+            class="center-text edit-claim-border width-75 auto-margin"
           >
-            <input
-              #_input
-              lyNativeControl
-              formControlName="color"
-              type="text"
-            />
-          </ly-field>
+            Color
+          </h1>
+          <h1 lyTyp="headline" *ngIf="!isEditing" class="center-text">
+            {{ claim.vehicle.color }}
+          </h1>
+          <div class="auto-margin center-text width-75">
+            <ly-field
+              *ngIf="isEditing"
+              fullWidth
+              [appearance]="appearance.value"
+              class="mts mbn"
+            >
+              <input
+                #_input
+                lyNativeControl
+                formControlName="color"
+                type="text"
+                class="center-text"
+              />
+            </ly-field>
+          </div>
         </ly-grid>
         <hr *ngIf="!isEditing" />
         <ly-grid item col="12">
-          <h1 lyTyp="display1" color="offPrimary">ACV</h1>
-          <h1 lyTyp="headline">COMING SOON</h1>
+          <div class="auto-margin">
+            <h1
+              lyTyp="display1"
+              color="offPrimary"
+              class="center-text edit-claim-border width-75 auto-margin"
+            >
+              ACV
+            </h1>
+          </div>
+          <h1 lyTyp="headline" class="center-text">COMING SOON</h1>
           <!-- <ly-field *ngIf="isEditing" fullWidth [appearance]="appearance.value" class="mtn">
             <input
             #_input
@@ -71,21 +125,32 @@
         </ly-grid>
         <hr *ngIf="!isEditing" />
         <ly-grid item col="12">
-          <h1 lyTyp="display1" color="offPrimary">Mileage</h1>
-          <h1 lyTyp="headline" *ngIf="!isEditing">{{ claim.vehicle.miles }}</h1>
-          <ly-field
-            *ngIf="isEditing"
-            fullWidth
-            [appearance]="appearance.value"
-            class="mtn"
+          <h1
+            lyTyp="display1"
+            color="offPrimary"
+            class="center-text edit-claim-border width-75 auto-margin"
           >
-            <input
-              #_input
-              lyNativeControl
-              formControlName="miles"
-              type="text"
-            />
-          </ly-field>
+            Mileage
+          </h1>
+          <h1 lyTyp="headline" *ngIf="!isEditing" class="center-text">
+            {{ claim.vehicle.miles }}
+          </h1>
+          <div class="auto-margin center-text width-75">
+            <ly-field
+              *ngIf="isEditing"
+              fullWidth
+              [appearance]="appearance.value"
+              class="mts mbn"
+            >
+              <input
+                #_input
+                lyNativeControl
+                formControlName="miles"
+                type="text"
+                class="center-text"
+              />
+            </ly-field>
+          </div>
         </ly-grid>
         <hr *ngIf="!isEditing" />
         <ly-grid item col="12" *ngIf="isEditing">

@@ -61,6 +61,7 @@ export class EditVehicleComponent implements OnInit {
 
   toggleEditMode(): void {
     this.isEditing = !this.isEditing;
+    this.setInitialFormValues();
   }
 
   setInitialFormValues(): void {
@@ -73,7 +74,7 @@ export class EditVehicleComponent implements OnInit {
       miles:
         this.claim && this.claim.vehicle.miles ? this.claim.vehicle.miles : '',
       year:
-        this.claim && this.claim.vehicle.miles ? this.claim.vehicle.miles : '',
+        this.claim && this.claim.vehicle.year ? this.claim.vehicle.year : '',
     });
   }
 

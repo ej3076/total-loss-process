@@ -40,7 +40,7 @@ export class EditFilesComponent implements OnInit {
   reloadComponent(): void {
     this.router
       .navigateByUrl('/', { skipLocationChange: true })
-      .then(() => this.router.navigate(['/claims', this.vin]));
+      .then(() => this.router.navigate([`/claims/${this.vin}`]));
   }
 
   archiveFile(filename: string): void {
