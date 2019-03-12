@@ -25,7 +25,7 @@ services:
       - 4200:4200
     volumes:
       - ./types:/usr/src/types
-      - ./frontend:/usr/src/app
+      - ./frontend/insurance:/usr/src/app
     command: >-
       bash -c '
         npm i --no-package-lock &&

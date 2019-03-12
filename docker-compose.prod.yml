@@ -14,7 +14,7 @@ services:
     image: fordtotalloss/web
     build:
       context: .
-      dockerfile: ./frontend/Dockerfile
+      dockerfile: ./frontend/insurance/Dockerfile
     ports:
       - 4200:80
 

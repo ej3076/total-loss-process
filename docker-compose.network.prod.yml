@@ -134,7 +134,7 @@ services:
     image: fordtotalloss/web-replica-1
     build:
       context: .
-      dockerfile: ./frontend/Dockerfile
+      dockerfile: ./frontend/insurance/Dockerfile
       args:
         api_port: 8081
     depends_on:
@@ -147,7 +147,7 @@ services:
     image: fordtotalloss/web-replica-2
     build:
       context: .
-      dockerfile: ./frontend/Dockerfile
+      dockerfile: ./frontend/insurance/Dockerfile
       args:
         api_port: 8082
     depends_on:
