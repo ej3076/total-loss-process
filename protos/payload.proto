@@ -4,8 +4,8 @@ import "claim.proto";
 
 message ClaimPayload {
   enum Action {
-    // Never used on purpose.
-    // This ensures that payload actions are always specified explicitly.
+    // Ensures that payload actions are always specified explicitly. Should
+    // not be used on purpose.
     ERROR = 0;
     // Create a new claim.
     CREATE_CLAIM = 1;
