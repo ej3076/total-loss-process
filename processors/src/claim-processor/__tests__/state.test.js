@@ -10,15 +10,21 @@ describe('ClaimState', () => {
    * @type {Readonly<Protos.Claim>}
    */
   const DATA = Object.freeze({
-    files: [],
     status: 0,
+    created: new Date(Date.UTC(2019, 0)).toJSON(),
+    modified: new Date(Date.UTC(2019, 0)).toJSON(),
+    date_of_loss: new Date(Date.UTC(2019, 0)).toJSON(),
     vehicle: {
       vin: '1234567890',
-      color: 'red',
       miles: 1000,
-      model: 'sedan',
-      year: 2019,
+      location: 'salvage',
     },
+    insurer: {
+      name: '',
+      deductible: 0,
+      has_gap: false,
+    },
+    files: [],
   });
   const ADDRESS = addressFromVIN('1234567890');
   /**
@@ -53,26 +59,25 @@ describe('ClaimState', () => {
   });
 
   it('should serialize default values when given partial valid data', async () => {
-    const { year, color, ...vehicle } = DATA.vehicle;
-    const buffer = await state._serialize({ status: 1, vehicle });
+    const { location, miles, ...vehicle } = DATA.vehicle;
+    const buffer = await state._serialize({ ...DATA, vehicle: { ...vehicle } });
     const claim = await state._deserialize(buffer);
     expect(claim).toEqual({
-      files: [],
-      status: 1,
+      ...DATA,
       vehicle: {
         ...DATA.vehicle,
-        color: '',
-        year: 0,
+        miles: 0,
+        location: '',
       },
     });
   });
 
   it('should throw InvalidTransaction when given data of incorrect type', async () => {
     /** @type {any} */
-    let invalid = { ...DATA, vehicle: { ...DATA.vehicle, color: true } };
+    let invalid = { ...DATA, vehicle: { ...DATA.vehicle, location: true } };
     await expect(state._serialize(invalid)).rejects.toThrow(InvalidTransaction);
     await expect(state._serialize(invalid)).rejects.toThrow(
-      new InvalidTransaction('vehicle.color: string expected'),
+      new InvalidTransaction('vehicle.location: string expected'),
     );
 
     invalid = { ...DATA, vehicle: 42 };

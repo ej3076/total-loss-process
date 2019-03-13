@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "file.proto";
+import "insurer.proto";
 import "vehicle.proto";
 
 message Claim {
@@ -8,8 +9,7 @@ message Claim {
     // Initial data entry and settlement agreement being orchestrated by
     // the insurance company.
     SETTLEMENT = 0;
-    // Settlement has been reached. Information and files are being
-    // collected/requested by agencies exterior to insurance company
+    // Settlement has been reached. Information and files are being collected/requested by agencies exterior to insurance company
     // (DMV, Ford Credit, etc).
     DATA_COLLECTION = 1;
     // All required files have been obtained. Vehicle is ready for auction.
@@ -18,11 +18,24 @@ message Claim {
     RESOLVED = 3;
   }
 
-  Vehicle vehicle = 1;
-
   // The status of the vehicle in the system.
-  Status status = 2;
+  Status status = 1;
 
-  // An array of sha256 hex digests of the associated files stored in s3.
-  repeated File files = 3;
+  // JSON serialized UTC date representing claim creation time.
+  string created = 2;
+
+  // JSON serialized UTC date representing last modification time.
+  string modified = 3;
+
+  // JSON serialized UTC date representing the date of vehicle loss.
+  string date_of_loss = 4;
+
+  // The vehicle info.
+  Vehicle vehicle = 5;
+
+  // The insurer info.
+  Insurer insurer = 6;
+
+  // An array file protos.
+  repeated File files = 7;
 }
