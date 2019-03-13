@@ -11,9 +11,17 @@ declare namespace Protos {
     name: string;
   }
 
+  namespace Claim {
+    enum Status {
+      SETTLEMENT,
+      DATA_COLLECTION,
+      AUCTION,
+      RESOLVED,
+    }
+  }
   interface Claim {
     files: File[];
-    status: number;
+    status: Claim.Status;
     vehicle: Vehicle;
   }
 
@@ -23,7 +31,6 @@ declare namespace Protos {
     year: number;
     miles: number;
     color: string;
-    //acv: number;
   }
 
   namespace ClaimPayload {

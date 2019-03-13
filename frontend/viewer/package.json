@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@blueprintjs/core": "^3.14.1",
     "@types/jest": "24.0.11",
     "@types/node": "11.11.1",
     "@types/react": "16.8.7",
     "@types/react-dom": "16.8.2",
+    "classnames": "^2.2.6",
+    "node-sass": "^4.11.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-router-dom": "^4.3.1",
@@ -29,6 +32,10 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@types/react-router-dom": "^4.3.1"
+    "@dsifford/stylelint-config": "^0.2.0",
+    "@types/classnames": "^2.2.7",
+    "@types/react-router-dom": "^4.3.1",
+    "stylelint": "^9.10.1",
+    "stylelint-scss": "^3.5.4"
   }
 }
