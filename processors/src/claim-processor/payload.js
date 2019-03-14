@@ -2,25 +2,23 @@
 
 const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
 
-const logger = require('../logger');
-const { loadType } = require('../proto');
+const logger = require('../../../utils/logger');
+const { loadType } = require('../../../utils/proto');
 
 /**
  * @typedef {typeof Protos.ClaimPayload.Action} Actions
- * @typedef {Protos.ClaimPayload} Payload
  */
 
 class ClaimPayload {
   /**
    * Constructor.
    *
-   * @param {Payload} payload - The payload.
-   * @param {Actions} actions - Known actions.
+   * @param {Protos.ClaimPayload} payload - The payload.
    */
-  constructor(payload, actions) {
-    this.action = payload.action;
-    this.data = payload.data;
-    this.Actions = actions;
+  constructor({ action, data, timestamp }) {
+    this.action = action;
+    this.data = data;
+    this.timestamp = timestamp;
   }
 
   /**
@@ -33,7 +31,7 @@ class ClaimPayload {
   static async fromBytes(buffer, defaults = false) {
     const PayloadType = await loadType('ClaimPayload');
     const ClaimType = PayloadType.lookupType('Claim');
-    const payload = /** @type {Payload} */ (PayloadType.toObject(
+    const payload = /** @type {Protos.ClaimPayload} */ (PayloadType.toObject(
       PayloadType.decode(buffer),
       {
         arrays: true,
@@ -45,7 +43,7 @@ class ClaimPayload {
       throw new InvalidTransaction(`Error decoding payload data: ${err}`);
     }
     logger.debug('Payload decoded', { data: { payload } });
-    return new ClaimPayload(payload, PayloadType.Action);
+    return new ClaimPayload(payload);
   }
 }
 

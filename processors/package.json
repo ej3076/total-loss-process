@@ -5,12 +5,10 @@
     "tp-claim:start": "node ./src/claim-processor/index.js"
   },
   "dependencies": {
-    "protobufjs": "^6.8.8",
-    "sawtooth-sdk": "^1.0.5",
-    "winston": "^3.2.1"
+    "sawtooth-sdk": "^1.0.5"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.9",
-    "@types/node": "^11.10.4"
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.11.3"
   }
 }

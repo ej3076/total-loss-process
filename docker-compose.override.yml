@@ -11,8 +11,10 @@ services:
     volumes:
       - ./protos:/usr/src/protos
       - ./middleware:/usr/src/app
+      - ./utils:/usr/src/utils
     command: >-
       bash -c '
+        (cd ../utils && npm i --no-package-lock) &&
         npm i --no-package-lock &&
         npm run dev
       '
@@ -54,8 +56,10 @@ services:
     volumes:
       - ./protos:/usr/src/protos
       - ./processors:/usr/src/app
+      - ./utils:/usr/src/utils
     command: >-
       bash -c '
+        (cd ../utils && npm i --no-package-lock) &&
         npm i --no-package-lock &&
         npm run tp-claim:start -- tcp://validator:4004
       '

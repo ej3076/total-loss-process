@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.js",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "*": ["*", "../processors/node_modules/*"]
+    },
+    "typeRoots": ["../processors/node_modules/@types"]
+  }
+}

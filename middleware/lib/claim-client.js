@@ -11,9 +11,10 @@ const {
   Secp256k1Context: Context,
 } = require('sawtooth-sdk/signing/secp256k1');
 
+const createFamily = require('../../utils/family');
+const { loadType } = require('../../utils/proto');
+
 const { createBatch, ...utils } = require('./utils/client');
-const createFamily = require('./utils/family');
-const { loadType } = require('./utils/proto');
 const s3 = require('./utils/s3');
 const API = require('./api');
 
@@ -23,6 +24,16 @@ const { FAMILY_NAME, FAMILY_NAMESPACE, calculateAddress } = createFamily(
 const createTransaction = utils.makeTransactionCreator(FAMILY_NAME, '1.0');
 
 class ClaimClient {
+  /**
+   * Calculate address from a given VIN.
+   *
+   * @param {string} vin - The VIN from which to calculate the address.
+   * @return {string}
+   */
+  static address(vin) {
+    return calculateAddress(vin.replace(/[^A-Za-z0-9]/g, '').toUpperCase());
+  }
+
   /**
    * Constructor.
    *
@@ -50,12 +61,31 @@ class ClaimClient {
   }
 
   /**
+   * Generates a JSON timestamp in UTC time.
+   */
+  get timestamp() {
+    const d = new Date();
+    return new Date(
+      Date.UTC(
+        d.getUTCFullYear(),
+        d.getUTCMonth(),
+        d.getUTCDate(),
+        d.getUTCHours(),
+        d.getUTCMinutes(),
+        d.getUTCSeconds(),
+        d.getUTCMilliseconds(),
+      ),
+    ).toJSON();
+  }
+
+  /**
    * Add 1 or more files to an existing claim.
    *
-   * @param {string} vin                     - The VIN of the claim.
-   * @param {Express.Request['files']} files - Array of uploaded files.
+   * @param {string} vin                                      - The VIN of the claim.
+   * @param {Express.Request['files']} files                  - Array of uploaded files.
+   * @param {keyof typeof Protos.File.Type} [fileType='NONE'] - The type of the files.
    */
-  async addFiles(vin, files) {
+  async addFiles(vin, files, fileType = 'NONE') {
     if (!Array.isArray(files)) {
       throw new InvalidTransaction(
         'files argument must be an array of Multer files.',
@@ -65,7 +95,9 @@ class ClaimClient {
       vehicle: {
         vin,
       },
-      files: await Promise.all(files.map(file => s3.uploadFile(vin, file))),
+      files: await Promise.all(
+        files.map(file => s3.uploadFile(vin, file, fileType)),
+      ),
     });
   }
 
@@ -176,7 +208,7 @@ class ClaimClient {
    * @return {Promise<Protos.Claim>}
    */
   async getClaim(vin) {
-    const { data } = await API.getStateItem(calculateAddress(vin));
+    const { data } = await API.getStateItem(ClaimClient.address(vin));
     return this._decode(data);
   }
 
@@ -217,6 +249,7 @@ class ClaimClient {
     const Actions = PayloadType.getEnum('Action');
     const action = Actions[actionKey];
     const payload = {
+      timestamp: this.timestamp,
       action,
       data,
     };
@@ -229,7 +262,7 @@ class ClaimClient {
     if (invalidReason) {
       throw new InvalidTransaction(invalidReason);
     }
-    const address = calculateAddress(data.vehicle.vin);
+    const address = ClaimClient.address(data.vehicle.vin);
     const response = await API.sendBatches(
       createBatch(
         this.signer,
@@ -251,12 +284,23 @@ class ClaimClient {
    */
   async _decode(data) {
     const ClaimType = await loadType('Claim');
-    return /** @type {Protos.Claim} */ (ClaimType.toObject(
+    const InsurerType = ClaimType.lookupType('Insurer');
+    const claim = /** @type {Protos.Claim} */ (ClaimType.toObject(
       ClaimType.decode(Buffer.from(data, 'base64')),
       {
         defaults: true,
       },
     ));
+    const insurer = /** @type {Protos.Claim['insurer']} */ (InsurerType.toObject(
+      InsurerType.create(claim.insurer),
+      {
+        defaults: true,
+      },
+    ));
+    return {
+      ...claim,
+      insurer,
+    };
   }
 }
 

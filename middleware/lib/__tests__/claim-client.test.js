@@ -5,11 +5,8 @@ const {
   InvalidTransaction,
 } = require('sawtooth-sdk/processor/exceptions');
 
+const { loadType } = require('../../../utils/proto');
 const ClaimClient = require('../claim-client');
-const createFamily = require('../utils/family');
-const { loadType } = require('../utils/proto');
-
-const { calculateAddress } = createFamily('claim');
 
 /**
  * @type {any}
@@ -49,7 +46,7 @@ describe('ClaimClient', () => {
     const buffer = /** @type {Buffer} */ (ClaimType.encode(CLAIM).finish());
     api.__STATE.clear();
     api.__STATE.set(
-      calculateAddress(CLAIM.vehicle.vin),
+      ClaimClient.address(CLAIM.vehicle.vin),
       buffer.toString('base64'),
     );
   });

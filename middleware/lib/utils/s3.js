@@ -2,7 +2,7 @@
 
 const S3 = require('aws-sdk/clients/s3');
 
-const { loadType } = require('./proto');
+const { loadType } = require('../../../utils/proto');
 
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 const Bucket = 'ford-capstone-wayne-state';
@@ -58,12 +58,18 @@ exports.renameFile = async (vin, from, to) => {
 /**
  * Upload a single file to s3.
  *
- * @param {string} vin               - The VIN to associate the file with.
- * @param {Express.Multer.File} file - The file to upload.
+ * @param {string} vin                                      - The VIN to associate the file with.
+ * @param {Express.Multer.File} file                        - The file to upload.
+ * @param {keyof typeof Protos.File.Type} [fileType='NONE'] - The type of the file.
  * @return {Promise<Protos.File>} The SHA512 hash digest of the file uploaded.
  */
-exports.uploadFile = async (vin, file) => {
-  const { ACTIVE } = (await loadType('File')).getEnum('Status');
+exports.uploadFile = async (vin, file, fileType = 'NONE') => {
+  const FileType = await loadType('File');
+  const Status = FileType.getEnum('Status');
+  const Type = FileType.getEnum('Type');
+  if (Type[fileType] === undefined) {
+    throw new Error(`Invalid file type provided: ${fileType}`);
+  }
   const { buffer: Body, originalname: name } = file;
   const { ETag: hash } = await s3
     .upload({
@@ -76,6 +82,7 @@ exports.uploadFile = async (vin, file) => {
   return {
     hash,
     name,
-    status: ACTIVE,
+    status: Status.ACTIVE,
+    type: Type[fileType],
   };
 };
