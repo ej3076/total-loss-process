@@ -2,24 +2,12 @@ import { Card, Callout, Intent } from '@blueprintjs/core';
 import { match } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
-import { API_URL } from '../../utils/constants';
+import { API_URL, BLANK_CLAIM } from '../../utils/constants';
 
 import Container from '../../components/container';
 import Main from '../../components/main';
 
 import styles from './single-claim.module.scss';
-
-const BLANK_CLAIM: Readonly<Protos.Claim> = {
-  files: [],
-  status: 0,
-  vehicle: {
-    color: '',
-    miles: 0,
-    model: '',
-    vin: '',
-    year: 0,
-  },
-};
 
 interface Props {
   match: match<{ vin: string }>;

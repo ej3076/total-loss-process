@@ -33,19 +33,19 @@ export default function Claims() {
           <thead>
             <tr>
               <th>VIN</th>
-              <th>Model</th>
-              <th>Year</th>
+              <th>Miles</th>
+              <th>Location</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {claims.map(({ status, vehicle: { model, vin, year } }) => (
+            {claims.map(({ status, vehicle: { location, miles, vin } }) => (
               <tr key={vin}>
                 <td>
                   <Link to={`/claims/${vin}`}>{vin}</Link>
                 </td>
-                <td>{model}</td>
-                <td>{year}</td>
+                <td>{miles}</td>
+                <td>{location}</td>
                 <td>
                   <Tag large minimal intent={intentFromStatus(status)}>
                     {status}
