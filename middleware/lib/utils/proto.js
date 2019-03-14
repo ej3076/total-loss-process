@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { promisify } = require('util');
 
-const { load } = require('protobufjs');
+const { Root } = require('protobufjs');
 
 const readdir = promisify(fs.readdir);
 
@@ -23,7 +23,8 @@ exports.loadRoot = async () => {
   const protos = await readdir(protosPath).then(files =>
     files.map(name => path.join(protosPath, name)),
   );
-  return load(protos);
+  const root = new Root();
+  return root.load(protos, { keepCase: true });
 };
 
 /**
@@ -32,7 +33,7 @@ exports.loadRoot = async () => {
  * @param {string} typename - The name of the type to load.
  * @return {Promise<ProtobufType>}
  */
-exports.loadType = async (typename) => {
+exports.loadType = async typename => {
   const Root = await exports.loadRoot();
   return Root.lookupType(typename);
 };

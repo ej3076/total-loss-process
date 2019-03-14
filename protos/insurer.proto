@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+message Insurer {
+  // Name of insurance company.
+  string name = 1;
+
+  // Deductible amount.
+  uint32 deductible = 2;
+
+  // Whether or not owner has gap coverage.
+  bool has_gap = 3;
+}
