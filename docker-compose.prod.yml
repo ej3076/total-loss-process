@@ -10,13 +10,21 @@ services:
       context: .
       dockerfile: ./middleware/Dockerfile
 
-  web:
-    image: fordtotalloss/web
+  web-insurance:
+    image: fordtotalloss/web-insurance
     build:
       context: .
       dockerfile: ./frontend/insurance/Dockerfile
     ports:
       - 4200:80
+
+  web-viewer:
+    image: fordtotalloss/web-viewer
+    build:
+      context: .
+      dockerfile: ./frontend/viewer/Dockerfile
+    ports:
+      - 3000:80
 
   tp-claim:
     image: fordtotalloss/tp-claim

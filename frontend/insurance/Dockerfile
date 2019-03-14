@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 COPY frontend/insurance/package*.json ./
 RUN npm ci
 
-COPY types /usr/src/types
+COPY types /usr/types
 COPY frontend/insurance ./
 RUN sed -i \
         's/localhost:8080/localhost:'"$api_port"'/' \

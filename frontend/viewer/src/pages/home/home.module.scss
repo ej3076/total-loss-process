@@ -1,0 +1,28 @@
+%flex {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.main {
+  @extend %flex;
+}
+
+.hero {
+  @extend %flex;
+  font-size: 16px;
+  text-align: center;
+  margin: 20px 0;
+
+  h1 {
+    font-size: 3em;
+    margin: 0 {
+      bottom: 10px;
+    }
+  }
+}
+
+.text {
+  max-width: 850px;
+}

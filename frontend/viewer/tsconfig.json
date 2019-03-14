@@ -1,31 +1,29 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./",
-    "declaration": false,
     "downlevelIteration": true,
-    "emitDecoratorMetadata": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "lib": ["es2018", "dom", "dom.iterable"],
-    "module": "es2015",
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "preserve",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
     "moduleResolution": "node",
+    "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "./dist/out-tsc",
     "resolveJsonModule": true,
-    "sourceMap": true,
     "strict": true,
     "target": "es5",
     "plugins": [
       {
         "name": "typescript-tslint-plugin"
       }
-    ]
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "isolatedModules": true
   },
-  "include": ["**/*", "../../types/protos.d.ts", "../../types/globals.d.ts"]
+  "include": ["./src", "../../types/protos.d.ts", "../../types/globals.d.ts"]
 }

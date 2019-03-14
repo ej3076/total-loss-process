@@ -3,6 +3,7 @@ dist/
 node_modules/
 .idea/
 tmp/
+frontend/viewer/build/
 
  # Files
 .DS_Store
