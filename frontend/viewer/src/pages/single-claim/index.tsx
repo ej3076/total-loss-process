@@ -1,7 +1,8 @@
-import { Card, Callout, Intent } from '@blueprintjs/core';
+import { Card, Callout, HTMLTable, Intent } from '@blueprintjs/core';
 import { match } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
+import { fetchVINData, VINData } from '../../utils/api';
 import { API_URL, BLANK_CLAIM } from '../../utils/constants';
 
 import Container from '../../components/container';
@@ -16,14 +17,17 @@ interface Props {
 export default function SingleClaim({ match }: Props) {
   const [isLoading, setLoading] = useState(true);
   const [claim, setClaim] = useState<Protos.Claim>(BLANK_CLAIM);
+  const [vehicleData, setVehicleData] = useState<VINData[]>([]);
 
   useEffect(() => {
-    fetch(`${API_URL}/claims/${match.params.vin}`)
-      .then(resp => resp.json())
-      .then(data => {
-        setClaim(data);
-        setLoading(false);
-      });
+    Promise.all([
+      fetch(`${API_URL}/claims/${match.params.vin}`).then(res => res.json()),
+      fetchVINData(match.params.vin),
+    ]).then(([claimData, vinData]) => {
+      setClaim(claimData);
+      setVehicleData(vinData);
+      setLoading(false);
+    });
   }, []);
 
   if (isLoading) {
@@ -39,6 +43,19 @@ export default function SingleClaim({ match }: Props) {
         <Card className={styles.card}>
           <pre>{JSON.stringify(claim, null, 4)}</pre>
         </Card>
+        <h2>Vehicle Options</h2>
+        <HTMLTable striped>
+          <tbody>
+            {vehicleData.map(({ Value, Variable }) => (
+              <tr key={Variable}>
+                <td>
+                  <strong>{Variable}</strong>
+                </td>
+                <td>{Value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </HTMLTable>
       </Main>
     </Container>
   );

@@ -1,4 +1,4 @@
-import { Card, Text } from '@blueprintjs/core';
+import { Card, Tag, Text } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 
 import { WS_URL } from '../../utils/constants';
@@ -78,26 +78,35 @@ export default function Feed() {
       <Main className={styles.main}>
         {feed.map(
           ({ block_id, block_num, previous_block_id, state_changes }) => (
-            <Card key={block_id} className={styles.card}>
-              <dl className={styles.dl}>
-                <dt>Block #</dt>
-                <dd>{block_num}</dd>
-                <dt>Block ID</dt>
-                <dd>
-                  <Text ellipsize>{block_id}</Text>
-                </dd>
-                <dt>Prev Block ID</dt>
-                <dd>
-                  <Text ellipsize>{previous_block_id}</Text>
-                </dd>
-                <dt>State Changes</dt>
-                <dd>
-                  <Card className={styles.code}>
-                    <pre>{JSON.stringify(state_changes, null, 4)}</pre>
-                  </Card>
-                </dd>
-              </dl>
-            </Card>
+            <div key={block_id} className={styles.item}>
+              <Tag minimal large>
+                <code>{block_num}</code>
+              </Tag>
+              <Card className={styles.card}>
+                <dl className={styles.dl}>
+                  <dt>
+                    <h3>Block ID</h3>
+                  </dt>
+                  <dd>
+                    <Text ellipsize>{block_id}</Text>
+                  </dd>
+                  <dt>
+                    <h3>Previous Block ID</h3>
+                  </dt>
+                  <dd>
+                    <Text ellipsize>{previous_block_id}</Text>
+                  </dd>
+                  <dt>
+                    <h3>State Changes</h3>
+                  </dt>
+                  <dd>
+                    <Card className={styles.code}>
+                      <pre>{JSON.stringify(state_changes, null, 4)}</pre>
+                    </Card>
+                  </dd>
+                </dl>
+              </Card>
+            </div>
           ),
         )}
       </Main>
