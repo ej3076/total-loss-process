@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "dependencies": {
+    "sawtooth-sdk": "^1.0.5",
+    "winston": "^3.2.1"
+  }
+}

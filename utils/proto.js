@@ -19,7 +19,7 @@ const readdir = promisify(fs.readdir);
  * @return {Promise<ProtobufRoot>}
  */
 exports.loadRoot = async () => {
-  const protosPath = path.join(__dirname, '../../../protos');
+  const protosPath = path.join(__dirname, '../protos');
   const protos = await readdir(protosPath).then(files =>
     files.map(name => path.join(protosPath, name)),
   );

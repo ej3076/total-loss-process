@@ -6,5 +6,6 @@ COPY middleware/package*.json ./
 
 RUN npm ci
 
-COPY protos /usr/src/protos
 COPY middleware .
+COPY protos /usr/src/protos
+COPY utils /usr/src/utils

@@ -2,7 +2,7 @@
 
 const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
 
-const { loadType } = require('../../proto');
+const { loadType } = require('../../../../utils/proto');
 const ClaimPayload = require('../payload');
 
 describe('ClaimPayload', () => {
@@ -28,7 +28,7 @@ describe('ClaimPayload', () => {
   });
 
   /**
-   * @type {PromiseReturnType<import('../../proto').loadType>}
+   * @type {PromiseReturnType<import('../../../../utils/proto').loadType>}
    */
   let PayloadType;
 

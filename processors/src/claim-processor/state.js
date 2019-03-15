@@ -2,8 +2,8 @@
 
 const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
 
-const logger = require('../logger');
-const { loadType } = require('../proto');
+const logger = require('../../../utils/logger');
+const { loadType } = require('../../../utils/proto');
 const { addressFromVIN } = require('./constants');
 
 class ClaimState {

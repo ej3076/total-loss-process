@@ -75,6 +75,10 @@ declare namespace Protos {
   }
   interface ClaimPayload {
     /**
+     * JSON serialized UTC timestamp.
+     */
+    timestamp: string;
+    /**
      * Action to be taken.
      */
     action: ClaimPayload.Action;

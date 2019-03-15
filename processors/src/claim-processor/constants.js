@@ -1,6 +1,6 @@
 'use strict';
 
-const createFamily = require('../family');
+const createFamily = require('../../../utils/family');
 
 const { FAMILY_NAME, FAMILY_NAMESPACE, calculateAddress } = createFamily(
   'claim',
@@ -14,4 +14,5 @@ exports.CLAIM_NAMESPACE = FAMILY_NAMESPACE;
  * @param {string} vin - The vin number of interest.
  * @returns {string} A block address.
  */
-exports.addressFromVIN = vin => calculateAddress(vin);
+exports.addressFromVIN = vin =>
+  calculateAddress(vin.replace(/[^A-Za-z0-9]/g, '').toUpperCase());

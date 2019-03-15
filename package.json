@@ -26,13 +26,13 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "**/*.js",
-      "!middleware/lib/api.js",
-      "!processors/src/logger.js"
+      "!middleware/lib/api.js"
     ],
     "coverageDirectory": "node_modules/.cache/coverage",
     "roots": [
       "<rootDir>/middleware/",
-      "<rootDir>/processors/"
+      "<rootDir>/processors/",
+      "<rootDir>/utils/"
     ],
     "testEnvironment": "node"
   },
