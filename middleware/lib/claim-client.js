@@ -262,17 +262,27 @@ class ClaimClient {
     if (invalidReason) {
       throw new InvalidTransaction(invalidReason);
     }
-    const address = ClaimClient.address(data.vehicle.vin);
-    const response = await API.sendBatches(
-      createBatch(
-        this.signer,
-        createTransaction(this.signer, PayloadType.encode(payload).finish(), {
-          inputs: [address],
-          outputs: [address],
-        }),
+    const { vin } = data.vehicle;
+    const address = ClaimClient.address(vin);
+    const response = JSON.parse(
+      await API.sendBatches(
+        createBatch(
+          this.signer,
+          createTransaction(this.signer, PayloadType.encode(payload).finish(), {
+            inputs: [address],
+            outputs: [address],
+          }),
+        ),
       ),
     );
-    return API.pingBatchResponse(JSON.parse(response));
+    return API.pingBatchResponse(response).then(() =>
+      this.getClaim(vin).catch(err => {
+        if (actionKey === 'DELETE_CLAIM') {
+          return;
+        }
+        throw err;
+      }),
+    );
   }
 
   /**
