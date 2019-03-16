@@ -3,7 +3,7 @@ import { MiddlewareService } from '../../core/services/middleware/middleware.ser
 import { MatTableDataSource } from '@angular/material';
 
 @Component({
-  selector: 'app-view-claims',
+  selector: 'app-view-claims-new',
   templateUrl: './view-claims.component.html',
   styleUrls: ['./view-claims.component.scss']
 })

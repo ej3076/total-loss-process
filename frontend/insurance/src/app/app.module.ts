@@ -21,6 +21,7 @@ import { CoreModule } from './core/core.module';
 import { MatToolbarModule } from '@angular/material';
 import { MaterialModule } from './modules/material/material.module';
 import { SharedModule } from './shared/shared.module';
+import { ViewClaimsModule } from './modules/view-claims/view-claims.module';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { SharedModule } from './shared/shared.module';
     EditClaimModule,
     AppRoutingModule,
     MatToolbarModule,
+    ViewClaimsModule
   ],
   bootstrap: [AppComponent],
 })
