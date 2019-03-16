@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LyTheme2, ThemeVariables } from '@alyle/ui';
 import { AuthService } from './auth/auth.service';
 
@@ -19,7 +19,12 @@ const STYLES = (theme: ThemeVariables) => ({
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   readonly classes = this.theme.addStyleSheet(STYLES);
   constructor(private theme: LyTheme2, public auth: AuthService) {}
+  ngOnInit() {
+    if (window.localStorage.getItem('auth')) {
+      this.auth.login();
+    }
+  }
 }

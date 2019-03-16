@@ -21,15 +21,11 @@ export class MiddlewareService {
   ) {}
 
   getClaims() {
-    return this.http.get<Protos.Claim[]>(`${API_BASE}/claims`, {
-      headers: this.auth.headers,
-    });
+    return this.http.get<Protos.Claim[]>(`${API_BASE}/claims`);
   }
 
   getClaim(vin: string): Observable<Protos.Claim> {
-    return this.http.get<Protos.Claim>(`${API_BASE}/claims/${vin}`, {
-      headers: this.auth.headers,
-    });
+    return this.http.get<Protos.Claim>(`${API_BASE}/claims/${vin}`);
   }
 
   deleteClaim(vin: string): Observable<Object> {
@@ -49,7 +45,6 @@ export class MiddlewareService {
   }
 
   editClaim(claim: MinimalClaim) {
-    console.log(claim);
     return this.http
       .post(`${API_BASE}/claims/${claim.vehicle.vin}`, claim, {
         headers: this.auth.headers,
