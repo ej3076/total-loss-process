@@ -8,7 +8,7 @@ import { AuthGuardService } from './auth/auth-guard.service';
 import { EditClaimComponent } from './modules/edit-claim/edit-claim.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
+  { path: '', pathMatch: 'full', component: HomeComponent },
   {
     path: 'claims/new',
     component: NewClaimComponent,
@@ -22,7 +22,6 @@ const routes: Routes = [
   {
     path: 'claims',
     component: ViewClaimsComponent,
-    canActivate: [AuthGuardService],
   },
   { path: 'callback', component: CallbackComponent },
 ];

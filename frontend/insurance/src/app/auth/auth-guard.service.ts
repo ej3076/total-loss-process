@@ -10,10 +10,11 @@ export class AuthGuardService {
 
   canActivate(): boolean {
     if (!this.authService.isLoggedIn) {
-      this.authService.login();
+      if (window.localStorage.getItem('auth')) {
+        return true;
+      }
       return false;
     }
-
     return true;
   }
 }
