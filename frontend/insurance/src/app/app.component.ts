@@ -1,18 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LyTheme2, ThemeVariables } from '@alyle/ui';
-import { AuthService } from './auth/auth.service';
-
-const STYLES = (theme: ThemeVariables) => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.background.default,
-      color: theme.text.default,
-      fontFamily: theme.typography.fontFamily,
-      margin: 0,
-      direction: theme.direction,
-    },
-  },
-});
+import { AuthService } from './core/services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -20,8 +7,7 @@ const STYLES = (theme: ThemeVariables) => ({
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  readonly classes = this.theme.addStyleSheet(STYLES);
-  constructor(private theme: LyTheme2, public auth: AuthService) {}
+  constructor(public auth: AuthService) {}
   ngOnInit() {
     if (window.localStorage.getItem('auth')) {
       this.auth.login();
