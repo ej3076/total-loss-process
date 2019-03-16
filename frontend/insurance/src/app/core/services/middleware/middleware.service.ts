@@ -39,8 +39,10 @@ export class MiddlewareService {
       .post(`${API_BASE}/claims`, claim, {
         headers: this.auth.headers,
       })
-      .subscribe(undefined, undefined, () =>
-        this.router.navigate([`/claims/${claim.vehicle.vin}`]),
+      .subscribe(
+        data => {
+          console.log(data);
+        }
       );
   }
 

@@ -26,13 +26,13 @@ export class NewClaimComponent {
       date_of_loss: this.date_of_loss.value,
       vehicle: {
         vin: this.vin.value,
-        miles: this.miles.value,
+        miles: +this.miles.value,
         location: this.location.value,
       },
       insurer: {
         name: this.name.value,
-        deductible: this.deductible.value,
-        has_gap: this.has_gap.value,
+        deductible: +this.deductible.value,
+        has_gap: false,
       },
     };
 
