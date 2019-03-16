@@ -17,6 +17,7 @@ export class NewClaimComponent {
   deductible = new FormControl('');
   has_gap = new FormControl('');
 
+  
   constructor(private middlewareService: MiddlewareService) {
     this.appearance.setValue('outlined');
   }
