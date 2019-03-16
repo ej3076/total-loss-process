@@ -15,4 +15,14 @@ app.use(cors());
 app.use('/claims', require('./routes/claims'));
 app.use('/keys', require('./routes/keys'));
 
+app.use((err, req, res, next) => {
+  if (!err) return next();
+  console.error(err.stack);
+  res.status(err.statusCode || 500).json({
+    name: err.name,
+    statusCode: err.statusCode,
+    message: err.message,
+  });
+});
+
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}.`));

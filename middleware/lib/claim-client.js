@@ -112,7 +112,12 @@ class ClaimClient {
    *
    * @param {string} vin - The VIN of the claim to delete.
    */
-  async deleteClaim(vin) {
+  async deleteClaim(vin, { vehicle = {} }) {
+    if (vehicle.vin && vehicle.vin !== vin) {
+      throw new InvalidTransaction(
+        'VIN in delete claim must match VIN requested',
+      );
+    }
     return this._batch('DELETE_CLAIM', { vehicle: { vin } });
   }
 
