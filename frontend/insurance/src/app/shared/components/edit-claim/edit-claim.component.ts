@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
 
 @Component({
-  selector: 'app-edit-claim',
+  selector: 'app-edit-claim-new',
   templateUrl: './edit-claim.component.html',
   styleUrls: ['./edit-claim.component.scss']
 })
