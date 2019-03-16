@@ -1,2 +1,2 @@
 # Defaults for sawtooth cli
-url = "http://rest-api:8008"
+url = "http://rest-api-1:8008"

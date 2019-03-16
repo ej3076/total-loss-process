@@ -24,7 +24,7 @@ services:
     <<: *shared
     image: hyperledger/sawtooth-shell:1.1
     depends_on:
-      - rest-api
+      - rest-api-1
     volumes:
       - ./etc/sawtooth/cli.toml:/etc/sawtooth/cli.toml
     command: >-
@@ -34,7 +34,7 @@ services:
       '
 
   # Transaction validator
-  validator:
+  validator-1:
     <<: *shared
     image: hyperledger/sawtooth-validator:1.0
     security_opt:
@@ -46,7 +46,7 @@ services:
           --key /etc/sawtooth/keys/validator.priv &&
         sawadm genesis config-genesis.batch &&
         sawtooth-validator -v \
-          --endpoint tcp://validator:8800 \
+          --endpoint tcp://validator-1:8800 \
           --bind component:tcp://eth0:4004 \
           --bind consensus:tcp://eth0:5050 \
           --bind network:tcp://eth0:8800 \
@@ -56,61 +56,61 @@ services:
       '
 
   # Consensus engine
-  engine:
+  engine-1:
     <<: *shared
     image: hyperledger/sawtooth-devmode-engine-rust:1.1
     depends_on:
-      - validator
+      - validator-1
     command: devmode-engine-rust
-      --connect tcp://validator:5050
+      --connect tcp://validator-1:5050
 
   # Sawtooth REST API that communicates with the validator
-  rest-api:
+  rest-api-1:
     <<: *shared
     image: hyperledger/sawtooth-rest-api:1.1
     depends_on:
-      - validator
+      - validator-1
     ports:
       - 8008:8008
     command: sawtooth-rest-api
-      --connect tcp://validator:4004
-      --bind rest-api:8008
+      --connect tcp://validator-1:4004
+      --bind rest-api-1:8008
 
   # The web "middleware" service
-  middleware:
+  middleware-1:
     <<: *shared
     ports:
       - 8080:8080
     depends_on:
-      - rest-api
+      - rest-api-1
     environment:
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID?AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY?AWS_SECRET_ACCESS_KEY}
-    command: npm start
+    command: npm start -- http://rest-api-1:8008
 
-  # Static web server for frontend app
+  # Claim transaction processor
+  tp-claim-1:
+    <<: *shared
+    depends_on:
+      - validator-1
+    command: npm run tp-claim:start -- tcp://validator-1:4004
+
+  # Settings Transaction Processor
+  tp-settings-1:
+    <<: *shared
+    image: hyperledger/sawtooth-settings-tp:1.1
+    depends_on:
+      - validator-1
+    command: settings-tp -v
+      --connect tcp://validator-1:4004
+
+  # Frontend apps
   web-insurance:
     <<: *shared
     depends_on:
-      - middleware
+      - middleware-1
 
   web-viewer:
     <<: *shared
     depends_on:
-      - middleware
-
-  # Claim transaction processor
-  tp-claim:
-    <<: *shared
-    depends_on:
-      - validator
-    command: npm run tp-claim:start -- tcp://validator:4004
-
-  # Settings Transaction Processor
-  tp-settings:
-    <<: *shared
-    image: hyperledger/sawtooth-settings-tp:1.1
-    depends_on:
-      - validator
-    command: settings-tp -v
-      --connect tcp://validator:4004
+      - middleware-1

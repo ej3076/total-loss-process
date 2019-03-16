@@ -3,7 +3,7 @@
 const request = require('request-promise-native');
 const sawtooth = require('sawtooth-sdk/protobuf');
 
-const REST_API_HOSTNAME = process.env.REST_API_HOSTNAME || 'rest-api';
+const REST_API_HOSTNAME = process.env.REST_API_HOSTNAME || 'rest-api-1';
 
 const { get } = request.defaults({
   baseUrl: `http://${REST_API_HOSTNAME}:8008`,
