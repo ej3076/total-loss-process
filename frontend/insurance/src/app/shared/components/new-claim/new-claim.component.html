@@ -1,16 +1,50 @@
 <div>
   <mat-card class="width-50 center-to-page">
     <form>
-      <mat-form-field class="width-100">
-        <input matInput placeholder="VIN">
+      <mat-form-field class="width-50">
+        <input matInput placeholder="VIN" />
       </mat-form-field>
 
-      <mat-form-field class="example-full-width">
-          <input matInput [matDatepicker]="picker" placeholder="Date of Loss">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker touchUi #picker></mat-datepicker>
-        </mat-form-field>
-        
-    </form>        
+      <mat-form-field class="width-50">
+        <input matInput [matDatepicker]="picker" placeholder="Date of Loss" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="width-100">
+        <input matInput placeholder="Mileage" />
+      </mat-form-field>
+
+      <mat-form-field class="width-100">
+        <input matInput placeholder="Current Location of Vehicle" />
+      </mat-form-field>
+
+      <mat-form-field class="width-100">
+        <input matInput placeholder="Insurer Name" />
+      </mat-form-field>
+
+      <mat-form-field class="width-100">
+        <input matInput placeholder="Insurance Deducitble" />
+      </mat-form-field>
+
+      <div>
+        <label>
+          Does the vehicle owner have GAP coverage?
+        </label>
+        <mat-radio-group>
+          <mat-radio-button value="1" class="mlm"> Yes </mat-radio-button>
+          <mat-radio-button value="0" class="mlh"> No </mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </form>
+
+    <button
+      mat-raised-button
+      color="primary"
+      class="float-center width-100 mth"
+      (click)="sendNewClaim()"
+    >
+      Submit
+    </button>
   </mat-card>
 </div>

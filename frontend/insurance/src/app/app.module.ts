@@ -17,10 +17,10 @@ import { ViewClaimsComponent } from './view-claims/view-claims.component';
 import { EditClaimModule } from './modules/edit-claim/edit-claim.module';
 import { CoreModule } from './core/core.module';
 
-import {MatToolbarModule} from '@angular/material';
+// Material
+import { MatToolbarModule } from '@angular/material';
 import { MaterialModule } from './modules/material/material.module';
 import { SharedModule } from './shared/shared.module';
-
 
 @NgModule({
   declarations: [
@@ -41,7 +41,7 @@ import { SharedModule } from './shared/shared.module';
     ReactiveFormsModule,
     EditClaimModule,
     AppRoutingModule,
-    MatToolbarModule
+    MatToolbarModule,
   ],
   bootstrap: [AppComponent],
 })
