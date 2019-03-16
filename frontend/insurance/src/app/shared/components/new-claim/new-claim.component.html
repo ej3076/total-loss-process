@@ -1,40 +1,99 @@
 <div>
-  <mat-card class="width-50 center-to-page">
+  <mat-card class="width-50 center-to-page mat-elevation-z24">
     <form>
-      <mat-form-field class="width-50">
-        <input matInput placeholder="VIN" [formControl]="vin"/>
+      <mat-form-field
+        class="width-100"
+        [ngClass]="vin.invalid && !vin.untouched ? 'pbl' : 'pbs'"
+      >
+        <input
+          matInput
+          placeholder="VIN"
+          [formControl]="vin"
+          minlength="11"
+          maxLength="17"
+          (input)="alphaNumericValidator($event)"
+        />
+        <mat-error *ngIf="vin.invalid">
+          {{ getErrorMessage() }}
+        </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="width-50">
-        <input matInput [matDatepicker]="picker" placeholder="Date of Loss" [formControl]="date_of_loss" />
+      <mat-form-field
+        class="width-100"
+        [ngClass]="miles.invalid && !miles.untouched ? 'pbl' : 'pbs'"
+      >
+        <input
+          matInput
+          placeholder="Mileage"
+          [formControl]="miles"
+          (input)="numberValidator($event)"
+        />
+        <mat-error *ngIf="miles.invalid">
+          Mileage is required.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field
+        class="width-100"
+        [ngClass]="
+          date_of_loss.invalid && !date_of_loss.untouched ? 'pbl' : 'pbs'
+        "
+      >
+        <input
+          matInput
+          [matDatepicker]="picker"
+          placeholder="Date of Loss"
+          [formControl]="date_of_loss"
+        />
+        <mat-error *ngIf="date_of_loss.invalid">
+          Date of loss is required.
+        </mat-error>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #picker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field class="width-100">
-        <input matInput placeholder="Mileage" [formControl]="miles"/>
+      <mat-form-field
+        class="width-100"
+        [ngClass]="location.invalid && !location.untouched ? 'pbl' : 'pbs'"
+      >
+        <input
+          matInput
+          placeholder="Current Vehicle Location"
+          [formControl]="location"
+        />
+        <mat-error *ngIf="location.invalid">
+          Current vehicle location is required.
+        </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="width-100">
-        <input matInput placeholder="Current Location of Vehicle" [formControl]="location"/>
+      <mat-form-field
+        class="width-100"
+        [ngClass]="name.invalid && !name.untouched ? 'pbl' : 'pbs'"
+      >
+        <input matInput placeholder="Insurer Company" [formControl]="name" />
+        <mat-error *ngIf="name.invalid">
+          Insurance company is required.
+        </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="width-100">
-        <input matInput placeholder="Insurer Name" [formControl]="name"/>
-      </mat-form-field>
-
-      <mat-form-field class="width-100">
-        <input matInput placeholder="Insurance Deductible" [formControl]="deductible"/>
+      <mat-form-field
+        class="width-100"
+        [ngClass]="deductible.invalid && !deductible.untouched ? 'pbl' : 'pbs'"
+      >
+        <input
+          matInput
+          placeholder="Insurance Deductible"
+          [formControl]="deductible"
+        />
+        <mat-error *ngIf="deductible.invalid">
+          Insurance deductible is required.
+        </mat-error>
       </mat-form-field>
 
       <div>
-        <label>
-          Does the vehicle owner have GAP coverage?
-        </label>
-        <mat-radio-group>
-          <mat-radio-button value="1" class="mlm"> Yes </mat-radio-button>
-          <mat-radio-button value="0" class="mlh"> No </mat-radio-button>
-        </mat-radio-group>
+        <mat-checkbox [formControl]="has_gap">
+          Does the vehicle owner have GAP insurance?
+        </mat-checkbox>
       </div>
     </form>
 
@@ -43,6 +102,7 @@
       color="primary"
       class="float-center width-100 mth"
       (click)="sendNewClaim()"
+      [disabled]="hasErroredFields()"
     >
       Submit
     </button>
