@@ -8,7 +8,7 @@ import {
   WebAuth,
 } from 'auth0-js';
 
-import { environment as env } from '../../environments/environment';
+import { environment as env } from '../../../../environments/environment';
 
 interface KeypairResponse {
   public_key: string;

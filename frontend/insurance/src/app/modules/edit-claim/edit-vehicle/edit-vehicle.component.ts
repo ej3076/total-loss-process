@@ -1,30 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ThemeVariables, LyTheme2 } from '@alyle/ui';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MiddlewareService } from '../../../middleware/middleware.service';
-
-const alyleStyle = (theme: ThemeVariables) => ({
-  paper: {
-    display: 'block',
-    margin: '.2em',
-    padding: '.8em',
-  },
-  noClaims: {
-    display: 'block',
-    margin: '3rem auto auto auto',
-    padding: '1em',
-  },
-  claim: {
-    padding: '16px',
-    borderRadius: '4px',
-  },
-  claimLink: {
-    color: theme.primary.default,
-    '&:hover': {
-      color: theme.warn.default,
-    },
-  },
-});
+import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
 
 @Component({
   selector: 'app-edit-vehicle',
@@ -38,7 +14,6 @@ export class EditVehicleComponent implements OnInit {
   @Input()
   vin = '';
 
-  readonly classes = this._theme.addStyleSheet(alyleStyle);
   public appearance = new FormControl();
 
   public isEditing = false;
@@ -51,7 +26,7 @@ export class EditVehicleComponent implements OnInit {
     year: new FormControl('', [Validators.required]),
   });
 
-  constructor(private _theme: LyTheme2, private service: MiddlewareService) {
+  constructor(private service: MiddlewareService) {
     this.appearance.setValue('outlined');
   }
 

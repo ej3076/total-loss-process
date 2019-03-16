@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LyTheme2, ThemeVariables } from '@alyle/ui';
-import { MiddlewareService } from '../middleware/middleware.service';
+import { MiddlewareService } from '../core/services/middleware/middleware.service';
 
 const alyleStyle = (theme: ThemeVariables) => ({
   paper: {

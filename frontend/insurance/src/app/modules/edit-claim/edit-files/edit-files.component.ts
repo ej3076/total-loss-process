@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MiddlewareService } from '../../../middleware/middleware.service';
 import { Router } from '@angular/router';
+import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
 
 @Component({
   selector: 'app-edit-files',

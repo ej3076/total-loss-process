@@ -1,22 +1,14 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { LyTheme2 } from '@alyle/ui';
-import { MiddlewareService } from '../middleware/middleware.service';
-
-const STYLES = () => ({
-  labelBefore: {
-    paddingAfter: '8px',
-  },
-});
+import { MiddlewareService } from '../core/services/middleware/middleware.service';
 
 @Component({
-  selector: 'app-new-claim',
+  selector: 'app-new',
   templateUrl: './new-claim.component.html',
   styleUrls: ['./new-claim.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewClaimComponent {
-  readonly classes = this._theme.addStyleSheet(STYLES);
 
   appearance = new FormControl();
   vin = new FormControl('', [Validators.required, Validators.minLength(11)]);
@@ -27,7 +19,6 @@ export class NewClaimComponent {
   color = new FormControl('');
 
   constructor(
-    private _theme: LyTheme2,
     private middlewareService: MiddlewareService,
   ) {
     this.appearance.setValue('outlined');
