@@ -2,29 +2,29 @@
   <mat-card class="width-50 center-to-page">
     <form>
       <mat-form-field class="width-50">
-        <input matInput placeholder="VIN" />
+        <input matInput placeholder="VIN" [formControl]="vin"/>
       </mat-form-field>
 
       <mat-form-field class="width-50">
-        <input matInput [matDatepicker]="picker" placeholder="Date of Loss" />
+        <input matInput [matDatepicker]="picker" placeholder="Date of Loss" [formControl]="date_of_loss" />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #picker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field class="width-100">
-        <input matInput placeholder="Mileage" />
+        <input matInput placeholder="Mileage" [formControl]="miles"/>
       </mat-form-field>
 
       <mat-form-field class="width-100">
-        <input matInput placeholder="Current Location of Vehicle" />
+        <input matInput placeholder="Current Location of Vehicle" [formControl]="location"/>
       </mat-form-field>
 
       <mat-form-field class="width-100">
-        <input matInput placeholder="Insurer Name" />
+        <input matInput placeholder="Insurer Name" [formControl]="name"/>
       </mat-form-field>
 
       <mat-form-field class="width-100">
-        <input matInput placeholder="Insurance Deducitble" />
+        <input matInput placeholder="Insurance Deductible" [formControl]="deductible"/>
       </mat-form-field>
 
       <div>
