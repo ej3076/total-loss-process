@@ -1,0 +1,42 @@
+@import '~@blueprintjs/core/lib/scss/variables';
+
+.main {
+  display: grid;
+  gap: 20px;
+}
+
+.card {
+  padding-top: 0;
+  overflow: hidden;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.dl {
+  position: relative;
+  margin: 0;
+
+  dd {
+    margin: 0 {
+      left: 10px;
+    }
+  }
+}
+
+.code {
+  overflow-x: auto;
+  background-color: $light-gray3;
+
+  @at-root :global(.bp3-dark) & {
+    background-color: $dark-gray3;
+  }
+
+  pre {
+    margin: 0;
+  }
+}

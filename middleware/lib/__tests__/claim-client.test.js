@@ -5,11 +5,8 @@ const {
   InvalidTransaction,
 } = require('sawtooth-sdk/processor/exceptions');
 
+const { loadType } = require('../../../utils/proto');
 const ClaimClient = require('../claim-client');
-const createFamily = require('../utils/family');
-const { loadType } = require('../utils/proto');
-
-const { calculateAddress } = createFamily('claim');
 
 /**
  * @type {any}
@@ -18,12 +15,25 @@ const api = require('../api');
 jest.mock('../api');
 
 describe('ClaimClient', () => {
+  /**
+   * @type {DeepPartial<Protos.Claim> & { vehicle: { vin: string } }}
+   */
   const CLAIM = {
-    files: [],
     status: 0,
+    created: new Date(Date.UTC(2019, 1)).toJSON(),
+    modified: new Date(Date.UTC(2019, 0)).toJSON(),
+    date_of_loss: new Date(Date.UTC(2019, 0)).toJSON(),
     vehicle: {
       vin: '12345678910',
+      miles: 0,
+      location: '',
     },
+    insurer: {
+      name: '',
+      deductible: 0,
+      has_gap: false,
+    },
+    files: [],
   };
 
   /**
@@ -36,7 +46,7 @@ describe('ClaimClient', () => {
     const buffer = /** @type {Buffer} */ (ClaimType.encode(CLAIM).finish());
     api.__STATE.clear();
     api.__STATE.set(
-      calculateAddress(CLAIM.vehicle.vin),
+      ClaimClient.address(CLAIM.vehicle.vin),
       buffer.toString('base64'),
     );
   });
@@ -54,7 +64,9 @@ describe('ClaimClient', () => {
 
     it('should edit claims correctly', async () => {
       await expect(
-        client.editClaim(CLAIM.vehicle.vin, { vehicle: { color: 'red' } }),
+        client.editClaim(CLAIM.vehicle.vin, {
+          vehicle: { location: 'salvage' },
+        }),
       ).resolves;
     });
 
@@ -68,9 +80,9 @@ describe('ClaimClient', () => {
 
     it('should throw InvalidTransaction with invalid claim data', async () => {
       /** @type {any} */
-      const claim = { vehicle: { color: Symbol('Red') } };
+      const claim = { vehicle: { location: Symbol('Red') } };
       await expect(client.editClaim(CLAIM.vehicle.vin, claim)).rejects.toThrow(
-        new InvalidTransaction('data.vehicle.color: string expected'),
+        new InvalidTransaction('data.vehicle.location: string expected'),
       );
     });
 
@@ -105,10 +117,7 @@ describe('ClaimClient', () => {
           ...CLAIM,
           vehicle: {
             ...CLAIM.vehicle,
-            color: '',
             miles: 0,
-            model: '',
-            year: 0,
           },
         },
       ]);
@@ -120,10 +129,7 @@ describe('ClaimClient', () => {
         ...CLAIM,
         vehicle: {
           ...CLAIM.vehicle,
-          color: '',
           miles: 0,
-          model: '',
-          year: 0,
         },
       });
       await expect(client.getClaim('asdf')).rejects.toThrowError();

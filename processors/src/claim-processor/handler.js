@@ -3,7 +3,9 @@
 const { TransactionHandler } = require('sawtooth-sdk/processor/handler');
 const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
 
-const logger = require('../logger');
+const logger = require('../../../utils/logger');
+const { loadType } = require('../../../utils/proto');
+
 const { CLAIM_FAMILY, CLAIM_NAMESPACE } = require('./constants');
 const ClaimPayload = require('./payload');
 const ClaimState = require('./state');
@@ -24,29 +26,26 @@ class ClaimHandler extends TransactionHandler {
     logger.debug('Transaction header', {
       data: { header: transaction.header },
     });
-    const { Actions, ...payload } = await ClaimPayload.fromBytes(
-      transaction.payload,
-    );
+    const Actions = (await loadType('ClaimPayload')).Action;
+    const payload = await ClaimPayload.fromBytes(transaction.payload);
     const state = new ClaimState(context);
     switch (payload.action) {
       case Actions.CREATE_CLAIM: {
-        const { data: dataWithDefaults } = await ClaimPayload.fromBytes(
-          transaction.payload,
-          true,
-        );
         logger.info('Processing action: CREATE_CLAIM');
-        return this.createClaim(dataWithDefaults, state);
+        return this.createClaim(
+          await ClaimPayload.fromBytes(transaction.payload, true),
+          state,
+        );
       }
       case Actions.DELETE_CLAIM: {
         logger.info('Processing action: DELETE_CLAIM');
-        return this.deleteClaim(payload.data, state);
+        return this.deleteClaim(payload, state);
       }
       case Actions.EDIT_CLAIM: {
         logger.info('Processing action: EDIT_CLAIM');
-        return this.editClaim(payload.data, state);
+        return this.editClaim(payload, state);
       }
       default:
-        logger.error(`Unable to process action: ${payload.action}`);
         throw new InvalidTransaction(
           `Unable to process action: ${payload.action}`,
         );
@@ -56,10 +55,10 @@ class ClaimHandler extends TransactionHandler {
   /**
    * CREATE_CLAIM action handler.
    *
-   * @param {Protos.Claim} claim
+   * @param {Protos.ClaimPayload} payload
    * @param {ClaimState} state
    */
-  async createClaim(claim, state) {
+  async createClaim({ data: claim, timestamp }, state) {
     const { vin } = claim.vehicle;
     const existingClaim = await state.getClaim(vin);
     if (existingClaim) {
@@ -67,16 +66,20 @@ class ClaimHandler extends TransactionHandler {
       throw new InvalidTransaction('Claim already exists');
     }
     logger.debug(`Creating new claim using VIN: ${vin}`);
-    return state.setClaim(vin, claim);
+    return state.setClaim(vin, {
+      ...claim,
+      created: timestamp,
+      modified: timestamp,
+    });
   }
 
   /**
    * DELETE_CLAIM action handler.
    *
-   * @param {Protos.Claim} claim
+   * @param {Protos.ClaimPayload} payload
    * @param {ClaimState} state
    */
-  async deleteClaim(claim, state) {
+  async deleteClaim({ data: claim }, state) {
     const { vin } = claim.vehicle;
     const existingClaim = await state.getClaim(vin);
     if (!existingClaim) {
@@ -89,10 +92,10 @@ class ClaimHandler extends TransactionHandler {
   /**
    * EDIT_CLAIM action handler.
    *
-   * @param {Protos.Claim} claim
+   * @param {Protos.ClaimPayload} payload
    * @param {ClaimState} state
    */
-  async editClaim(claim, state) {
+  async editClaim({ data: claim, timestamp }, state) {
     const { vin } = claim.vehicle;
     const existingClaim = await state.getClaim(vin);
     if (!existingClaim) {
@@ -100,13 +103,20 @@ class ClaimHandler extends TransactionHandler {
       throw new InvalidTransaction('Cannot edit - claim does not exist');
     }
     logger.debug(`Editing existing claim using VIN: ${vin}`);
+    const insurer = {
+      ...existingClaim.insurer,
+      ...claim.insurer,
+    };
     return state.setClaim(vin, {
       ...existingClaim,
       ...claim,
+      created: existingClaim.created,
+      modified: timestamp,
       vehicle: {
         ...existingClaim.vehicle,
         ...claim.vehicle,
       },
+      ...(Object.keys(insurer).length > 0 ? { insurer } : {}),
       files: this._mergeFiles(existingClaim.files, claim.files),
     });
   }

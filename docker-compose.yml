@@ -89,7 +89,12 @@ services:
     command: npm start
 
   # Static web server for frontend app
-  web:
+  web-insurance:
+    <<: *shared
+    depends_on:
+      - middleware
+
+  web-viewer:
     <<: *shared
     depends_on:
       - middleware

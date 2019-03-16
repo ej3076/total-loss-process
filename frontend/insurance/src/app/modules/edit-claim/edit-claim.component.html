@@ -1,10 +1,10 @@
 <a routerLink="/claims">
   <button ly-button outlined color="primary">Go Back</button>
 </a>
-<h1 [lyTyp]="display1" class="mtm" color="offPrimary">
+<h1 lyTyp="display1" class="mtm" color="offPrimary">
   Edit Claim
 </h1>
-<h1 [lyTyp]="display1">VIN: {{ vin }}</h1>
+<h1 lyTyp="display1">VIN: {{ vin }}</h1>
 <div *ngIf="claim">
   <ly-tabs [alignTabs]="'stretch'">
     <!-- Vehicle -->

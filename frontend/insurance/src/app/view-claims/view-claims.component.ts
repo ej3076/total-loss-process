@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LyTheme2, ThemeVariables } from '@alyle/ui';
 import { MiddlewareService } from '../middleware/middleware.service';
-import { AuthService } from '../auth/auth.service';
 
 const alyleStyle = (theme: ThemeVariables) => ({
   paper: {
@@ -42,13 +41,10 @@ export class ViewClaimsComponent implements OnInit {
   constructor(
     private _theme: LyTheme2,
     private middlewareService: MiddlewareService,
-    private auth: AuthService,
   ) {}
 
   ngOnInit() {
-    if (this.auth.isLoggedIn) {
-      this.setClaims();
-    }
+    this.setClaims();
   }
 
   setClaims(): void {

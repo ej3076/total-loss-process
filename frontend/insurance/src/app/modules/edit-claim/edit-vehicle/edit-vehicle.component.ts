@@ -65,11 +65,8 @@ export class EditVehicleComponent implements OnInit {
 
   setInitialFormValues(): void {
     this.vehicleForm.patchValue({
-      model:
-        this.claim && this.claim.vehicle.model ? this.claim.vehicle.model : '',
-      color:
-        this.claim && this.claim.vehicle.color ? this.claim.vehicle.color : '',
-      // acv: TODO,
+      model: 'FIXME...',
+      color: 'FIXME...',
       miles:
         this.claim && this.claim.vehicle.miles ? this.claim.vehicle.miles : '',
       year:
@@ -84,7 +81,6 @@ export class EditVehicleComponent implements OnInit {
         color: this.vehicleForm.controls['color'].value,
         model: this.vehicleForm.controls['model'].value,
         miles: +this.vehicleForm.controls['miles'].value,
-        // acv: this.vehicleForm.controls['acv'].value,
         year: +this.vehicleForm.controls['year'].value,
       },
     };

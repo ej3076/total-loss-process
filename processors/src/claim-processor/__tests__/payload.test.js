@@ -2,7 +2,7 @@
 
 const { InvalidTransaction } = require('sawtooth-sdk/processor/exceptions');
 
-const { loadType } = require('../../proto');
+const { loadType } = require('../../../../utils/proto');
 const ClaimPayload = require('../payload');
 
 describe('ClaimPayload', () => {
@@ -10,19 +10,25 @@ describe('ClaimPayload', () => {
    * @type {Readonly<Protos.Claim>}
    */
   const DATA = Object.freeze({
-    files: [],
     status: 0,
+    created: new Date(Date.UTC(2019, 0)).toJSON(),
+    modified: new Date(Date.UTC(2019, 0)).toJSON(),
+    date_of_loss: new Date(Date.UTC(2019, 0)).toJSON(),
     vehicle: {
       vin: '1234567890',
-      color: 'red',
       miles: 1000,
-      model: 'sedan',
-      year: 2019,
+      location: 'salvage',
     },
+    insurer: {
+      name: '',
+      deductible: 0,
+      has_gap: false,
+    },
+    files: [],
   });
 
   /**
-   * @type {PromiseReturnType<import('../../proto').loadType>}
+   * @type {PromiseReturnType<import('../../../../utils/proto').loadType>}
    */
   let PayloadType;
 
@@ -48,11 +54,12 @@ describe('ClaimPayload', () => {
   });
 
   it('should resolve to default values when given partial payload and default = true', async () => {
-    const { color, year, model, ...data } = DATA.vehicle;
+    const { location, miles, ...data } = DATA.vehicle;
     const payload = await ClaimPayload.fromBytes(
       PayloadType.encode({
         action: Actions.CREATE_CLAIM,
         data: {
+          ...DATA,
           vehicle: {
             ...data,
           },
@@ -61,24 +68,22 @@ describe('ClaimPayload', () => {
       true,
     );
     expect(payload.data).toEqual({
-      files: [],
-      status: 0,
+      ...DATA,
       vehicle: {
         vin: '1234567890',
-        color: '',
-        miles: 1000,
-        model: '',
-        year: 0,
+        miles: 0,
+        location: '',
       },
     });
   });
 
   it('should not resolve to default values when given partial payload and default = false or undefined', async () => {
-    const { color, year, model, ...data } = DATA.vehicle;
+    const { location, miles, ...data } = DATA.vehicle;
     const payload = await ClaimPayload.fromBytes(
       PayloadType.encode({
         action: Actions.CREATE_CLAIM,
         data: {
+          ...DATA,
           vehicle: {
             ...data,
           },
@@ -86,10 +91,9 @@ describe('ClaimPayload', () => {
       }).finish(),
     );
     expect(payload.data).toEqual({
-      files: [],
+      ...DATA,
       vehicle: {
         vin: '1234567890',
-        miles: 1000,
       },
     });
   });

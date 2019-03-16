@@ -4,8 +4,8 @@ import "claim.proto";
 
 message ClaimPayload {
   enum Action {
-    // Never used on purpose.
-    // This ensures that payload actions are always specified explicitly.
+    // Ensures that payload actions are always specified explicitly. Should
+    // not be used on purpose.
     ERROR = 0;
     // Create a new claim.
     CREATE_CLAIM = 1;
@@ -15,9 +15,12 @@ message ClaimPayload {
     EDIT_CLAIM = 3;
   }
 
+  // JSON serialized UTC timestamp.
+  string timestamp = 1;
+
   // Action to be taken.
-  Action action = 1;
+  Action action = 2;
 
   // Claim data associated with the action.
-  Claim data = 2;
+  Claim data = 3;
 }

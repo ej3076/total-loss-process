@@ -8,3 +8,4 @@ RUN npm ci
 
 COPY protos /usr/src/protos
 COPY processors/src src
+COPY utils /usr/src/utils

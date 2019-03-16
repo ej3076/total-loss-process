@@ -8,6 +8,23 @@ message File {
     ARCHIVED = 1;
   }
 
+  enum Type {
+    // Misc documents/images.
+    NONE = 0;
+    // Power of Attorney.
+    POA = 1;
+    // Vehicle title.
+    TITLE = 2;
+    // Odometer disclosure statement.
+    ODS = 3;
+    // Police report.
+    POLICE = 4;
+    // Settlement offer.
+    SETTLEMENT = 5;
+    // Letter of guarantee.
+    LOG = 6;
+  }
+
   // The computed hash of the file (the Amazon S3 `ETag`).
   string hash = 1;
 
@@ -16,4 +33,7 @@ message File {
 
   // The file's status.
   Status status = 3;
+
+  // The file's type.
+  Type type = 4;
 }

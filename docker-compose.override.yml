@@ -11,25 +11,42 @@ services:
     volumes:
       - ./protos:/usr/src/protos
       - ./middleware:/usr/src/app
+      - ./utils:/usr/src/utils
     command: >-
       bash -c '
+        (cd ../utils && npm i --no-package-lock) &&
         npm i --no-package-lock &&
         npm run dev
       '
 
-  web:
+  web-insurance:
     image: node:11
     user: node
     working_dir: /usr/src/app
     ports:
       - 4200:4200
     volumes:
-      - ./types:/usr/src/types
+      - ./types:/usr/types
       - ./frontend/insurance:/usr/src/app
     command: >-
       bash -c '
         npm i --no-package-lock &&
         npm start -- --host 0.0.0.0
+      '
+
+  web-viewer:
+    image: node:11
+    user: node
+    working_dir: /usr/src/app
+    ports:
+      - 3000:3000
+    volumes:
+      - ./types:/usr/types
+      - ./frontend/viewer:/usr/src/app
+    command: >-
+      bash -c '
+        npm i --no-package-lock &&
+        npm start
       '
 
   tp-claim:
@@ -39,8 +56,10 @@ services:
     volumes:
       - ./protos:/usr/src/protos
       - ./processors:/usr/src/app
+      - ./utils:/usr/src/utils
     command: >-
       bash -c '
+        (cd ../utils && npm i --no-package-lock) &&
         npm i --no-package-lock &&
         npm run tp-claim:start -- tcp://validator:4004
       '

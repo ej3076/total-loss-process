@@ -42,6 +42,9 @@ export class AuthService {
 
   constructor(private router: Router) {
     this.auth0 = new WebAuth(AuthService.AUTH0_OPTIONS);
+    if (window.localStorage.getItem('auth')) {
+      this.login();
+    }
   }
 
   get accessToken() {
@@ -77,6 +80,14 @@ export class AuthService {
           : 'Error fetching data from login provider.';
         console.error(this.errorMessage);
       } else {
+        const expiresIn = data.expiresIn || 0;
+        window.localStorage.setItem(
+          'auth',
+          JSON.stringify({
+            accessToken: data.accessToken,
+            expires: expiresIn * 1000 + Date.now(),
+          }),
+        );
         this.setUser(data);
       }
       this.router.navigate(['/']);
@@ -84,6 +95,15 @@ export class AuthService {
   }
 
   login() {
+    const auth = JSON.parse(window.localStorage.getItem('auth') || '{}');
+    if (Object.keys(auth).length > 0) {
+      if (auth.expires <= Date.now()) {
+        window.localStorage.removeItem('auth');
+      } else {
+        this.setUser({ accessToken: auth.accessToken });
+        return;
+      }
+    }
     this.auth0.checkSession({}, (err, user) => {
       if (err) {
         return this.auth0.authorize();
@@ -96,6 +116,7 @@ export class AuthService {
     this._isLoggedIn = false;
     this._accessToken = '';
     this._user = undefined;
+    window.localStorage.removeItem('auth');
     this.auth0.logout({ returnTo: window.location.origin });
   }
 
