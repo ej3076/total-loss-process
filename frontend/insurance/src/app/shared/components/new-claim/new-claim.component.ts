@@ -10,14 +10,13 @@ import { MiddlewareService } from '../../../core/services/middleware/middleware.
 export class NewClaimComponent {
   appearance = new FormControl();
   vin = new FormControl('', [Validators.required, Validators.minLength(11)]);
-  date_of_loss = new FormControl('');
-  miles = new FormControl('');
-  location = new FormControl('');
-  name = new FormControl('');
-  deductible = new FormControl('');
-  has_gap = new FormControl('');
+  date_of_loss = new FormControl('', [Validators.required]);
+  miles = new FormControl('', [Validators.required]);
+  location = new FormControl('', [Validators.required]);
+  name = new FormControl('', [Validators.required]);
+  deductible = new FormControl('', [Validators.required]);
+  has_gap = new FormControl('', [Validators.required]);
 
-  
   constructor(private middlewareService: MiddlewareService) {
     this.appearance.setValue('outlined');
   }
@@ -62,7 +61,15 @@ export class NewClaimComponent {
   }
 
   hasErroredFields(): boolean {
-    return this.vin.hasError('minlength') || this.vin.hasError('required');
+    return !(
+      this.date_of_loss.valid &&
+      this.vin.valid &&
+      this.miles.valid &&
+      this.location.valid &&
+      this.name.valid &&
+      this.deductible.valid &&
+      this.has_gap.valid
+    );
   }
 
   public numberValidator(event: any) {
@@ -81,5 +88,13 @@ export class NewClaimComponent {
     if (!charactersAllowed.test(event.target.value)) {
       event.target.value = event.target.value.replace(/[^a-zA-Z0-9]/g, '');
     }
+  }
+
+  getErrorMessage() {
+    return this.vin.hasError('required')
+      ? 'VIN is required.'
+      : this.vin.hasError('minlength')
+      ? 'VIN must be 11 to 17 characters and numbers.'
+      : '';
   }
 }
