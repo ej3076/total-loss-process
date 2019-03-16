@@ -1,9 +1,14 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <a routerLink='/'>
+    <a routerLink="/">
       <img src="../../../../assets/logos/ford-logo.png" class="logo-width" />
     </a>
     <span class="example-spacer"></span>
-    <button mat-button (click)="auth.login()">Log In</button>
+    <button mat-button *ngIf="auth.isLoggedIn" (click)="auth.logout()">
+      Log Out
+    </button>
+    <button mat-button *ngIf="!auth.isLoggedIn" (click)="auth.login()">
+      Log In
+    </button>
   </mat-toolbar-row>
 </mat-toolbar>
