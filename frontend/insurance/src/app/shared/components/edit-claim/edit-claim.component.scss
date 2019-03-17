@@ -13,27 +13,29 @@
 }
 
 .content-wrapper {
-  margin: 15px;
-}
-
-.row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-  flex-basis: 100%;
-  flex: 1;
-}
-
-.one-column {
-  height: 100px;
-}
-
-.two-column {
-  height: 100px;
-}
+    margin: 15px;
+  }
+  
+  .row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  
+  .column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+  }
+  
+  .one-column {
+    height: 150px;
+  }
+  
+  .two-column {
+    height: 150px;
+  }
+  
+  

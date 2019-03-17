@@ -49,18 +49,7 @@ export class MiddlewareService {
     return this.http
       .post(`${API_BASE}/claims/${claim.vehicle.vin}`, claim, {
         headers: this.auth.headers,
-      })
-      .subscribe(
-        undefined,
-        error => {
-          alert('Edit claim failed');
-          console.error(error);
-        },
-        () => {
-          alert('Edit successful!');
-          this.router.navigateByUrl('/claims');
-        },
-      );
+      });
   }
 
   addFiles(files: FileList, vin: string) {

@@ -10,9 +10,6 @@
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Go Back</button>
-  <button mat-button *ngIf="!success" (click)="submitFiles()" cdkFocusInitial>
-    Submit
-  </button>
-  <button mat-button *ngIf="success" disabled>Upload Successful!</button>
+  <button mat-button [mat-dialog-close]="data">Go Back</button>
+  <button mat-button *ngIf="!success" (click)="submitFiles()">Submit</button>
 </div>

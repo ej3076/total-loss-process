@@ -1,1 +1,13 @@
-EDITING FILE
+<p mat-dialog-title>Actions on File</p>
+
+<div mat-dialog-content>
+    <button mat-button (click)="archiveFile()" [disabled]="data.file.status === 1 || successfulArchive">Archive File</button>
+    <button mat-button (click)="restoreFile()" [disabled]="data.file.status === 0 || successfulRestore">Restore File</button>
+    <button mat-button (click)="downloadFile()">Download File</button>
+
+    <p *ngIf="successfulArchive">Archive Successful!</p>
+    <p *ngIf="successfulRestore">Restore Successful!</p>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Go Back</button>
+</div>

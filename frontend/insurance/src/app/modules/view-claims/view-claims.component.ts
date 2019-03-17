@@ -52,12 +52,14 @@ export class ViewClaimsComponent implements OnInit {
         console.log('Claims: ');
         console.log(result);
       },
+
       error => {
         console.log(error);
       },
     );
     this.dataSource.sort = this.sort;
   }
+  
 
   sortClaims(num: number) {
     this.dataSource.filter = num.toString();

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -14,45 +14,18 @@ export class FilesComponent implements OnInit {
   @Input()
   vin = '';
 
+  @Output()
+  updatedClaim = new EventEmitter<Protos.Claim>();
+
   files: FileList | null = null;
 
-  constructor(private service: MiddlewareService, public dialog: MatDialog) {}
+  constructor(
+    public dialog: MatDialog
+  ) {
+    this.updatedClaim.emit(this.claim);
+  }
 
   ngOnInit() {}
-
-  archiveFile(filename: string): void {
-    this.service.archiveFile(filename, this.vin).subscribe(
-      undefined,
-      error => console.log(error),
-      () => {
-        alert('FILE ARCHIVED');
-      },
-    );
-  }
-
-  restoreFile(filename: string): void {
-    this.service.restoreFile(filename, this.vin).subscribe(
-      undefined,
-      error => console.log(error),
-      () => {
-        alert('FILE RESTORED');
-      },
-    );
-  }
-
-  downloadFile(hash: string, filename: string) {
-    this.service.downloadFile(this.vin, hash, filename).subscribe(blob => {
-      const url = URL.createObjectURL(new File([blob], filename));
-      const a = document.createElement('a');
-      a.href = url;
-      a.target = '_blank';
-      a.download = filename;
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    });
-  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(FileDialog, {
@@ -61,7 +34,7 @@ export class FilesComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
+      this.updatedClaim.emit(result);
     });
   }
 }
@@ -73,6 +46,7 @@ export class FilesComponent implements OnInit {
 export class FileDialog {
   urls = Array<string>();
   success = false;
+  updatedClaim: Protos.Claim | undefined;
 
   constructor(
     public dialogRef: MatDialogRef<FileDialog>,
@@ -112,7 +86,8 @@ export class FileDialog {
       this.service
         .addFiles(this.files, this.data.vehicle.vin)
         .subscribe(data => {
-          console.log(data);
+          console.log(<Protos.Claim>data);
+          this.data = <Protos.Claim>data
           this.files = null;
           this.success = true;
         });
@@ -125,18 +100,58 @@ export class FileDialog {
   templateUrl: 'edit-file-dialog.html',
 })
 export class EditFileDialog {
-  file: Protos.File | null = null;
+  data!: {file: {name: string, hash: string, status: number}, vin: string};
   success = false;
+
+  successfulArchive = false;
+  successfulRestore = false;
 
   constructor(
     public dialogRef: MatDialogRef<FileDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: Protos.File,
+    private service: MiddlewareService,
+    @Inject(MAT_DIALOG_DATA) public dataObj: {file: {name: string, hash: string, status: number}, vin: string},
   ) {
-    this.file = data;
-    console.log(this.file);
+    this.data = dataObj;
+    console.log(this.data);
   }
 
   onNoClick(): void {
     this.dialogRef.close();
+    this.successfulArchive = false;
+    this.successfulRestore = false;
+  }
+
+  archiveFile(): void {
+    this.service.archiveFile(this.data.file.name, this.data.vin).subscribe(
+      () => {
+        this.data.file.status = 1;
+        this.successfulArchive = true;
+        this.successfulRestore = false;
+      }
+    );
+  }
+
+  restoreFile(): void {
+    this.service.restoreFile(this.data.file.name, this.data.vin).subscribe(
+      () => {
+        this.data.file.status = 0;
+        this.successfulRestore = true;
+        this.successfulArchive = false;
+      }
+    );
+  }
+
+  downloadFile() {
+    this.service.downloadFile(this.data.vin, this.data.file.hash, this.data.file.name).subscribe(blob => {
+      const url = URL.createObjectURL(new File([blob], this.data.file.name));
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.download = this.data.file.name;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
   }
 }

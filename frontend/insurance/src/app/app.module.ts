@@ -13,7 +13,6 @@ import { HomeComponent } from './modules/home/home.component';
 
 // Auth0 Components
 import { ViewClaimsComponent } from './view-claims/view-claims.component';
-import { EditClaimModule } from './modules/edit-claim/edit-claim.module';
 import { CoreModule } from './core/core.module';
 
 // Material
@@ -34,7 +33,6 @@ import { ViewClaimsModule } from './modules/view-claims/view-claims.module';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    EditClaimModule,
     AppRoutingModule,
     MatToolbarModule,
     ViewClaimsModule,

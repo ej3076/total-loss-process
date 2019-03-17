@@ -1,42 +1,52 @@
 <div *ngIf="claim" class="width-100">
   <p>Vehicle Information</p>
   <mat-list class="vehicle-information mbl">
-    <div class="content-wrapper">
-      <div class="row">
-        <div class="column">
-          <div class="one-column">
-            <mat-list-item>
-              <p>Miles:</p>
-              <span class="mls edit-field" contenteditable="true">
-                {{ claim.vehicle.miles }}
-              </span>
-            </mat-list-item>
-            <mat-list-item>
-              <p>Model:</p>
-              <span class="mls">
-                Generated Model
-              </span>
-            </mat-list-item>
+    <form [formGroup]="vehicleForm">
+      <div class='content-wrapper'>
+        <div class='row'>
+          <div class='column'>
+            <div class='one-column'>
+              <mat-list-item> 
+                <p>Miles: </p>
+                <span class="mls">
+                  <input type="text" class="raw-text-input" [value]="claim.vehicle.miles" formControlName="miles"/>
+                </span>
+              </mat-list-item>
+              <mat-list-item>
+                <p>Model: </p>
+                <span class="mls">
+                  Generated Model
+                </span>
+              </mat-list-item>
+              <mat-list-item *ngIf="successfulVehicleEdit">
+                  <p>Edit Successful!</p>
+              </mat-list-item>
+            </div>
           </div>
-        </div>
-        <div class="column">
-          <div class="two-column">
-            <mat-list-item>
-              <p>Vehicle Location:</p>
-              <span class="mls edit-field" contenteditable="true">
-                {{ claim.vehicle.location }}
-              </span>
-            </mat-list-item>
-            <mat-list-item>
-              <p>Base Price:</p>
-              <span class="mls">
-                $XXX,XXX
-              </span>
-            </mat-list-item>
+          <div class='column'>
+            <div class='two-column'>
+              <mat-list-item>
+                <p>Vehicle Location: </p>
+                <span class="mls">
+                  <input type="text" class="raw-text-input" [value]="claim.vehicle.location" formControlName="location"/>
+                </span>
+              </mat-list-item>
+              <mat-list-item>
+                <p>Base Price: </p>
+                <span class="mls">
+                  $XXX,XXX
+                </span>
+              </mat-list-item>
+              <mat-list-item>
+                <span class="mls">
+                  <button mat-raised-button color="primary" [disabled]="!canSubmitVehicleChanges" (click)="submitClaimEdit()">Submit Changes</button>
+                </span>
+              </mat-list-item>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   </mat-list>
   <mat-accordion class="width-100 mtl">
     <mat-expansion-panel>
@@ -45,14 +55,9 @@
           Files on Claim
         </mat-panel-title>
       </mat-expansion-panel-header>
-
-      <app-files [claim]="claim" [vin]="claim.vehicle.vin"></app-files>
-      <table
-        mat-table
-        [dataSource]="dataSource"
-        class="mat-elevation-z8 width-100 mtl"
-        *ngIf="dataSource"
-      >
+  
+      <app-files [claim]="claim" [vin]="claim.vehicle.vin" (updatedClaim)="receiveNewClaim($event)"></app-files>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 width-100 mtl" *ngIf="dataSource">      
         <!-- Position Column -->
         <ng-container matColumnDef="filename">
           <th mat-header-cell *matHeaderCellDef>File Name</th>
@@ -83,36 +88,43 @@
       </mat-expansion-panel-header>
 
       <mat-list class="vehicle-information mbl">
-        <div class="content-wrapper">
-          <div class="row">
-            <div class="column">
-              <div class="one-column">
-                <mat-list-item>
-                  <p>Insurance Provider:</p>
-                  <span class="mls edit-field" contenteditable="true">
-                    {{ claim.insurer.name }}
-                  </span>
-                </mat-list-item>
-                <mat-list-item>
-                  <p>Gap Coverage:</p>
-                  <span class="mls edit-field" contenteditable="true">
-                    {{ claim.insurer.has_gap ? 'Yes' : 'No' }}
-                  </span>
-                </mat-list-item>
+        <form [formGroup]="insurerForm">
+          <div class='content-wrapper'>
+            <div class='row'>
+              <div class='column'>
+                <div class='one-column'>
+                  <mat-list-item> 
+                    <p>Insurance Provider: </p>
+                    <span class="mls">
+                      <input type="text" class="raw-text-input" [value]="claim.insurer.name" formControlName="insurerName"/>
+                    </span>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <p>Gap Coverage: </p>
+                    <span class="mls">
+                      <input type="text" class="raw-text-input" [value]="(claim.insurer.has_gap) ? 'Yes' : 'No'" formControlName="gap"/>
+                    </span>
+                  </mat-list-item>
+                </div>
               </div>
-            </div>
-            <div class="column">
-              <div class="two-column">
-                <mat-list-item>
-                  <p>Deductible Amount:</p>
-                  <span class="mls edit-field" contenteditable="true">
-                    {{ claim.insurer.deductible | currency }}
-                  </span>
-                </mat-list-item>
+              <div class='column'>
+                <div class='two-column'>
+                  <mat-list-item>
+                    <p>Deductible Amount: </p>
+                    <span class="mls">
+                      <input type="text" class="raw-text-input" [value]="claim.insurer.deductible | currency" formControlName="deductible"/>
+                    </span>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <span class="mls">
+                      <button mat-raised-button color="primary" [disabled]="!canSubmitInsurerChanges" (click)="submitClaimEdit()">Submit Changes</button>
+                    </span>
+                  </mat-list-item>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </mat-list>
     </mat-expansion-panel>
   </mat-accordion>
