@@ -16,11 +16,10 @@ import {
   animations: [
     trigger('detailExpand', [
       state(
-        'collapsed, void',
-        style({ height: '0px', minHeight: '0', display: 'none' }),
+        'collapsed', style({ height: '0px', minHeight: '0' }),
       ),
       state('expanded', style({ height: '*' })),
-      transition('* <=> *', animate('150ms cubic-bezier(0.4, 0.4, 0.2, 1)')),
+      transition('collapsed <=> expanded', animate('300ms ease-in')),
     ]),
   ],
 })
@@ -59,7 +58,6 @@ export class ViewClaimsComponent implements OnInit {
     );
     this.dataSource.sort = this.sort;
   }
-  
 
   sortClaims(num: number) {
     this.dataSource.filter = num.toString();

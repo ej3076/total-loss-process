@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-files',
@@ -86,8 +87,10 @@ export class FileDialog {
       this.service
         .addFiles(this.files, this.data.vehicle.vin)
         .subscribe(data => {
-          console.log(<Protos.Claim>data);
-          this.data = <Protos.Claim>data
+          const claim = <Protos.Claim>data;
+          this.data.files = claim.files;
+          this.data.modified = claim.modified;
+
           this.files = null;
           this.success = true;
         });
@@ -100,11 +103,14 @@ export class FileDialog {
   templateUrl: 'edit-file-dialog.html',
 })
 export class EditFileDialog {
-  data!: {file: {name: string, hash: string, status: number}, vin: string};
+  claim = new EventEmitter<Protos.Claim>();
+  data: {file: {name: string, hash: string, status: number}, vin: string};
   success = false;
 
   successfulArchive = false;
   successfulRestore = false;
+
+  newFileName = new FormControl('');
 
   constructor(
     public dialogRef: MatDialogRef<FileDialog>,
@@ -153,5 +159,21 @@ export class EditFileDialog {
       a.click();
       document.body.removeChild(a);
     });
+  }
+
+  renameFile() {
+    this.service.editFileName(this.data.vin, this.data.file.name, this.newFileName.value)
+      .subscribe(
+        data => {
+          console.log(data);
+          const claim = <Protos.Claim>data;
+          const file = claim.files.find(file => file.name === this.newFileName.value);
+          if (file) {
+            this.data.file.name = file.name;
+            this.newFileName.setValue('');
+            this.claim.emit(<Protos.Claim>claim);
+          }
+        }
+      );
   }
 }

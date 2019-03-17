@@ -19,7 +19,7 @@
                 </span>
               </mat-list-item>
               <mat-list-item *ngIf="successfulVehicleEdit">
-                  <p>Edit Successful!</p>
+                  <p style="color:green">Edit Successful!</p>
               </mat-list-item>
             </div>
           </div>
@@ -39,7 +39,7 @@
               </mat-list-item>
               <mat-list-item>
                 <span class="mls">
-                  <button mat-raised-button color="primary" [disabled]="!canSubmitVehicleChanges" (click)="submitClaimEdit()">Submit Changes</button>
+                  <button mat-raised-button color="primary" [disabled]="!canSubmitVehicleChanges" (click)="submitVehicleEdit()">Submit Changes</button>
                 </span>
               </mat-list-item>
             </div>
@@ -105,19 +105,22 @@
                       <input type="text" class="raw-text-input" [value]="(claim.insurer.has_gap) ? 'Yes' : 'No'" formControlName="gap"/>
                     </span>
                   </mat-list-item>
+                  <mat-list-item *ngIf="successfulInsurerEdit">
+                    <p style="color:green">Insurer Update Success</p>
+                  </mat-list-item>
                 </div>
               </div>
               <div class='column'>
                 <div class='two-column'>
                   <mat-list-item>
-                    <p>Deductible Amount: </p>
+                    <p>Deductible Amount ($): </p>
                     <span class="mls">
-                      <input type="text" class="raw-text-input" [value]="claim.insurer.deductible | currency" formControlName="deductible"/>
+                      <input type="text" class="raw-text-input" [value]="claim.insurer.deductible" formControlName="deductible"/>
                     </span>
                   </mat-list-item>
                   <mat-list-item>
                     <span class="mls">
-                      <button mat-raised-button color="primary" [disabled]="!canSubmitInsurerChanges" (click)="submitClaimEdit()">Submit Changes</button>
+                      <button mat-raised-button color="primary" [disabled]="!canSubmitInsurerChanges" (click)="submitInsurerEdit()">Submit Changes</button>
                     </span>
                   </mat-list-item>
                 </div>

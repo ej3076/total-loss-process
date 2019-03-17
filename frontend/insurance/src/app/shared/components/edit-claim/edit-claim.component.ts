@@ -17,6 +17,7 @@ export class EditClaimComponent implements OnInit {
   dataSource = new MatTableDataSource((this.claim) ? this.claim.files : []);
 
   successfulVehicleEdit = false;
+  successfulInsurerEdit = false;
 
   // Form Controls
   vehicleForm: FormGroup;
@@ -28,7 +29,7 @@ export class EditClaimComponent implements OnInit {
     this.vehicleForm = this.formBuilder.group({});
     this.insurerForm = this.formBuilder.group({});
    }
-  
+
   ngOnInit() {
     if (this.claim && this.claim.files) {
       this.dataSource = new MatTableDataSource(this.claim.files);
@@ -49,9 +50,19 @@ export class EditClaimComponent implements OnInit {
   }
 
   openDialog(file: Protos.File): void {
-    this.dialog.open(EditFileDialog, {
+    const dialog = this.dialog.open(EditFileDialog, {
       width: '500px',
       data: {file: file, vin: this.claim.vehicle.vin}
+    });
+
+    const sub = dialog.componentInstance.claim.subscribe(
+      (data: Protos.Claim) => {
+        this.claim = data;
+      }
+    );
+
+    dialog.afterClosed().subscribe(() => {
+      sub.unsubscribe();
     });
   }
 
@@ -72,27 +83,58 @@ export class EditClaimComponent implements OnInit {
     });
   }
 
-  submitClaimEdit(): void {
+  submitVehicleEdit(): void {
     const claim = {
       vehicle: {
         vin: this.claim.vehicle.vin,
-        miles: +this.vehicleForm.controls['miles'].value,
-        location: this.vehicleForm.controls['location'].value,
+        miles: (this.vehicleForm.controls['miles'].value)
+                ? +this.vehicleForm.controls['miles'].value
+                : this.claim.vehicle.miles,
+        location: (this.vehicleForm.controls['location'].value)
+                  ? this.vehicleForm.controls['location'].value
+                  : this.claim.vehicle.location,
       },
-      insurer: {
-        name: this.insurerForm.controls['insurerName'].value,
-        has_gap: this.gapValue,
-        deductible: +this.insurerForm.controls['deductible'].value
-      }
     };
 
     this.service.editClaim(claim)
     .subscribe(
       (data) => {
-        console.log("success");
-        this.claim = <Protos.Claim>data;
+        const claim = <Protos.Claim>data;
+        this.claim.vehicle = claim.vehicle;
+        this.claim.modified = claim.modified;
+
         this.successfulVehicleEdit = true;
       });
+  }
+
+  submitInsurerEdit(): void {
+    const claim = {
+      vehicle: {
+        vin: this.claim.vehicle.vin
+      },
+      insurer: {
+        name: (this.insurerForm.controls['insurerName'].value) 
+                ? this.insurerForm.controls['insurerName'].value
+                : this.claim.insurer.name,
+        has_gap: (this.insurerForm.controls['gap'].value)
+                  ? this.gapValue
+                  : this.claim.insurer.has_gap,
+        deductible: (this.insurerForm.controls['deductible'].value)
+                    ? this.insurerForm.controls['deductible'].value
+                    : this.claim.insurer.deductible
+      }
+    }
+
+    this.service.editClaim(claim)
+    .subscribe(
+      (data) => {
+        const claim = <Protos.Claim>data;
+        this.claim.insurer = claim.insurer;
+        this.claim.modified = claim.modified;
+
+        this.successfulInsurerEdit = true;
+      });
+
   }
 
   deleteClaim(): void {

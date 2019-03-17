@@ -46,3 +46,7 @@ table {
     opacity: 0.5;
   }
   
+  .hover-row:hover {
+    background: rgba(211, 211, 211, 0.6);
+    cursor: pointer;
+  }

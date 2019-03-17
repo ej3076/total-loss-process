@@ -93,4 +93,14 @@ export class MiddlewareService {
       responseType: <any>'blob',
     });
   }
+
+  editFileName(vin: string, oldFileName: string, newFileName: string) {
+    const body = {
+      name: newFileName
+    };
+
+    return this.http.post(`${API_BASE}/claims/${vin}/files/${oldFileName}`, body, {
+      headers: this.auth.headers
+    });
+  }
 }
