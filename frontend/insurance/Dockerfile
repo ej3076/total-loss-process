@@ -12,7 +12,11 @@ RUN sed -i \
         ./src/environments/environment.prod.ts \
     && npm run build
 
-FROM nginx:alpine
-WORKDIR /usr/share/nginx/html
-COPY etc/nginx/conf.d /etc/nginx/conf.d/
-COPY --from=builder /usr/src/app/dist/frontend ./
+FROM node:alpine
+ENV PORT 80
+
+RUN npm install -g serve
+WORKDIR /usr/src/app
+COPY --from=builder /usr/src/app/dist/frontend ./build
+
+CMD ["serve", "-s", "build"]
