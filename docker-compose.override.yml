@@ -4,7 +4,7 @@
 version: '3.6'
 
 services:
-  middleware:
+  middleware-1:
     image: node:11
     user: node
     working_dir: /usr/src/app
@@ -16,7 +16,7 @@ services:
       bash -c '
         (cd ../utils && npm i --no-package-lock) &&
         npm i --no-package-lock &&
-        npm run dev
+        npm run dev -- http://rest-api-1:8008
       '
 
   web-insurance:
@@ -39,7 +39,7 @@ services:
     user: node
     working_dir: /usr/src/app
     ports:
-      - 3000:3000
+      - 4201:3000
     volumes:
       - ./types:/usr/types
       - ./frontend/viewer:/usr/src/app
@@ -49,7 +49,7 @@ services:
         npm start
       '
 
-  tp-claim:
+  tp-claim-1:
     image: node:11
     user: node
     working_dir: /usr/src/app
@@ -61,5 +61,5 @@ services:
       bash -c '
         (cd ../utils && npm i --no-package-lock) &&
         npm i --no-package-lock &&
-        npm run tp-claim:start -- tcp://validator:4004
+        npm run tp-claim:start -- tcp://validator-1:4004
       '

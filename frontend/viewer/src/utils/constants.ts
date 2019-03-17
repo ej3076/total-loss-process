@@ -1,6 +1,8 @@
-export const API_URL = process.env.API_URL || 'http://localhost:8080';
+const API_PORT = process.env.REACT_APP_API_PORT || '8080';
+const WS_PORT = process.env.REACT_APP_WS_PORT || '8008';
 
-export const WS_URL = process.env.WS_URL || 'ws://localhost:8008/subscriptions';
+export const API_URL = `http://localhost:${API_PORT}`;
+export const WS_URL = `ws://localhost:${WS_PORT}/subscriptions`;
 
 export const BLANK_CLAIM: Readonly<Protos.Claim> = Object.freeze({
   status: 0,
