@@ -4,11 +4,15 @@ import { MaterialModule } from '../modules/material/material.module';
 import { EditClaimComponent } from './components/edit-claim/edit-claim.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FilesComponent, FileDialog, EditFileDialog } from './components/files/files.component';
 
 @NgModule({
   declarations: [
     NewClaimComponent,
-    EditClaimComponent
+    EditClaimComponent,
+    FilesComponent,
+    FileDialog,
+    EditFileDialog
   ],
   imports: [
     CommonModule,
@@ -18,7 +22,14 @@ import { CommonModule } from '@angular/common';
   ],
   exports: [
     NewClaimComponent,
-    EditClaimComponent
+    EditClaimComponent,
+    FilesComponent,
+    FileDialog,
+    EditFileDialog
+  ],
+  entryComponents: [
+    FileDialog,
+    EditFileDialog
   ]
 })
 export class SharedModule {}

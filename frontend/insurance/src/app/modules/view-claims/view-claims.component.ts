@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MiddlewareService } from '../../core/services/middleware/middleware.service';
-import { MatTableDataSource, MatSort } from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
@@ -17,12 +17,12 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 })
 export class ViewClaimsComponent implements OnInit {    
   claims: Protos.Claim[] = [];
-  @ViewChild(MatSort) sort: MatSort;
 
-  dataSource: MatTableDataSource<Protos.Claim>;
+  dataSource: MatTableDataSource<Protos.Claim> | undefined;
   columnsToDisplay = ['vin', 'insuranceName', 'gap', 'modifiedDate', 'createdDate'];
   expandedElement: Protos.Claim | null = null;
 
+  
   constructor(private middlewareService: MiddlewareService) {}
 
   ngOnInit() {
@@ -31,7 +31,6 @@ export class ViewClaimsComponent implements OnInit {
         this.claims = [...result];
         console.log(this.claims);
         this.dataSource = new MatTableDataSource(this.claims);
-        this.dataSource.sort = this.sort;
       },
       error => {
         console.log(error);

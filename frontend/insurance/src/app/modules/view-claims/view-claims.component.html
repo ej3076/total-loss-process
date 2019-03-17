@@ -1,5 +1,5 @@
 <div *ngIf="claims">
-  <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z24">
+  <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z24 mth">
     <ng-container matColumnDef="vin">
       <th mat-header-cell *matHeaderCellDef>VIN</th>
       <td mat-cell *matCellDef="let element"> {{element.vehicle.vin}} </td>

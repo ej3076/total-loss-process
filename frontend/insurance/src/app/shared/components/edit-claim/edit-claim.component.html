@@ -1,19 +1,113 @@
 <div *ngIf="claim" class="width-100">
-  <mat-accordion class="width-100">
+  <p>Vehicle Information</p>
+  <mat-list class="vehicle-information mbl">
+    <div class='content-wrapper'>
+      <div class='row'>
+        <div class='column'>
+          <div class='one-column'>
+            <mat-list-item> 
+              <p>Miles: </p>
+              <span class="mls edit-field" contenteditable="true">
+                {{ claim.vehicle.miles }}
+              </span>
+            </mat-list-item>
+            <mat-list-item>
+              <p>Model: </p>
+              <span class="mls">
+                Generated Model
+              </span>
+            </mat-list-item>
+          </div>
+        </div>
+        <div class='column'>
+          <div class='two-column'>
+            <mat-list-item>
+                <p>Vehicle Location: </p>
+              <span class="mls edit-field" contenteditable="true">
+                {{ claim.vehicle.location }}
+              </span>
+            </mat-list-item>
+            <mat-list-item>
+              <p>Base Price: </p>
+              <span class="mls">
+                $XXX,XXX
+              </span>
+            </mat-list-item>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-list>
+  <mat-accordion class="width-100 mtl">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Vehicle Data
+          Files on Claim
         </mat-panel-title>
       </mat-expansion-panel-header>
   
-      <mat-form-field>
-        <input matInput placeholder="First name">
-      </mat-form-field>
-  
-      <mat-form-field>
-        <input matInput placeholder="Age">
-      </mat-form-field>
+      <app-files [claim]="claim" [vin]="claim.vehicle.vin"></app-files>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 width-100 mtl" *ngIf="dataSource">      
+        <!-- Position Column -->
+        <ng-container matColumnDef="filename">
+          <th mat-header-cell *matHeaderCellDef> File Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+      
+        <!-- Name Column -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let element"> 
+            <button mat-raised-button (click)="openDialog(element)">Edit File</button>
+          </td>
+        </ng-container>
+      
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
     </mat-expansion-panel>
+  </mat-accordion>
+  <mat-accordion class="width-100 mtl">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Insurer Information
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+    
+      <mat-list class="vehicle-information mbl">
+        <div class='content-wrapper'>
+          <div class='row'>
+            <div class='column'>
+              <div class='one-column'>
+                <mat-list-item> 
+                  <p>Insurance Provider: </p>
+                  <span class="mls edit-field" contenteditable="true">
+                    {{ claim.insurer.name }}
+                  </span>
+                </mat-list-item>
+                <mat-list-item>
+                  <p>Gap Coverage: </p>
+                  <span class="mls edit-field" contenteditable="true">
+                    {{ (claim.insurer.has_gap) ? 'Yes' : 'No' }}
+                  </span>
+                </mat-list-item>
+              </div>
+            </div>
+            <div class='column'>
+              <div class='two-column'>
+                <mat-list-item>
+                    <p>Deductible Amount: </p>
+                  <span class="mls edit-field" contenteditable="true">
+                    {{ claim.insurer.deductible | currency }}
+                  </span>
+                </mat-list-item>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-list>
+      </mat-expansion-panel>
   </mat-accordion>
 </div>

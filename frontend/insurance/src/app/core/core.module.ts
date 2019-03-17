@@ -6,6 +6,7 @@ import { AuthService } from './services/auth/auth.service';
 import { MiddlewareService } from './services/middleware/middleware.service';
 import { MaterialModule } from '../modules/material/material.module';
 import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { NavigationBarComponent } from './components/navigation-bar/navigation-b
   imports: [
     CommonModule,
     MaterialModule,
+    RouterModule
   ],
   exports: [
     NavigationBarComponent,

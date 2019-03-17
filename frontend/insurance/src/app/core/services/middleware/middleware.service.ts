@@ -42,6 +42,7 @@ export class MiddlewareService {
       .subscribe(
         data => {
           console.log(data);
+          this.router.navigate(['/claims']);
         }
       );
   }
