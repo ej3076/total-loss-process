@@ -39,11 +39,10 @@ export class MiddlewareService {
       .post(`${API_BASE}/claims`, claim, {
         headers: this.auth.headers,
       })
-      .subscribe(
-        data => {
-          console.log(data);
-        }
-      );
+      .subscribe(data => {
+        console.log(data);
+        this.router.navigate(['/claims']);
+      });
   }
 
   editClaim(claim: MinimalClaim) {

@@ -4,13 +4,10 @@ import { AuthService } from '../../services/auth/auth.service';
 @Component({
   selector: 'app-navigation-bar',
   templateUrl: './navigation-bar.component.html',
-  styleUrls: ['./navigation-bar.component.scss']
+  styleUrls: ['./navigation-bar.component.scss'],
 })
 export class NavigationBarComponent implements OnInit {
+  constructor(public auth: AuthService) {}
 
-  constructor(public auth: AuthService) { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

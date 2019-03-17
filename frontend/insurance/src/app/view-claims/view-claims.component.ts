@@ -2,6 +2,26 @@ import { Component, OnInit } from '@angular/core';
 import { LyTheme2, ThemeVariables } from '@alyle/ui';
 import { MiddlewareService } from '../core/services/middleware/middleware.service';
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// OLD
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 const alyleStyle = (theme: ThemeVariables) => ({
   paper: {
     display: 'block',
