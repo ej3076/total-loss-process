@@ -81,11 +81,6 @@ class ClaimHandler extends TransactionHandler {
    */
   async deleteClaim({ data: claim }, state) {
     const { vin } = claim.vehicle;
-    const existingClaim = await state.getClaim(vin);
-    if (!existingClaim) {
-      logger.error(`Attempted to delete a non-existing claim for VIN: ${vin}.`);
-      throw new InvalidTransaction('Cannot delete - claim does not exist');
-    }
     return state.deleteClaim(vin);
   }
 
@@ -100,7 +95,7 @@ class ClaimHandler extends TransactionHandler {
     const existingClaim = await state.getClaim(vin);
     if (!existingClaim) {
       logger.error(`Attempted to edit a non-existing claim for VIN: ${vin}.`);
-      throw new InvalidTransaction('Cannot edit - claim does not exist');
+      throw new InvalidTransaction('Claim does not exist');
     }
     logger.debug(`Editing existing claim using VIN: ${vin}`);
     const insurer = {
