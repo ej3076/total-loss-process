@@ -1,32 +1,130 @@
 version: 2
 jobs:
-  build:
+  frontend-viewer:
     working_directory: ~/total-loss-process
     docker:
       - image: circleci/node:11
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - viewer-v1-{{ checksum "frontend/viewer/package-lock.json" }}
+            - viewer-v1-
       - run:
-          name: build dependencies
-          command: npm ci
-      - run:
-          name: build middleware
-          working_directory: ~/total-loss-process/middleware
-          command: npm ci
-      - run:
-          name: build processors
-          working_directory: ~/total-loss-process/processors
-          command: npm ci
-      - run:
-          name: build utils
-          working_directory: ~/total-loss-process/utils
-          command: npm ci
-      - run:
-          name: test
+          name: Test
+          working_directory: ~/total-loss-process/frontend/viewer
           environment:
-            JEST_JUNIT_OUTPUT: 'test-results/jest/js-test-results.xml'
-          command: npm run test:ci
+            JEST_JUNIT_OUTPUT: '~/total-loss-process/test-results/jest/viewer-test-results.xml'
+          command: |
+            npm ci
+            npm run test:ci
+      - save_cache:
+          paths:
+            - ~/total-loss-process/frontend/viewer/node_modules
+          key: viewer-v1-{{ checksum "frontend/viewer/package-lock.json" }}
       - store_test_results:
           path: test-results
       - store_artifacts:
           path: test-results
+
+  middleware:
+    working_directory: ~/total-loss-process
+    docker:
+      - image: circleci/node:11
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - middleware-v1-{{ checksum "middleware/package-lock.json" }}
+            - middleware-v1-
+      - restore_cache:
+          keys:
+            - utils-v1-{{ checksum "utils/package-lock.json" }}
+            - utils-v1-
+      - run:
+          name: Test
+          working_directory: ~/total-loss-process/middleware
+          environment:
+            JEST_JUNIT_OUTPUT: '~/total-loss-process/test-results/jest/middleware-test-results.xml'
+          command: |
+            npm ci
+            npm run test:ci
+      - save_cache:
+          paths:
+            - ~/total-loss-process/middleware/node_modules
+          key: middleware-v1-{{ checksum "middleware/package-lock.json" }}
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
+
+  processors:
+    working_directory: ~/total-loss-process
+    docker:
+      - image: circleci/node:11
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - processors-v1-{{ checksum "processors/package-lock.json" }}
+            - processors-v1-
+      - restore_cache:
+          keys:
+            - utils-v1-{{ checksum "utils/package-lock.json" }}
+            - utils-v1-
+      - run:
+          name: Test
+          working_directory: ~/total-loss-process/processors
+          environment:
+            JEST_JUNIT_OUTPUT: '~/total-loss-process/test-results/jest/processors-test-results.xml'
+          command: |
+            npm ci
+            npm run test:ci
+      - save_cache:
+          paths:
+            - ~/total-loss-process/processors/node_modules
+          key: processors-v1-{{ checksum "processors/package-lock.json" }}
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
+
+  utils:
+    working_directory: ~/total-loss-process
+    docker:
+      - image: circleci/node:11
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - utils-v1-{{ checksum "utils/package-lock.json" }}
+            - utils-v1-
+      - run:
+          name: Test
+          working_directory: ~/total-loss-process/utils
+          environment:
+            JEST_JUNIT_OUTPUT: '~/total-loss-process/test-results/jest/utils-test-results.xml'
+          command: |
+            npm ci
+            npm run test:ci
+      - save_cache:
+          paths:
+            - ~/total-loss-process/utils/node_modules
+          key: utils-v1-{{ checksum "utils/package-lock.json" }}
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - utils
+      - frontend-viewer
+      - middleware:
+          requires:
+            - utils
+      - processors:
+          requires:
+            - utils
