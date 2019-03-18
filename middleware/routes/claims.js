@@ -12,7 +12,7 @@ const getFiles = multer().array('files[]');
 router.delete('/:vin', authMiddleware, async (req, res, next) => {
   try {
     const client = new ClaimClient(req.privateKey);
-    const deletedClaims = await client.deleteClaim(req.params.vin, req.body);
+    const deletedClaims = await client.deleteClaim(req.params.vin);
     console.log(deletedClaims);
     res.send(deletedClaims);
   } catch (err) {
