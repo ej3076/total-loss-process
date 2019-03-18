@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { EditFileDialog } from '../files/files.component';
+import { EditFileDialogComponent } from '../files/files.component';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
@@ -23,6 +23,7 @@ export class EditClaimComponent implements OnInit {
   vehicleForm: FormGroup;
   insurerForm: FormGroup;
   canSubmitVehicleChanges = false;
+  
   canSubmitInsurerChanges = false;
 
   constructor(
@@ -54,7 +55,7 @@ export class EditClaimComponent implements OnInit {
   }
 
   openDialog(file: Protos.File): void {
-    const dialog = this.dialog.open(EditFileDialog, {
+    const dialog = this.dialog.open(EditFileDialogComponent, {
       width: '500px',
       data: { file: file, vin: this.claim.vehicle.vin },
     });
@@ -101,9 +102,9 @@ export class EditClaimComponent implements OnInit {
     };
 
     this.service.editClaim(claim).subscribe(data => {
-      const claim = <Protos.Claim>data;
-      this.claim.vehicle = claim.vehicle;
-      this.claim.modified = claim.modified;
+      const newClaim = <Protos.Claim>data;
+      this.claim.vehicle = newClaim.vehicle;
+      this.claim.modified = newClaim.modified;
 
       this.successfulVehicleEdit = true;
     });
@@ -128,9 +129,9 @@ export class EditClaimComponent implements OnInit {
     };
 
     this.service.editClaim(claim).subscribe(data => {
-      const claim = <Protos.Claim>data;
-      this.claim.insurer = claim.insurer;
-      this.claim.modified = claim.modified;
+      const newClaim = <Protos.Claim>data;
+      this.claim.insurer = newClaim.insurer;
+      this.claim.modified = newClaim.modified;
 
       this.successfulInsurerEdit = true;
     });

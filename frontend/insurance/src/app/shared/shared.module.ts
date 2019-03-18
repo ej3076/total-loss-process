@@ -6,8 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {
   FilesComponent,
-  FileDialog,
-  EditFileDialog,
+  FileDialogComponent,
+  EditFileDialogComponent,
 } from './components/files/files.component';
 import { MatDialogModule } from '@angular/material';
 
@@ -16,8 +16,8 @@ import { MatDialogModule } from '@angular/material';
     NewClaimComponent,
     EditClaimComponent,
     FilesComponent,
-    FileDialog,
-    EditFileDialog,
+    FileDialogComponent,
+    EditFileDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -30,9 +30,9 @@ import { MatDialogModule } from '@angular/material';
     NewClaimComponent,
     EditClaimComponent,
     FilesComponent,
-    FileDialog,
-    EditFileDialog,
+    FileDialogComponent,
+    EditFileDialogComponent,
   ],
-  entryComponents: [FileDialog, EditFileDialog],
+  entryComponents: [FileDialogComponent, EditFileDialogComponent],
 })
 export class SharedModule {}

@@ -11,51 +11,16 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-files',
-  templateUrl: './files.component.html',
-  styleUrls: ['./files.component.scss'],
-})
-export class FilesComponent implements OnInit {
-  @Input()
-  claim: Protos.Claim | undefined;
-
-  @Input()
-  vin = '';
-
-  @Output()
-  updatedClaim = new EventEmitter<Protos.Claim>();
-
-  files: FileList | null = null;
-
-  constructor(public dialog: MatDialog) {
-    this.updatedClaim.emit(this.claim);
-  }
-
-  ngOnInit() {}
-
-  openDialog(): void {
-    const dialogRef = this.dialog.open(FileDialog, {
-      width: '500px',
-      data: this.claim,
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.updatedClaim.emit(result);
-    });
-  }
-}
-
-@Component({
-  selector: 'dialog-overview-example-dialog',
+  selector: 'app-dialog-overview-example-dialog',
   templateUrl: 'dialog-overview-example-dialog.html',
 })
-export class FileDialog {
+export class FileDialogComponent {
   urls = Array<string>();
   success = false;
   updatedClaim: Protos.Claim | undefined;
 
   constructor(
-    public dialogRef: MatDialogRef<FileDialog>,
+    public dialogRef: MatDialogRef<FileDialogComponent>,
     private service: MiddlewareService,
     @Inject(MAT_DIALOG_DATA) public data: Protos.Claim,
     @Inject(MAT_DIALOG_DATA) public files: FileList | null,
@@ -73,10 +38,10 @@ export class FileDialog {
       // This gets you a preview of the file you're uploading.
       if (this.files !== null) {
         this.urls = [];
-        let files = event.currentTarget.files;
+        const files = event.currentTarget.files;
         if (files) {
           Array.from(files).forEach(file => {
-            let reader = new FileReader();
+            const reader = new FileReader();
             reader.onload = (e: any) => {
               this.urls.push(e.target.result);
             };
@@ -104,10 +69,10 @@ export class FileDialog {
 }
 
 @Component({
-  selector: 'edit-file-dialog',
+  selector: 'app-edit-file-dialog',
   templateUrl: 'edit-file-dialog.html',
 })
-export class EditFileDialog {
+export class EditFileDialogComponent {
   claim = new EventEmitter<Protos.Claim>();
   data: { file: { name: string; hash: string; status: number }; vin: string };
   success = false;
@@ -118,7 +83,7 @@ export class EditFileDialog {
   newFileName = new FormControl('');
 
   constructor(
-    public dialogRef: MatDialogRef<FileDialog>,
+    public dialogRef: MatDialogRef<FileDialogComponent>,
     private service: MiddlewareService,
     @Inject(MAT_DIALOG_DATA)
     public dataObj: {
@@ -179,7 +144,7 @@ export class EditFileDialog {
         console.log(data);
         const claim = <Protos.Claim>data;
         const file = claim.files.find(
-          file => file.name === this.newFileName.value,
+          fileData => fileData.name === this.newFileName.value,
         );
         if (file) {
           this.data.file.name = file.name;
@@ -187,5 +152,40 @@ export class EditFileDialog {
           this.claim.emit(<Protos.Claim>claim);
         }
       });
+  }
+}
+
+@Component({
+  selector: 'app-files',
+  templateUrl: './files.component.html',
+  styleUrls: ['./files.component.scss'],
+})
+export class FilesComponent implements OnInit {
+  @Input()
+  claim: Protos.Claim | undefined;
+
+  @Input()
+  vin = '';
+
+  @Output()
+  updatedClaim = new EventEmitter<Protos.Claim>();
+
+  files: FileList | null = null;
+
+  constructor(public dialog: MatDialog) {
+    this.updatedClaim.emit(this.claim);
+  }
+
+  ngOnInit() {}
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(FileDialogComponent, {
+      width: '500px',
+      data: this.claim,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.updatedClaim.emit(result);
+    });
   }
 }
