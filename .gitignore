@@ -1,9 +1,10 @@
 # Directories
-dist/
-node_modules/
 .idea/
-tmp/
+coverage/
+dist/
 frontend/viewer/build/
+node_modules/
+tmp/
 
  # Files
 .DS_Store

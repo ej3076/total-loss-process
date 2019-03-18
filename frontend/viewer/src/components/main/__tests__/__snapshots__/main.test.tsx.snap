@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Main /> should render correctly 1`] = `
+<main
+  className="main"
+  role="main"
+>
+  <h1>
+    Hello world
+  </h1>
+</main>
+`;
+
+exports[`<Main /> should render with extra classnames 1`] = `
+<main
+  className="foobar main"
+  role="main"
+>
+  <h1>
+    Hello world
+  </h1>
+</main>
+`;
