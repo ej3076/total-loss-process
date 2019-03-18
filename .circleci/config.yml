@@ -17,7 +17,9 @@ jobs:
           environment:
             JEST_JUNIT_OUTPUT: '~/total-loss-process/test-results/jest/viewer-test-results.xml'
           command: |
-            npm ci
+            if [ ! -d ./node_modules ]; then
+              npm ci
+            fi
             npm run test:ci
       - save_cache:
           paths:
@@ -48,7 +50,9 @@ jobs:
           environment:
             JEST_JUNIT_OUTPUT: '~/total-loss-process/test-results/jest/middleware-test-results.xml'
           command: |
-            npm ci
+            if [ ! -d ./node_modules ]; then
+              npm ci
+            fi
             npm run test:ci
       - save_cache:
           paths:
@@ -79,7 +83,9 @@ jobs:
           environment:
             JEST_JUNIT_OUTPUT: '~/total-loss-process/test-results/jest/processors-test-results.xml'
           command: |
-            npm ci
+            if [ ! -d ./node_modules ]; then
+              npm ci
+            fi
             npm run test:ci
       - save_cache:
           paths:
@@ -106,7 +112,9 @@ jobs:
           environment:
             JEST_JUNIT_OUTPUT: '~/total-loss-process/test-results/jest/utils-test-results.xml'
           command: |
-            npm ci
+            if [ ! -d ./node_modules ]; then
+              npm ci
+            fi
             npm run test:ci
       - save_cache:
           paths:
