@@ -15,7 +15,7 @@ jobs:
           name: Test
           working_directory: ~/total-loss-process/frontend/viewer
           environment:
-            JEST_JUNIT_OUTPUT: '~/total-loss-process/test-results/jest/viewer-test-results.xml'
+            JEST_JUNIT_OUTPUT: 'test-results/jest/viewer-test-results.xml'
           command: |
             if [ ! -d ./node_modules ]; then
               npm ci
@@ -48,7 +48,7 @@ jobs:
           name: Test
           working_directory: ~/total-loss-process/middleware
           environment:
-            JEST_JUNIT_OUTPUT: '~/total-loss-process/test-results/jest/middleware-test-results.xml'
+            JEST_JUNIT_OUTPUT: 'test-results/jest/middleware-test-results.xml'
           command: |
             if [ ! -d ./node_modules ]; then
               npm ci
@@ -81,7 +81,7 @@ jobs:
           name: Test
           working_directory: ~/total-loss-process/processors
           environment:
-            JEST_JUNIT_OUTPUT: '~/total-loss-process/test-results/jest/processors-test-results.xml'
+            JEST_JUNIT_OUTPUT: 'test-results/jest/processors-test-results.xml'
           command: |
             if [ ! -d ./node_modules ]; then
               npm ci
@@ -110,7 +110,7 @@ jobs:
           name: Test
           working_directory: ~/total-loss-process/utils
           environment:
-            JEST_JUNIT_OUTPUT: '~/total-loss-process/test-results/jest/utils-test-results.xml'
+            JEST_JUNIT_OUTPUT: 'test-results/jest/utils-test-results.xml'
           command: |
             if [ ! -d ./node_modules ]; then
               npm ci
