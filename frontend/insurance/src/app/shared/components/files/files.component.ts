@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Inject,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormControl } from '@angular/forms';
@@ -20,9 +27,7 @@ export class FilesComponent implements OnInit {
 
   files: FileList | null = null;
 
-  constructor(
-    public dialog: MatDialog
-  ) {
+  constructor(public dialog: MatDialog) {
     this.updatedClaim.emit(this.claim);
   }
 
@@ -104,7 +109,7 @@ export class FileDialog {
 })
 export class EditFileDialog {
   claim = new EventEmitter<Protos.Claim>();
-  data: {file: {name: string, hash: string, status: number}, vin: string};
+  data: { file: { name: string; hash: string; status: number }; vin: string };
   success = false;
 
   successfulArchive = false;
@@ -115,7 +120,11 @@ export class EditFileDialog {
   constructor(
     public dialogRef: MatDialogRef<FileDialog>,
     private service: MiddlewareService,
-    @Inject(MAT_DIALOG_DATA) public dataObj: {file: {name: string, hash: string, status: number}, vin: string},
+    @Inject(MAT_DIALOG_DATA)
+    public dataObj: {
+      file: { name: string; hash: string; status: number };
+      vin: string;
+    },
   ) {
     this.data = dataObj;
     console.log(this.data);
@@ -128,52 +137,55 @@ export class EditFileDialog {
   }
 
   archiveFile(): void {
-    this.service.archiveFile(this.data.file.name, this.data.vin).subscribe(
-      () => {
+    this.service
+      .archiveFile(this.data.file.name, this.data.vin)
+      .subscribe(() => {
         this.data.file.status = 1;
         this.successfulArchive = true;
         this.successfulRestore = false;
-      }
-    );
+      });
   }
 
   restoreFile(): void {
-    this.service.restoreFile(this.data.file.name, this.data.vin).subscribe(
-      () => {
+    this.service
+      .restoreFile(this.data.file.name, this.data.vin)
+      .subscribe(() => {
         this.data.file.status = 0;
         this.successfulRestore = true;
         this.successfulArchive = false;
-      }
-    );
+      });
   }
 
   downloadFile() {
-    this.service.downloadFile(this.data.vin, this.data.file.hash, this.data.file.name).subscribe(blob => {
-      const url = URL.createObjectURL(new File([blob], this.data.file.name));
-      const a = document.createElement('a');
-      a.href = url;
-      a.target = '_blank';
-      a.download = this.data.file.name;
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    });
+    this.service
+      .downloadFile(this.data.vin, this.data.file.hash, this.data.file.name)
+      .subscribe(blob => {
+        const url = URL.createObjectURL(new File([blob], this.data.file.name));
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.download = this.data.file.name;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
   }
 
   renameFile() {
-    this.service.editFileName(this.data.vin, this.data.file.name, this.newFileName.value)
-      .subscribe(
-        data => {
-          console.log(data);
-          const claim = <Protos.Claim>data;
-          const file = claim.files.find(file => file.name === this.newFileName.value);
-          if (file) {
-            this.data.file.name = file.name;
-            this.newFileName.setValue('');
-            this.claim.emit(<Protos.Claim>claim);
-          }
+    this.service
+      .editFileName(this.data.vin, this.data.file.name, this.newFileName.value)
+      .subscribe(data => {
+        console.log(data);
+        const claim = <Protos.Claim>data;
+        const file = claim.files.find(
+          file => file.name === this.newFileName.value,
+        );
+        if (file) {
+          this.data.file.name = file.name;
+          this.newFileName.setValue('');
+          this.claim.emit(<Protos.Claim>claim);
         }
-      );
+      });
   }
 }

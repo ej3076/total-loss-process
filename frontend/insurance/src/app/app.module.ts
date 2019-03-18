@@ -12,7 +12,6 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './modules/home/home.component';
 
 // Auth0 Components
-import { ViewClaimsComponent } from './view-claims/view-claims.component';
 import { CoreModule } from './core/core.module';
 
 // Material
@@ -22,7 +21,7 @@ import { SharedModule } from './shared/shared.module';
 import { ViewClaimsModule } from './modules/view-claims/view-claims.module';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, ViewClaimsComponent],
+  declarations: [AppComponent, HomeComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

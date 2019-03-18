@@ -4,7 +4,11 @@ import { MaterialModule } from '../modules/material/material.module';
 import { EditClaimComponent } from './components/edit-claim/edit-claim.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FilesComponent, FileDialog, EditFileDialog } from './components/files/files.component';
+import {
+  FilesComponent,
+  FileDialog,
+  EditFileDialog,
+} from './components/files/files.component';
 import { MatDialogModule } from '@angular/material';
 
 @NgModule({
@@ -13,14 +17,14 @@ import { MatDialogModule } from '@angular/material';
     EditClaimComponent,
     FilesComponent,
     FileDialog,
-    EditFileDialog
+    EditFileDialog,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
-    MatDialogModule
+    MatDialogModule,
   ],
   exports: [
     NewClaimComponent,

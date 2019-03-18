@@ -15,9 +15,7 @@ import {
   styleUrls: ['./view-claims.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state(
-        'collapsed', style({ height: '0px', minHeight: '0' }),
-      ),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
       transition('collapsed <=> expanded', animate('300ms ease-in')),
     ]),

@@ -9,8 +9,6 @@ import { SharedModule } from '../../shared/shared.module';
   declarations: [ViewClaimsComponent],
   imports: [MaterialModule, CommonModule, SharedModule],
   exports: [ViewClaimsComponent],
-  providers: [
-    AuthService,
-  ],
+  providers: [AuthService],
 })
 export class ViewClaimsModule {}
