@@ -2,13 +2,25 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "tp-claim:start": "node ./src/claim-processor/index.js"
+    "tp-claim:start": "node ./src/claim-processor/index.js",
+    "test": "jest",
+    "test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.js"
+    ],
+    "coverageDirectory": "node_modules/.cache/coverage",
+    "testEnvironment": "node"
   },
   "dependencies": {
     "sawtooth-sdk": "^1.0.5"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
-    "@types/node": "^11.11.3"
+    "@types/node": "^11.11.3",
+    "jest": "^24.5.0",
+    "jest-junit": "^6.3.0"
   }
 }

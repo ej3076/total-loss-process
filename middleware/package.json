@@ -1,14 +1,21 @@
 {
-  "name": "middleware",
+  "private": true,
   "version": "1.0.0",
-  "description": "Middleware to communicate between frontend UI and backend blockchain.",
-  "main": "app.js",
   "scripts": {
+    "dev": "nodemon -L app.js",
     "start": "node app.js",
-    "dev": "nodemon -L app.js"
+    "test": "jest",
+    "test:ci": "jest --ci --runInBand --reporters=default --reporters=jest-junit"
   },
-  "author": "",
-  "license": "ISC",
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!middleware/lib/api.js"
+    ],
+    "coverageDirectory": "node_modules/.cache/coverage",
+    "testEnvironment": "node"
+  },
   "dependencies": {
     "aws-sdk": "^2.422.0",
     "cors": "^2.8.5",
@@ -30,6 +37,8 @@
     "@types/node": "^11.11.3",
     "@types/request": "^2.48.1",
     "@types/request-promise-native": "^1.0.15",
+    "jest": "^24.5.0",
+    "jest-junit": "^6.3.0",
     "nodemon": "^1.18.10"
   }
 }

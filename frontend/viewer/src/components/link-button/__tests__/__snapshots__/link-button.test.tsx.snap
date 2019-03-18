@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LinkButton /> should render correctly 1`] = `
+<a
+  className="bp3-button"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  onKeyUp={[Function]}
+  role="button"
+  tabIndex={0}
+/>
+`;
+
+exports[`<LinkButton /> should render with additional props 1`] = `
+<a
+  aria-label="hello"
+  className="bp3-button bp3-intent-primary"
+  data-my-custom-data-attribute="foobar"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  onKeyUp={[Function]}
+  role="button"
+  tabIndex={0}
+/>
+`;
