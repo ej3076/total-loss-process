@@ -11,6 +11,7 @@
       placeholder="Claim Status"
       (selectionChange)="sortClaims($event.value)"
       disableOptionCentering
+      [value]="0"
     >
       <mat-option [value]="0">Awaiting Settlement Option</mat-option>
       <mat-option [value]="1">Finalize Loss</mat-option>

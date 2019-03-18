@@ -15,7 +15,7 @@ export class NewClaimComponent {
   location = new FormControl('', [Validators.required]);
   name = new FormControl('', [Validators.required]);
   deductible = new FormControl('', [Validators.required]);
-  has_gap = new FormControl('', [Validators.required]);
+  has_gap = new FormControl('');
 
   constructor(private middlewareService: MiddlewareService) {
     this.appearance.setValue('outlined');
