@@ -26,9 +26,9 @@ jobs:
             - ~/total-loss-process/frontend/viewer/node_modules
           key: viewer-v1-{{ checksum "frontend/viewer/package-lock.json" }}
       - store_test_results:
-          path: test-results
+          path: frontend/viewer/test-results
       - store_artifacts:
-          path: test-results
+          path: frontend/viewer/test-results
 
   middleware:
     working_directory: ~/total-loss-process
@@ -59,9 +59,9 @@ jobs:
             - ~/total-loss-process/middleware/node_modules
           key: middleware-v1-{{ checksum "middleware/package-lock.json" }}
       - store_test_results:
-          path: test-results
+          path: middleware/test-results
       - store_artifacts:
-          path: test-results
+          path: middleware/test-results
 
   processors:
     working_directory: ~/total-loss-process
@@ -92,9 +92,9 @@ jobs:
             - ~/total-loss-process/processors/node_modules
           key: processors-v1-{{ checksum "processors/package-lock.json" }}
       - store_test_results:
-          path: test-results
+          path: processors/test-results
       - store_artifacts:
-          path: test-results
+          path: processors/test-results
 
   utils:
     working_directory: ~/total-loss-process
@@ -121,9 +121,9 @@ jobs:
             - ~/total-loss-process/utils/node_modules
           key: utils-v1-{{ checksum "utils/package-lock.json" }}
       - store_test_results:
-          path: test-results
+          path: utils/test-results
       - store_artifacts:
-          path: test-results
+          path: utils/test-results
 
 workflows:
   version: 2
