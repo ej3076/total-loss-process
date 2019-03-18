@@ -3,7 +3,8 @@ jobs:
   frontend-viewer:
     working_directory: ~/total-loss-process
     docker:
-      - image: circleci/node:11
+      # FIXME: move this back to latest when circleci/node:11.12+ is available
+      - image: circleci/node:11.10
     steps:
       - checkout
       - restore_cache:
