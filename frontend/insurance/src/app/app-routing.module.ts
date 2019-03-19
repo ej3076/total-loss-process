@@ -1,24 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { CallbackComponent } from './callback/callback.component';
-import { NewClaimComponent } from './new-claim/new-claim.component';
-import { ViewClaimsComponent } from './view-claims/view-claims.component';
-import { AuthGuardService } from './auth/auth-guard.service';
-import { EditClaimComponent } from './modules/edit-claim/edit-claim.component';
+import { CallbackComponent } from './core/components/callback/callback.component';
+import { HomeComponent } from './modules/home/home.component';
+import { ViewClaimsComponent } from './modules/view-claims/view-claims.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent },
-  {
-    path: 'claims/new',
-    component: NewClaimComponent,
-    canActivate: [AuthGuardService],
-  },
-  {
-    path: 'claims/:vin',
-    component: EditClaimComponent,
-    canActivate: [AuthGuardService],
-  },
   {
     path: 'claims',
     component: ViewClaimsComponent,

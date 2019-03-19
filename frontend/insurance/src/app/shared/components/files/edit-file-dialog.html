@@ -1,0 +1,39 @@
+<p mat-dialog-title>Actions on File</p>
+
+<div mat-dialog-content>
+  <form class="example-form">
+    <p>File: {{ data.file.name }}</p>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="New File Name" [formControl]="newFileName" />
+    </mat-form-field>
+    <button
+      mat-button
+      (click)="renameFile()"
+      [disabled]="newFileName.value === null"
+    >
+      Update File Name
+    </button>
+  </form>
+
+  <button
+    mat-button
+    (click)="archiveFile()"
+    [disabled]="data.file.status === 1 || successfulArchive"
+  >
+    Archive File
+  </button>
+  <button
+    mat-button
+    (click)="restoreFile()"
+    [disabled]="data.file.status === 0 || successfulRestore"
+  >
+    Restore File
+  </button>
+  <button mat-button (click)="downloadFile()">Download File</button>
+
+  <p *ngIf="successfulArchive">Archive Successful!</p>
+  <p *ngIf="successfulRestore">Restore Successful!</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Go Back</button>
+</div>

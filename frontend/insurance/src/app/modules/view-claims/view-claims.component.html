@@ -1,0 +1,111 @@
+<div>
+  <mat-form-field class="width-50 mth">
+    <input
+      matInput
+      (keyUp)="applyFilter($event.target.value); console.log('Bye!')"
+      placeholder="Filter"
+    />
+  </mat-form-field>
+  <mat-form-field class="width-50">
+    <mat-select
+      placeholder="Claim Status"
+      (selectionChange)="sortClaims($event.value)"
+      disableOptionCentering
+      [value]="0"
+    >
+      <mat-option [value]="0">Awaiting Settlement Option</mat-option>
+      <mat-option [value]="1">Finalize Loss</mat-option>
+      <mat-option [value]="2">At Auction</mat-option>
+      <mat-option [value]="3">Claim Resolved</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    multiTemplateDataRows
+    matSort
+    class="mat-elevation-z24"
+  >
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.status }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="vin">
+      <th mat-header-cell *matHeaderCellDef>VIN</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.vehicle.vin }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="insuranceName">
+      <th mat-header-cell *matHeaderCellDef>
+        Insurance Company
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.insurer.name }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="gap">
+      <th mat-header-cell *matHeaderCellDef>GAP</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.insurer.has_gap ? 'Yes' : 'No' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="modified">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Modified Date</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.modified | date: 'short' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="created">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Created Date</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.created | date: 'short' }}
+      </td>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td
+        mat-cell
+        *matCellDef="let element"
+        [attr.colspan]="columnsToDisplay.length"
+      >
+        <div
+          class="example-element-detail"
+          [@detailExpand]="
+            element == expandedElement ? 'expanded' : 'collapsed'
+          "
+        >
+          <div class="mtl mbl width-100">
+            <app-edit-claim-new
+              [claim]="element"
+              class="width-100"
+            ></app-edit-claim-new>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr
+      mat-row
+      *matRowDef="let element; columns: columnsToDisplay"
+      [class.example-expanded-row]="expandedElement === element"
+      class="hover-row"
+      (click)="expandedElement = expandedElement === element ? null : element"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['expandedDetail']"
+      class="example-detail-row"
+    ></tr>
+  </table>
+</div>

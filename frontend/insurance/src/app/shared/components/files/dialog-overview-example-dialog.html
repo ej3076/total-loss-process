@@ -1,0 +1,15 @@
+<p mat-dialog-title>Upload Files</p>
+<div mat-dialog-content>
+  <input type="file" (change)="updateFileList($event)" multiple="multiple" />
+  <div *ngIf="files">
+    <div *ngFor="let file of files" class="mtm">
+      <span>File Name: {{ file.name }}</span><br />
+      <span>File Size (in bytes): {{ file.size }}</span>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data">Go Back</button>
+  <button mat-button *ngIf="!success" (click)="submitFiles()">Submit</button>
+</div>

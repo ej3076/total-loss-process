@@ -1,30 +1,6 @@
-html {
-  height: auto;
-}
-.page {
-  max-width: 1000px;
-  margin: auto;
-  padding-bottom: 25px;
-}
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
-.head {
-  max-width: 1000px;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.foot {
-  position: fixed;
-  bottom: 0;
-  max-width: 1000px;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-}
-
+@import './sass/main';
 // General Styles=
 .float-left {
   float: left !important;
@@ -50,76 +26,7 @@ html {
 }
 
 .center-to-page {
-  margin: auto;
-}
-
-.mls {
-  margin-left: 4px !important;
-}
-.mlm {
-  margin-left: 8px !important;
-}
-.mll {
-  margin-left: 16px !important;
-}
-
-.mtn {
-  margin-top: 0px !important;
-}
-.mts {
-  margin-top: 4px !important;
-}
-.mtm {
-  margin-top: 8px !important;
-}
-.mtl {
-  margin-top: 16px !important;
-}
-.mth {
-  margin-top: 32px !important;
-}
-
-.mrs {
-  margin-right: 4px !important;
-}
-.mrm {
-  margin-right: 8px !important;
-}
-.mrl {
-  margin-right: 16px !important;
-}
-
-.mbs {
-  margin-bottom: 4px !important;
-}
-.mbm {
-  margin-bottom: 8px !important;
-}
-.mbl {
-  margin-bottom: 16px !important;
-}
-.mbh {
-  margin-bottom: 32px !important;
-}
-
-.pls {
-  padding-left: 4px !important;
-}
-
-.pbs {
-  padding-bottom: 4px !important;
-}
-
-.pbm {
-  padding-bottom: 8px !important;
-}
-
-.pbl {
-  padding-bottom: 16px !important;
-}
-
-.pbh {
-  padding-bottom: 32px !important;
+  margin: auto !important;
 }
 
 .auto-height {
@@ -131,11 +38,15 @@ html {
 }
 
 .width-50 {
-  width: 48%;
+  width: 50%;
 }
 
 .header-height {
   height: 200px;
+}
+
+.max-height {
+  height: 1000px;
 }
 
 // Cards
@@ -143,16 +54,24 @@ html {
   max-width: 600px;
 }
 
-// Logo
-.homepage-logo {
-  max-width: 20%;
-  float: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 img {
   padding: 15px;
+}
+
+// No style inputs
+.raw-text-input {
+  
+
+  font-size: 1rem;
+  color: darkgray;
+  border: none;
+  background-image: none;
+  background-color: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+.raw-text-input:focus {
+  border-bottom: 2px solid darkgray;
 }

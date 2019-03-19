@@ -9,41 +9,33 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Created Components
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { HomeComponent } from './home/home.component';
-import { NewClaimComponent } from './new-claim/new-claim.component';
+import { HomeComponent } from './modules/home/home.component';
 
 // Auth0 Components
-import { CallbackComponent } from './callback/callback.component';
-import { CookieService } from 'ngx-cookie-service';
-import { AuthService } from './auth/auth.service';
-import { ViewClaimsComponent } from './view-claims/view-claims.component';
-import { EditClaimModule } from './modules/edit-claim/edit-claim.module';
-import { AlyleModule } from './modules/alyle/alyle.module';
+import { CoreModule } from './core/core.module';
+
+// Material
+import { MatToolbarModule } from '@angular/material';
+import { MaterialModule } from './modules/material/material.module';
+import { SharedModule } from './shared/shared.module';
+import { ViewClaimsModule } from './modules/view-claims/view-claims.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    HomeComponent,
-    CallbackComponent,
-    NewClaimComponent,
-    ViewClaimsComponent,
-  ],
+  declarations: [AppComponent, HomeComponent],
   imports: [
     BrowserModule,
-    AlyleModule,
     BrowserAnimationsModule,
+    MaterialModule,
     CommonModule,
+    CoreModule,
+    SharedModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    EditClaimModule,
     AppRoutingModule,
+    MatToolbarModule,
+    ViewClaimsModule,
   ],
-  providers: [AuthService, CookieService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
