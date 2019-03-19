@@ -156,7 +156,7 @@ export class EditClaimSharedComponent implements OnInit {
 
   deleteClaim(): void {
     this.service.deleteClaim(this.claim.vehicle.vin).subscribe(
-      data => {
+      () => {
         this.snackBar.open('Claim successfully deleted.', undefined, {
           duration: 5000
         });

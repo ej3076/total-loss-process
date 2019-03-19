@@ -9,7 +9,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Created Components
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './modules/home/home.component';
 
 // Auth0 Components
 import { CoreModule } from './core/core.module';
@@ -22,7 +21,7 @@ import { ViewClaimsModule } from './modules/view-claims/view-claims.module';
 import { EditClaimModule } from './modules/edit-claim/edit-claim.module';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

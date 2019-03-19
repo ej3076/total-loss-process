@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
@@ -16,8 +15,7 @@ type MinimalClaim = DeepPartial<Protos.Claim> & { vehicle: { vin: string } };
 export class MiddlewareService {
   constructor(
     private http: HttpClient,
-    private auth: AuthService,
-    private router: Router,
+    private auth: AuthService
   ) {}
 
   getClaims() {

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
-import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,7 +18,7 @@ export class NewClaimComponent {
   deductible = new FormControl('', [Validators.required]);
   has_gap = new FormControl('');
 
-  constructor(private middlewareService: MiddlewareService, private snackBar: MatSnackBar, private router: Router) {
+  constructor(private middlewareService: MiddlewareService, private router: Router) {
     this.appearance.setValue('outlined');
   }
 
