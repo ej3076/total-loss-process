@@ -1,6 +1,9 @@
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~@angular/material/theming';
+
+@import './sass/theme.scss';
 
 @import './sass/main';
+
 // General Styles=
 .float-left {
   float: left !important;
@@ -60,8 +63,6 @@ img {
 
 // No style inputs
 .raw-text-input {
-  
-
   font-size: 1rem;
   color: darkgray;
   border: none;
