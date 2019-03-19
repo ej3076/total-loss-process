@@ -1,3 +1,4 @@
+//Keeping in case we want to switch to logos later
 .logo-width {
   // Logo
   width: 200px;
@@ -9,10 +10,16 @@
   padding: 0 14px;
 }
 
-.example-icon {
-  padding: 0 14px;
+.header-text {
+  width: 200px;
+  float: none;
+  position: absolute;
+  top: 35px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 150%;
 }
 
-.example-spacer {
+.header-spacer {
   flex: 1 1 auto;
 }

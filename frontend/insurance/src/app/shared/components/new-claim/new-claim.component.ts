@@ -23,7 +23,6 @@ export class NewClaimComponent {
 
   private setClaim() {
     const claim = {
-      
       date_of_loss: this.date_of_loss.value,
       vehicle: {
         vin: this.vin.value,
