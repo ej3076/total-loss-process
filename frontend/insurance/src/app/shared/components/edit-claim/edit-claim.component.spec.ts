@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditClaimComponent } from './edit-claim.component';
+import { EditClaimSharedComponent } from './edit-claim.component';
 
-describe('EditClaimComponent', () => {
-  let component: EditClaimComponent;
-  let fixture: ComponentFixture<EditClaimComponent>;
+describe('EditClaimSharedComponent', () => {
+  let component: EditClaimSharedComponent;
+  let fixture: ComponentFixture<EditClaimSharedComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [EditClaimComponent],
+      declarations: [EditClaimSharedComponent],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditClaimComponent);
+    fixture = TestBed.createComponent(EditClaimSharedComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -90,7 +90,13 @@ export class AuthService {
         );
         this.setUser(data);
       }
-      this.router.navigate(['/']);
+      if (localStorage.getItem('url')) {
+        const redirectUrl = localStorage.getItem('url');
+        localStorage.removeItem('url');
+        this.router.navigate([redirectUrl]);
+      } else {
+        this.router.navigate(['/']);
+      }
     });
   }
 

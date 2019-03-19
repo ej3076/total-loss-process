@@ -36,18 +36,14 @@ export class MiddlewareService {
 
   addClaim(claim: MinimalClaim) {
     return this.http
-      .post(`${API_BASE}/claims`, claim, {
+      .post<Protos.Claim>(`${API_BASE}/claims`, claim, {
         headers: this.auth.headers,
-      })
-      .subscribe(data => {
-        console.log(data);
-        this.router.navigate(['/claims']);
       });
   }
 
   editClaim(claim: MinimalClaim) {
     return this.http
-      .post(`${API_BASE}/claims/${claim.vehicle.vin}`, claim, {
+      .post<Protos.Claim>(`${API_BASE}/claims/${claim.vehicle.vin}`, claim, {
         headers: this.auth.headers,
       });
   }

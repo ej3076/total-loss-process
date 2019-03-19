@@ -1,35 +1,34 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { EditFileDialogComponent } from '../files/files.component';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-claim-new',
   templateUrl: './edit-claim.component.html',
   styleUrls: ['./edit-claim.component.scss'],
 })
-export class EditClaimComponent implements OnInit {
+export class EditClaimSharedComponent implements OnInit {
   @Input()
   claim!: Protos.Claim;
 
   displayedColumns: string[] = ['filename', 'action'];
   dataSource = new MatTableDataSource(this.claim ? this.claim.files : []);
 
-  successfulVehicleEdit = false;
-  successfulInsurerEdit = false;
-
   // Form Controls
   vehicleForm: FormGroup;
   insurerForm: FormGroup;
   canSubmitVehicleChanges = false;
-  
   canSubmitInsurerChanges = false;
 
   constructor(
     public dialog: MatDialog,
     private formBuilder: FormBuilder,
     private service: MiddlewareService,
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.vehicleForm = this.formBuilder.group({});
     this.insurerForm = this.formBuilder.group({});
@@ -101,13 +100,22 @@ export class EditClaimComponent implements OnInit {
       },
     };
 
-    this.service.editClaim(claim).subscribe(data => {
-      const newClaim = <Protos.Claim>data;
-      this.claim.vehicle = newClaim.vehicle;
-      this.claim.modified = newClaim.modified;
+    this.service.editClaim(claim).subscribe(
+      data => {
+        if (data) {
+          const newClaim = <Protos.Claim>data;
+          this.claim.vehicle = newClaim.vehicle;
+          this.claim.modified = newClaim.modified;
 
-      this.successfulVehicleEdit = true;
-    });
+          this.snackBar.open('Vehicle edit successful.', 'Exit', {
+            duration: 4000
+          });
+        }
+      },
+      error => {
+        this.snackBar.open(`${error}`, 'Exit');
+      }
+    );
   }
 
   submitInsurerEdit(): void {
@@ -128,27 +136,88 @@ export class EditClaimComponent implements OnInit {
       },
     };
 
-    this.service.editClaim(claim).subscribe(data => {
-      const newClaim = <Protos.Claim>data;
-      this.claim.insurer = newClaim.insurer;
-      this.claim.modified = newClaim.modified;
+    this.service.editClaim(claim).subscribe(
+      data => {
+        if (data) {
+          const newClaim = <Protos.Claim>data;
+          this.claim.insurer = newClaim.insurer;
+          this.claim.modified = newClaim.modified;
 
-      this.successfulInsurerEdit = true;
-    });
+          this.snackBar.open('Insurer edit successful.', 'Exit', {
+            duration: 4000
+          });
+        }
+      },
+      error => {
+        this.snackBar.open(`${error}`, 'Exit');
+      }
+    );
   }
 
   deleteClaim(): void {
     this.service.deleteClaim(this.claim.vehicle.vin).subscribe(
       data => {
-        console.log(data);
+        this.snackBar.open('Claim successfully deleted.', undefined, {
+          duration: 5000
+        });
+
+        this.router.navigate(['/']);
       },
       error => {
         console.log(error);
-      },
-      () => {
-        alert('SUCCESSFULLY DELETED');
-      },
+      }
     );
+  }
+
+  claimBackward(): void {
+    const claim = {
+      status: +this.claim.status - 1,
+      vehicle: {
+        vin: this.claim.vehicle.vin,
+      }
+    };
+
+    this.service.editClaim(claim)
+      .subscribe(
+        data => {
+          if (data) {
+            this.claim = data;
+
+            this.snackBar.open(`Claim status updated to: ${this.claim.status}`, 'Exit', {
+              duration: 5000
+            });
+          }
+        },
+        error => {
+          this.snackBar.open(`${error}`, 'Exit');
+        }
+      );
+  }
+
+
+  claimForward(): void {
+    const claim = {
+      status: +this.claim.status + 1,
+      vehicle: {
+        vin: this.claim.vehicle.vin,
+      }
+    };
+
+    this.service.editClaim(claim)
+      .subscribe(
+        data => {
+          if (data) {
+            this.claim = data;
+
+            this.snackBar.open(`Claim status updated to: ${this.claim.status}`, 'Exit', {
+              duration: 5000
+            });
+          }
+        },
+        error => {
+          this.snackBar.open(`${error}`, 'Exit');
+        }
+      );
   }
 
   get gapValue() {

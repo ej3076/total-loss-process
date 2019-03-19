@@ -19,6 +19,7 @@ import { MatToolbarModule } from '@angular/material';
 import { MaterialModule } from './modules/material/material.module';
 import { SharedModule } from './shared/shared.module';
 import { ViewClaimsModule } from './modules/view-claims/view-claims.module';
+import { EditClaimModule } from './modules/edit-claim/edit-claim.module';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -35,6 +36,7 @@ import { ViewClaimsModule } from './modules/view-claims/view-claims.module';
     AppRoutingModule,
     MatToolbarModule,
     ViewClaimsModule,
+    EditClaimModule
   ],
   bootstrap: [AppComponent],
 })

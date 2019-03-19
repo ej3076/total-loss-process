@@ -50,3 +50,9 @@ tr.example-element-row:not(.example-expanded-row):active {
   background: rgba(211, 211, 211, 0.6);
   cursor: pointer;
 }
+
+.align-new-claim-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

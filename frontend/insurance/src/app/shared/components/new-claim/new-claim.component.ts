@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
+import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-claim',
@@ -17,13 +19,13 @@ export class NewClaimComponent {
   deductible = new FormControl('', [Validators.required]);
   has_gap = new FormControl('');
 
-  constructor(private middlewareService: MiddlewareService) {
+  constructor(private middlewareService: MiddlewareService, private snackBar: MatSnackBar, private router: Router) {
     this.appearance.setValue('outlined');
   }
 
   private setClaim() {
     const claim = {
-      
+
       date_of_loss: this.date_of_loss.value,
       vehicle: {
         vin: this.vin.value,
@@ -37,8 +39,12 @@ export class NewClaimComponent {
       },
     };
 
-    // FIXME: Remove this
-    console.log(this.middlewareService.addClaim(claim));
+    this.middlewareService.addClaim(claim)
+      .subscribe(data => {
+        if (data) {
+          this.router.navigate(['claims', data.vehicle.vin]);
+        }
+      });
   }
 
   sendNewClaim() {
