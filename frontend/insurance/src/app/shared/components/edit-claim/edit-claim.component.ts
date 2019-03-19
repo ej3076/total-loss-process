@@ -23,7 +23,6 @@ export class EditClaimComponent implements OnInit {
   vehicleForm: FormGroup;
   insurerForm: FormGroup;
   canSubmitVehicleChanges = false;
-  
   canSubmitInsurerChanges = false;
 
   constructor(
