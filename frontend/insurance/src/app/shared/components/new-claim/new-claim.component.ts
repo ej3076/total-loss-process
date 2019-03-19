@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
+import { validate } from 'vin-validator';
 
 @Component({
   selector: 'app-new-claim',
@@ -9,7 +10,11 @@ import { MiddlewareService } from '../../../core/services/middleware/middleware.
 })
 export class NewClaimComponent {
   appearance = new FormControl();
-  vin = new FormControl('', [Validators.required, Validators.minLength(11)]);
+  vin = new FormControl('', [
+    Validators.required,
+    Validators.minLength(11),
+    control => (this.checkVin(control.value) ? null : { foo: 'OOF' }),
+  ]);
   date_of_loss = new FormControl('', [Validators.required]);
   miles = new FormControl('', [Validators.required]);
   location = new FormControl('', [Validators.required]);
@@ -90,11 +95,17 @@ export class NewClaimComponent {
     }
   }
 
+  checkVin(vin: string): boolean {
+    return validate(vin);
+  }
+
   getErrorMessage() {
     return this.vin.hasError('required')
       ? 'VIN is required.'
       : this.vin.hasError('minlength')
       ? 'VIN must be 11 to 17 characters and numbers.'
+      : this.vin.hasError('foo')
+      ? 'The VIN entered is invalid.'
       : '';
   }
 }
