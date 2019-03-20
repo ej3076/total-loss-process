@@ -9,3 +9,5 @@ type DeepPartial<T> = {
 // prettier-ignore
 type PromiseReturnType<T extends (...args: any[]) => any> =
   ReturnType<T> extends Promise<infer U> ? U : T;
+
+declare module 'vin-validator';
