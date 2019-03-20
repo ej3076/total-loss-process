@@ -1,0 +1,9 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$tlp-light-primary: mat-palette($mat-blue, 900);
+$tlp-light-accent: mat-palette($mat-blue, 100);
+$tlp-light-theme: mat-light-theme($tlp-light-primary, $tlp-light-accent);
+
+@include angular-material-theme($tlp-light-theme);
