@@ -1,19 +1,20 @@
 <div *ngIf="claim" class="width-100">
-  <p>Vehicle Information</p>
+  <h1>VIN: {{ claim.vehicle.vin }}</h1>
   <mat-list class="vehicle-information mbl">
+    <h2 class="mll">Vehicle Information</h2>
     <form [formGroup]="vehicleForm">
       <div class='content-wrapper'>
         <div class='row'>
           <div class='column'>
             <div class='one-column'>
               <mat-list-item> 
-                <p>Miles: </p>
+                <p class="label-text">Miles: </p>
                 <span class="mls">
-                  <input type="text" class="raw-text-input" [value]="claim.vehicle.miles" formControlName="miles"/>
+                  <input type="text" class="raw-text-input editable-text" [value]="claim.vehicle.miles" formControlName="miles"/>
                 </span>
               </mat-list-item>
               <mat-list-item>
-                <p>Model: </p>
+                <p class="label-text">Model: </p>
                 <span class="mls">
                   Generated Model
                 </span>
@@ -26,13 +27,13 @@
           <div class='column'>
             <div class='two-column'>
               <mat-list-item>
-                <p>Vehicle Location: </p>
+                <p class="label-text">Vehicle Location: </p>
                 <span class="mls">
-                  <input type="text" class="raw-text-input" [value]="claim.vehicle.location" formControlName="location"/>
+                  <input type="text" class="raw-text-input editable-text" [value]="claim.vehicle.location" formControlName="location"/>
                 </span>
               </mat-list-item>
               <mat-list-item>
-                <p>Base Price: </p>
+                <p class="label-text">Base Price: </p>
                 <span class="mls">
                   $XXX,XXX
                 </span>
@@ -48,16 +49,11 @@
       </div>
     </form>
   </mat-list>
-  <mat-accordion class="width-100 mtl">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Files on Claim
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-  
-      <app-files [claim]="claim" [vin]="claim.vehicle.vin" (updatedClaim)="receiveNewClaim($event)"></app-files>
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 width-100 mtl" *ngIf="dataSource">      
+  <mat-list class="vehicle-information mbl pbm">
+    <h2 class="mll">Files on Claim</h2>
+    <app-files [claim]="claim" [vin]="claim.vehicle.vin" (updatedClaim)="receiveNewClaim($event)"></app-files>
+    <div *ngIf="claim.files.length > 0">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 width-100 mtl">      
         <!-- Position Column -->
         <ng-container matColumnDef="filename">
           <th mat-header-cell *matHeaderCellDef>File Name</th>
@@ -68,7 +64,7 @@
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let element">
-            <button mat-raised-button (click)="openDialog(element)">
+            <button mat-raised-button color="primary" (click)="openDialog(element)">
               Edit File
             </button>
           </td>
@@ -77,58 +73,74 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-    </mat-expansion-panel>
-  </mat-accordion>
-  <mat-accordion class="width-100 mtl">
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Insurer Information
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      <mat-list class="vehicle-information mbl">
-        <form [formGroup]="insurerForm">
-          <div class='content-wrapper'>
-            <div class='row'>
-              <div class='column'>
-                <div class='one-column'>
-                  <mat-list-item> 
-                    <p>Insurance Provider: </p>
-                    <span class="mls">
-                      <input type="text" class="raw-text-input" [value]="claim.insurer.name" formControlName="insurerName"/>
-                    </span>
-                  </mat-list-item>
-                  <mat-list-item>
-                    <p>Gap Coverage: </p>
-                    <span class="mls">
-                      <input type="text" class="raw-text-input" [value]="(claim.insurer.has_gap) ? 'Yes' : 'No'" formControlName="gap"/>
-                    </span>
-                  </mat-list-item>
-                  <mat-list-item *ngIf="successfulInsurerEdit">
-                    <p style="color:green">Insurer Update Success</p>
-                  </mat-list-item>
-                </div>
+    </div>
+  </mat-list>
+  <mat-list class="vehicle-information mbl">
+    <h2 class="mll">Insurer Information</h2>
+      <form [formGroup]="insurerForm">
+        <div class='content-wrapper'>
+          <div class='row'>
+            <div class='column'>
+              <div class='one-column'>
+                <mat-list-item> 
+                  <p class="label-text">Insurance Provider: </p>
+                  <span class="mls">
+                    <input type="text" class="raw-text-input editable-text" [value]="claim.insurer.name" formControlName="insurerName"/>
+                  </span>
+                </mat-list-item>
+                <mat-list-item>
+                  <p class="label-text">Gap Coverage: </p>
+                  <span class="mls">
+                    <input type="text" class="raw-text-input editable-text" [value]="(claim.insurer.has_gap) ? 'Yes' : 'No'" formControlName="gap"/>
+                  </span>
+                </mat-list-item>
+                <mat-list-item *ngIf="successfulInsurerEdit">
+                  <p style="color:green">Insurer Update Success</p>
+                </mat-list-item>
               </div>
-              <div class='column'>
-                <div class='two-column'>
-                  <mat-list-item>
-                    <p>Deductible Amount ($): </p>
-                    <span class="mls">
-                      <input type="text" class="raw-text-input" [value]="claim.insurer.deductible" formControlName="deductible"/>
-                    </span>
-                  </mat-list-item>
-                  <mat-list-item>
-                    <span class="mls">
-                      <button mat-raised-button color="primary" [disabled]="!canSubmitInsurerChanges" (click)="submitInsurerEdit()">Submit Changes</button>
-                    </span>
-                  </mat-list-item>
-                </div>
+            </div>
+            <div class='column'>
+              <div class='two-column'>
+                <mat-list-item>
+                  <p class="label-text">Deductible Amount ($): </p>
+                  <span class="mls">
+                    <input type="text" class="raw-text-input editable-text" [value]="claim.insurer.deductible" formControlName="deductible"/>
+                  </span>
+                </mat-list-item>
+                <mat-list-item>
+                  <span class="mls">
+                    <button mat-raised-button color="primary" [disabled]="!canSubmitInsurerChanges" (click)="submitInsurerEdit()">Submit Changes</button>
+                  </span>
+                </mat-list-item>
               </div>
             </div>
           </div>
-        </form>
-      </mat-list>
-    </mat-expansion-panel>
-  </mat-accordion>
+        </div>
+      </form>
+  </mat-list>
+  <mat-list class="vehicle-information mbl">
+    <mat-grid-list cols="3" rowHeight="100px">
+      <mat-grid-tile>
+        <a class="width-50">
+          <button mat-raised-button color="primary" class="width-100" (click)="claimBackward()" [disabled]="claim.status === 0">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </a>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <a (click)="deleteClaim()" class="width-50">
+          <button mat-raised-button color="warn" class="width-100">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </a>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <a class="width-50">
+          <button mat-raised-button color="primary" class="width-100" (click)="claimForward()" [disabled]="claim.status === 3">
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </a>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-list>
 </div>

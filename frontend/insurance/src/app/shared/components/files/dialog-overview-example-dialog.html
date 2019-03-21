@@ -1,6 +1,6 @@
 <p mat-dialog-title>Upload Files</p>
 <div mat-dialog-content>
-  <input type="file" (change)="updateFileList($event)" multiple="multiple" />
+  <input type="file" (change)="updateFileList($event)" multiple="multiple" accept="application/pdf,image/*"/>
   <div *ngIf="files">
     <div *ngFor="let file of files" class="mtm">
       <span>File Name: {{ file.name }}</span><br />

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { NewClaimComponent } from './components/new-claim/new-claim.component';
 import { MaterialModule } from '../modules/material/material.module';
-import { EditClaimComponent } from './components/edit-claim/edit-claim.component';
+import { EditClaimSharedComponent } from './components/edit-claim/edit-claim.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {
@@ -10,11 +10,12 @@ import {
   EditFileDialogComponent,
 } from './components/files/files.component';
 import { MatDialogModule } from '@angular/material';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
     NewClaimComponent,
-    EditClaimComponent,
+    EditClaimSharedComponent,
     FilesComponent,
     FileDialogComponent,
     EditFileDialogComponent,
@@ -25,10 +26,11 @@ import { MatDialogModule } from '@angular/material';
     ReactiveFormsModule,
     MaterialModule,
     MatDialogModule,
+    RouterModule
   ],
   exports: [
     NewClaimComponent,
-    EditClaimComponent,
+    EditClaimSharedComponent,
     FilesComponent,
     FileDialogComponent,
     EditFileDialogComponent,

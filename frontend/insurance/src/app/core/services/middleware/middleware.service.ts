@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
@@ -16,8 +15,7 @@ type MinimalClaim = DeepPartial<Protos.Claim> & { vehicle: { vin: string } };
 export class MiddlewareService {
   constructor(
     private http: HttpClient,
-    private auth: AuthService,
-    private router: Router,
+    private auth: AuthService
   ) {}
 
   getClaims() {
@@ -36,18 +34,14 @@ export class MiddlewareService {
 
   addClaim(claim: MinimalClaim) {
     return this.http
-      .post(`${API_BASE}/claims`, claim, {
+      .post<Protos.Claim>(`${API_BASE}/claims`, claim, {
         headers: this.auth.headers,
-      })
-      .subscribe(data => {
-        console.log(data);
-        this.router.navigate(['/claims']);
       });
   }
 
   editClaim(claim: MinimalClaim) {
     return this.http
-      .post(`${API_BASE}/claims/${claim.vehicle.vin}`, claim, {
+      .post<Protos.Claim>(`${API_BASE}/claims/${claim.vehicle.vin}`, claim, {
         headers: this.auth.headers,
       });
   }

@@ -36,16 +36,17 @@ export class ViewClaimsComponent implements OnInit {
   ];
 
   constructor(private middlewareService: MiddlewareService) {
-    this.dataSource.filterPredicate = (claim, filter) => {
-      const status = parseInt(filter, 10) || -1;
-      return claim.status === status || status === -1;
-    };
   }
 
   ngOnInit() {
     this.middlewareService.getClaims().subscribe(
       result => {
         this.dataSource.data = result;
+
+        this.defaultFilter();
+
+        this.dataSource.sort = this.sort;
+
         console.log('Claims: ');
         console.log(result);
       },
@@ -54,15 +55,33 @@ export class ViewClaimsComponent implements OnInit {
         console.log(error);
       },
     );
-    this.dataSource.sort = this.sort;
   }
 
-  sortClaims(num: number) {
+  sortClaims(num: any) {
+    console.log(num);
+    this.defaultFilter();
+
     this.dataSource.filter = num.toString();
   }
 
-  applyFilter(filterValue: string) {
-    console.log(filterValue);
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyVinFilter(vin: string) {
+    this.dataSource.filterPredicate = (claim, filter) => {
+      return claim.vehicle.vin.indexOf(filter) !== -1;
+    };
+
+    this.dataSource.filter = vin.trim();
+
+    if (this.dataSource.filter.length === 0) {
+      this.defaultFilter();
+    }
+  }
+
+  defaultFilter(): void {
+    this.dataSource.filterPredicate = (claim, filter) => {
+      console.log(+filter);
+      return claim.status === +filter;
+    };
+
+    this.dataSource.filter = '0';
   }
 }

@@ -9,7 +9,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Created Components
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './modules/home/home.component';
 
 // Auth0 Components
 import { CoreModule } from './core/core.module';
@@ -19,9 +18,10 @@ import { MatToolbarModule } from '@angular/material';
 import { MaterialModule } from './modules/material/material.module';
 import { SharedModule } from './shared/shared.module';
 import { ViewClaimsModule } from './modules/view-claims/view-claims.module';
+import { EditClaimModule } from './modules/edit-claim/edit-claim.module';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -35,6 +35,7 @@ import { ViewClaimsModule } from './modules/view-claims/view-claims.module';
     AppRoutingModule,
     MatToolbarModule,
     ViewClaimsModule,
+    EditClaimModule
   ],
   bootstrap: [AppComponent],
 })

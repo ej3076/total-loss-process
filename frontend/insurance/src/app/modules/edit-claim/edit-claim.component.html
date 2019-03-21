@@ -1,0 +1,7 @@
+<div *ngIf="claim; else loading">
+  <app-edit-claim-new [claim]="claim"></app-edit-claim-new>
+</div>
+
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>
