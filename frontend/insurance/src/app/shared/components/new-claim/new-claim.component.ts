@@ -41,7 +41,7 @@ export class NewClaimComponent {
       insurer: {
         name: this.name.value,
         deductible: +this.deductible.value,
-        has_gap: this.has_gap.value,
+        has_gap: Boolean(this.has_gap.value),
       },
     };
 
