@@ -1,12 +1,6 @@
 @import '~@angular/material/theming';
 
-@import './sass/theme.scss';
-
 @import './sass/main';
-
-html * {
-  font-family: 'Source Sans Pro', sans-serif;
-}
 
 // Material Theme
 @import '~@angular/material/theming';
