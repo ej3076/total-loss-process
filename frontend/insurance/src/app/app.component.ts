@@ -16,7 +16,6 @@ export class AppComponent implements OnInit {
   }
 
   changeTheme() {
-    console.log('Hello!');
     this.darkMode = !this.darkMode;
   }
 }

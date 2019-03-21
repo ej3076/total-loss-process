@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MiddlewareService } from '../../core/services/middleware/middleware.service';
-// import { VinInfoService } from '../../core/services/vin-info/vin-info.service';
 import { MatSort, MatTableDataSource } from '@angular/material';
-// import { VehicleData } from '../../shared/interfaces/VehicleData';
 import {
   trigger,
   state,
@@ -24,7 +22,6 @@ import {
   ],
 })
 export class ViewClaimsComponent implements OnInit {
-  // vehicleData: VehicleData | null = null;
   dataSource = new MatTableDataSource<Protos.Claim>([]);
   expandedElement: Protos.Claim | null = null;
   @ViewChild(MatSort) sort: MatSort | null = null;
@@ -38,9 +35,7 @@ export class ViewClaimsComponent implements OnInit {
     'created',
   ];
 
-  constructor(
-    private middlewareService: MiddlewareService, // private service: VinInfoService,
-  ) {}
+  constructor(private middlewareService: MiddlewareService) {}
 
   ngOnInit() {
     this.middlewareService.getClaims().subscribe(
@@ -50,9 +45,6 @@ export class ViewClaimsComponent implements OnInit {
         this.defaultFilter();
 
         this.dataSource.sort = this.sort;
-
-        console.log('Claims: ');
-        console.log(result);
       },
 
       error => {
@@ -82,26 +74,9 @@ export class ViewClaimsComponent implements OnInit {
 
   defaultFilter(): void {
     this.dataSource.filterPredicate = (claim, filter) => {
-      console.log(+filter);
       return claim.status === +filter;
     };
 
     this.dataSource.filter = '0';
   }
-
-  /* getVehicleModel(vin: string) {
-    this.service.getVinData(vin).subscribe(
-      result => {
-        if (result) {
-          this.vehicleData.model = result.Model;
-          this.vehicleData.modelYear = result.ModelYear;
-          this.vehicleData.basePrice = result.BasePrice;
-          console.log(this.vehicleData);
-        }
-      },
-      error => {
-        console.log(error);
-      },
-    );
-  } */
 }
