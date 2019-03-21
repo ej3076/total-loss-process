@@ -1,4 +1,12 @@
-<app-navigation-bar></app-navigation-bar>
-<main class="page">
-  <router-outlet></router-outlet>
-</main>
+<html>
+  <div
+    [class.alternative]="darkMode"
+    class="mat-app-background height-100"
+    color="background"
+  >
+    <app-navigation-bar></app-navigation-bar>
+    <main class="page">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</html>

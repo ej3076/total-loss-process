@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
+import { AppComponent } from '../../../app.component';
 
 @Component({
   selector: 'app-navigation-bar',
@@ -7,7 +8,11 @@ import { AuthService } from '../../services/auth/auth.service';
   styleUrls: ['./navigation-bar.component.scss'],
 })
 export class NavigationBarComponent implements OnInit {
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService, public appComp: AppComponent) {}
 
   ngOnInit() {}
+
+  themeButton() {
+    this.appComp.changeTheme();
+  }
 }

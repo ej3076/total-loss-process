@@ -1,7 +1,9 @@
 <div>
   <div class="center-to-page width-50">
     <a routerLink="/claims/new" class="width-100">
-      <button mat-raised-button color="accent" class="width-100 mtl ptm pbm">Add A New Claim</button>
+      <button mat-raised-button color="accent" class="width-100 mtl ptm pbm">
+        Add A New Claim
+      </button>
     </a>
   </div>
   <mat-form-field class="width-50 mth">
@@ -41,7 +43,11 @@
 
     <ng-container matColumnDef="vin">
       <th mat-header-cell *matHeaderCellDef>VIN</th>
-      <td mat-cell *matCellDef="let element" [class.big-and-bold]="element == expandedElement">
+      <td
+        mat-cell
+        *matCellDef="let element"
+        [class.big-and-bold]="element == expandedElement"
+      >
         {{ element.vehicle.vin }}
       </td>
     </ng-container>
@@ -91,29 +97,40 @@
         >
           <div class="mtl mbl width-100">
             <mat-list class="vehicle-information">
-                <div class='content-wrapper mbn'>
-                  <div class='row'>
-                    <div class='column'>
-                      <div class='one-column'>
-                        <mat-list-item> 
-                          <p class="label-text">Miles: {{ element.vehicle.miles }}</p>
-                        </mat-list-item>
-                        <mat-list-item>
-                          <a routerLink="/claims/{{ element.vehicle.vin }}">
-                            <button mat-raised-button color="primary">Edit Claim</button>
-                          </a>
-                        </mat-list-item>
-                      </div>
+              <div class="content-wrapper mbn">
+                <div class="row">
+                  <div class="column">
+                    <div class="one-column">
+                      <mat-list-item>
+                        <p class="label-text">
+                          Model: {{ getVehicleModel(element.vehicle.vin) }}
+                        </p>
+                      </mat-list-item>
+                      <mat-list-item>
+                        <p class="label-text">
+                          Miles: {{ element.vehicle.miles }}
+                        </p>
+                      </mat-list-item>
+                      <mat-list-item>
+                        <a routerLink="/claims/{{ element.vehicle.vin }}">
+                          <button mat-raised-button color="primary">
+                            Edit Claim
+                          </button>
+                        </a>
+                      </mat-list-item>
                     </div>
-                    <div class='column'>
-                      <div class='two-column'>
-                        <mat-list-item>
-                          <p class="label-text">Vehicle Location: {{ element.vehicle.location }}</p>
-                        </mat-list-item>
-                      </div>
+                  </div>
+                  <div class="column">
+                    <div class="two-column">
+                      <mat-list-item>
+                        <p class="label-text">
+                          Vehicle Location: {{ element.vehicle.location }}
+                        </p>
+                      </mat-list-item>
                     </div>
                   </div>
                 </div>
+              </div>
             </mat-list>
           </div>
         </div>
