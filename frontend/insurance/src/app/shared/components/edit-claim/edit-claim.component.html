@@ -91,7 +91,7 @@
           <td mat-cell *matCellDef="let element">
             <button
               mat-raised-button
-              color="primary"
+              color="accent"
               (click)="openDialog(element)"
             >
               Edit File
@@ -155,7 +155,7 @@
                 <span class="mls">
                   <button
                     mat-raised-button
-                    color="primary"
+                    color="accent"
                     [disabled]="!canSubmitInsurerChanges"
                     (click)="submitInsurerEdit()"
                   >
@@ -175,7 +175,7 @@
         <a class="width-50">
           <button
             mat-raised-button
-            color="primary"
+            color="accent"
             class="width-100"
             (click)="claimBackward()"
             [disabled]="claim.status === 0"
@@ -195,7 +195,7 @@
         <a class="width-50">
           <button
             mat-raised-button
-            color="primary"
+            color="accent"
             class="width-100"
             (click)="claimForward()"
             [disabled]="claim.status === 3"
