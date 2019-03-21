@@ -1,6 +1,11 @@
 <p mat-dialog-title>Upload Files</p>
 <div mat-dialog-content>
-  <input type="file" (change)="updateFileList($event)" multiple="multiple" accept="application/pdf,image/*"/>
+  <input
+    type="file"
+    (change)="updateFileList($event)"
+    multiple="multiple"
+    accept="application/pdf,image/*"
+  />
   <div *ngIf="files">
     <div *ngFor="let file of files" class="mtm">
       <span>File Name: {{ file.name }}</span><br />
@@ -10,6 +15,8 @@
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="data">Go Back</button>
-  <button mat-button *ngIf="!success" (click)="submitFiles()">Submit</button>
+  <button mat-button [mat-dialog-close]="data" color="primary">Go Back</button>
+  <button mat-button *ngIf="!success" (click)="submitFiles()" color="primary">
+    Submit
+  </button>
 </div>
