@@ -4,6 +4,8 @@ import { MatDialog, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
 import { Router } from '@angular/router';
+import { VinInfoService } from '../../../core/services/vin-info/vin-info.service';
+import { VehicleData } from '../../interfaces/VehicleData';
 
 @Component({
   selector: 'app-edit-claim-new',
@@ -14,6 +16,7 @@ export class EditClaimSharedComponent implements OnInit {
   @Input()
   claim!: Protos.Claim;
 
+  vehicleData: VehicleData;
   displayedColumns: string[] = ['filename', 'action'];
   dataSource = new MatTableDataSource(this.claim ? this.claim.files : []);
 
@@ -27,16 +30,25 @@ export class EditClaimSharedComponent implements OnInit {
     public dialog: MatDialog,
     private formBuilder: FormBuilder,
     private service: MiddlewareService,
+    private vinService: VinInfoService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
   ) {
     this.vehicleForm = this.formBuilder.group({});
     this.insurerForm = this.formBuilder.group({});
+
+    this.vehicleData = {
+      model: '',
+      modelYear: '',
+      basePrice: '',
+    };
   }
 
   ngOnInit() {
     if (this.claim && this.claim.files) {
       this.dataSource = new MatTableDataSource(this.claim.files);
+
+      this.getVehicleModel(this.claim.vehicle.vin);
 
       this.vehicleForm = this.formBuilder.group({
         miles: '',
@@ -51,6 +63,27 @@ export class EditClaimSharedComponent implements OnInit {
 
       this.onChanges();
     }
+  }
+
+  getVehicleModel(vin: string) {
+    this.vinService.getVinData(vin).subscribe(
+      result => {
+        if (result) {
+          this.vehicleData.model = result.Results[0].Model
+            ? result.Results[0].Model
+            : 'Not Found';
+          this.vehicleData.basePrice = result.Results[0].BasePrice
+            ? result.Results[0].BasePrice
+            : 'Not Found';
+          this.vehicleData.modelYear = result.Results[0].ModelYear
+            ? result.Results[0].ModelYear
+            : 'Not Found';
+        }
+      },
+      error => {
+        this.snackBar.open(`${error}`, 'Exit');
+      },
+    );
   }
 
   openDialog(file: Protos.File): void {
@@ -108,13 +141,13 @@ export class EditClaimSharedComponent implements OnInit {
           this.claim.modified = newClaim.modified;
 
           this.snackBar.open('Vehicle edit successful.', 'Exit', {
-            duration: 4000
+            duration: 4000,
           });
         }
       },
       error => {
         this.snackBar.open(`${error}`, 'Exit');
-      }
+      },
     );
   }
 
@@ -144,13 +177,13 @@ export class EditClaimSharedComponent implements OnInit {
           this.claim.modified = newClaim.modified;
 
           this.snackBar.open('Insurer edit successful.', 'Exit', {
-            duration: 4000
+            duration: 4000,
           });
         }
       },
       error => {
         this.snackBar.open(`${error}`, 'Exit');
-      }
+      },
     );
   }
 
@@ -158,14 +191,14 @@ export class EditClaimSharedComponent implements OnInit {
     this.service.deleteClaim(this.claim.vehicle.vin).subscribe(
       () => {
         this.snackBar.open('Claim successfully deleted.', undefined, {
-          duration: 5000
+          duration: 5000,
         });
 
         this.router.navigate(['/']);
       },
       error => {
         console.log(error);
-      }
+      },
     );
   }
 
@@ -174,50 +207,55 @@ export class EditClaimSharedComponent implements OnInit {
       status: +this.claim.status - 1,
       vehicle: {
         vin: this.claim.vehicle.vin,
-      }
+      },
     };
 
-    this.service.editClaim(claim)
-      .subscribe(
-        data => {
-          if (data) {
-            this.claim = data;
+    this.service.editClaim(claim).subscribe(
+      data => {
+        if (data) {
+          this.claim = data;
 
-            this.snackBar.open(`Claim status updated to: ${this.claim.status}`, 'Exit', {
-              duration: 5000
-            });
-          }
-        },
-        error => {
-          this.snackBar.open(`${error}`, 'Exit');
+          this.snackBar.open(
+            `Claim status updated to: ${this.claim.status}`,
+            'Exit',
+            {
+              duration: 5000,
+            },
+          );
         }
-      );
+      },
+      error => {
+        this.snackBar.open(`${error}`, 'Exit');
+      },
+    );
   }
-
 
   claimForward(): void {
     const claim = {
       status: +this.claim.status + 1,
       vehicle: {
         vin: this.claim.vehicle.vin,
-      }
+      },
     };
 
-    this.service.editClaim(claim)
-      .subscribe(
-        data => {
-          if (data) {
-            this.claim = data;
+    this.service.editClaim(claim).subscribe(
+      data => {
+        if (data) {
+          this.claim = data;
 
-            this.snackBar.open(`Claim status updated to: ${this.claim.status}`, 'Exit', {
-              duration: 5000
-            });
-          }
-        },
-        error => {
-          this.snackBar.open(`${error}`, 'Exit');
+          this.snackBar.open(
+            `Claim status updated to: ${this.claim.status}`,
+            'Exit',
+            {
+              duration: 5000,
+            },
+          );
         }
-      );
+      },
+      error => {
+        this.snackBar.open(`${error}`, 'Exit');
+      },
+    );
   }
 
   get gapValue() {
