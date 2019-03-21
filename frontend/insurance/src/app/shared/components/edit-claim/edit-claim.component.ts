@@ -164,7 +164,7 @@ export class EditClaimSharedComponent implements OnInit {
           ? this.gapValue
           : this.claim.insurer.has_gap,
         deductible: this.insurerForm.controls['deductible'].value
-          ? this.insurerForm.controls['deductible'].value
+          ? +this.insurerForm.controls['deductible'].value
           : this.claim.insurer.deductible,
       },
     };
