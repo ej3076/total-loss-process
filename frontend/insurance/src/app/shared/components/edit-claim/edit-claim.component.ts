@@ -48,7 +48,7 @@ export class EditClaimSharedComponent implements OnInit {
     if (this.claim && this.claim.files) {
       this.dataSource = new MatTableDataSource(this.claim.files);
 
-      this.getVehicleModel(this.claim.vehicle.vin);
+      this.getAndCacheVehicleModel(this.claim.vehicle.vin);
 
       this.vehicleForm = this.formBuilder.group({
         miles: '',
@@ -65,25 +65,53 @@ export class EditClaimSharedComponent implements OnInit {
     }
   }
 
-  getVehicleModel(vin: string) {
-    this.vinService.getVinData(vin).subscribe(
-      result => {
-        if (result) {
-          this.vehicleData.model = result.Results[0].Model
-            ? result.Results[0].Model
-            : 'Not Found';
-          this.vehicleData.basePrice = result.Results[0].BasePrice
-            ? result.Results[0].BasePrice
-            : 'Not Found';
-          this.vehicleData.modelYear = result.Results[0].ModelYear
-            ? result.Results[0].ModelYear
-            : 'Not Found';
-        }
-      },
-      error => {
-        this.snackBar.open(`${error}`, 'Exit');
-      },
-    );
+  getAndCacheVehicleModel(vin: string) {
+    if (localStorage.getItem(`vehicle: ${this.claim.vehicle.vin}`)) {
+      this.vehicleData.model = JSON.parse(
+        localStorage.getItem(`${this.claim.vehicle.vin}: Model`) || 'Not Found',
+      );
+      this.vehicleData.modelYear = JSON.parse(
+        localStorage.getItem(`${this.claim.vehicle.vin}: ModelYear`) ||
+          'Not Found',
+      );
+      this.vehicleData.basePrice = JSON.parse(
+        localStorage.getItem(`${this.claim.vehicle.vin}: BasePrice`) ||
+          'Not Found',
+      );
+    } else {
+      this.vinService.getVinData(vin).subscribe(
+        result => {
+          if (result) {
+            this.vehicleData.model = result.Results[0].Model
+              ? result.Results[0].Model
+              : 'Not Found';
+            this.vehicleData.basePrice = result.Results[0].BasePrice
+              ? result.Results[0].BasePrice
+              : 'Not Found';
+            this.vehicleData.modelYear = result.Results[0].ModelYear
+              ? result.Results[0].ModelYear
+              : 'Not Found';
+
+            localStorage.setItem(`vehicle: ${this.claim.vehicle.vin}`, 'Set');
+            localStorage.setItem(
+              `${this.claim.vehicle.vin}: Model`,
+              this.vehicleData.model,
+            );
+            localStorage.setItem(
+              `${this.claim.vehicle.vin}: ModelYear`,
+              this.vehicleData.modelYear,
+            );
+            localStorage.setItem(
+              `${this.claim.vehicle.vin}: BasePrice`,
+              this.vehicleData.basePrice,
+            );
+          }
+        },
+        error => {
+          this.snackBar.open(`${error}`, 'Exit');
+        },
+      );
+    }
   }
 
   openDialog(file: Protos.File): void {
