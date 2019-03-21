@@ -1,7 +1,9 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <img src="../../../../assets/logos/ford-logo.png" class="logo-width" />
-    <span class="example-spacer"></span>
+    <h1 class="header-text ptm">
+      Insurance Viewer
+    </h1>
+    <span class="header-spacer"></span>
     <button mat-button *ngIf="auth.isLoggedIn" (click)="auth.logout()">
       Log Out
     </button>
