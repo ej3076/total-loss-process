@@ -8,12 +8,7 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [ViewClaimsComponent],
-  imports: [
-    MaterialModule,
-    CommonModule,
-    SharedModule,
-    RouterModule
-  ],
+  imports: [MaterialModule, CommonModule, SharedModule, RouterModule],
   exports: [ViewClaimsComponent],
   providers: [AuthService],
 })

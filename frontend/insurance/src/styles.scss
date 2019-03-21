@@ -1,12 +1,6 @@
 @import '~@angular/material/theming';
 
-@import './sass/theme.scss';
-
 @import './sass/main';
-
-html * {
-  font-family: 'Source Sans Pro', sans-serif;
-}
 
 // Material Theme
 @import '~@angular/material/theming';
@@ -76,6 +70,10 @@ $candy-app-theme: mat-light-theme(
 
 .width-50 {
   width: 50%;
+}
+
+.height-100 {
+  height: 100%;
 }
 
 .header-height {

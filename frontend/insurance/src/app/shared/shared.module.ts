@@ -26,7 +26,7 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     MaterialModule,
     MatDialogModule,
-    RouterModule
+    RouterModule,
   ],
   exports: [
     NewClaimComponent,

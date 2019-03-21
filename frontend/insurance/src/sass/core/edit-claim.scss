@@ -1,39 +1,38 @@
 .vehicle-information {
-    border: 1px solid darkgray;
-    border-radius: 5px;
-  }
-  
-  .edit-field {
-    color: darkgray;
-  }
-  
-  .content-wrapper {
-    margin: 15px;
-  }
-  
-  .row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
-  }
-  
-  .column {
-    display: flex;
-    flex-direction: column;
-    flex-basis: 100%;
-    flex: 1;
-  }
-  
-  .one-column {
-    height: 150px;
-  }
-  
-  .two-column {
-    height: 150px;
-  }
-  
-  .editable-text {
-    color: mat-color($candy-app-primary) !important;
-  }
-  
+  border: 1px solid darkgray;
+  border-radius: 5px;
+}
+
+.edit-field {
+  color: darkgray;
+}
+
+.content-wrapper {
+  margin: 15px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.one-column {
+  height: 150px;
+}
+
+.two-column {
+  height: 150px;
+}
+
+.editable-text {
+  color: grey !important;
+}
