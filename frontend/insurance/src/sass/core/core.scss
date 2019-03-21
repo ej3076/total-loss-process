@@ -10,6 +10,11 @@ $candy-app-primary: mat-palette($mat-indigo);
 html {
   height: 100vh;
 }
+
+body {
+  margin: 0;
+}
+
 .page {
   display: grid;
   max-width: 1000px;
