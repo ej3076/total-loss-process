@@ -1,7 +1,7 @@
-<div>
-  <div class="center-to-page width-50">
-    <a routerLink="/claims/new" class="width-100">
-      <button mat-raised-button color="accent" class="width-100 mtl ptm pbm">
+<div class="mtl">
+  <div class="center-to-page add-view-button">
+    <a routerLink="/claims/new">
+      <button mat-raised-button color="accent" class="width-100 ptm pbm">
         Add A New Claim
       </button>
     </a>
@@ -20,10 +20,10 @@
       disableOptionCentering
       [value]="0"
     >
-      <mat-option [value]="0">Awaiting Settlement Option</mat-option>
-      <mat-option [value]="1">Finalize Loss</mat-option>
-      <mat-option [value]="2">At Auction</mat-option>
-      <mat-option [value]="3">Claim Resolved</mat-option>
+      <mat-option [value]="0">0 - Awaiting Settlement Option</mat-option>
+      <mat-option [value]="1">1 - Finalize Loss</mat-option>
+      <mat-option [value]="2">2 - At Auction</mat-option>
+      <mat-option [value]="3">3 - Claim Resolved</mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -32,7 +32,7 @@
     [dataSource]="dataSource"
     multiTemplateDataRows
     matSort
-    class="mat-elevation-z24"
+    class="mat-elevation-z8"
   >
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef>Status</th>

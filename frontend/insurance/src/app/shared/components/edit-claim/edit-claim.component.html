@@ -1,6 +1,6 @@
 <div *ngIf="claim" class="width-100">
   <h1>VIN: {{ claim.vehicle.vin }}</h1>
-  <mat-list class="vehicle-information mbl">
+  <mat-list class="mbl mat-elevation-z4">
     <h2 class="mll">Vehicle Information</h2>
     <form [formGroup]="vehicleForm">
       <div class="content-wrapper">
@@ -69,7 +69,7 @@
       </div>
     </form>
   </mat-list>
-  <mat-list class="vehicle-information mbl pbm">
+  <mat-list class="mbl mat-elevation-z4 pbh">
     <h2 class="mll">Files on Claim</h2>
     <app-files
       [claim]="claim"
@@ -80,7 +80,7 @@
       <table
         mat-table
         [dataSource]="dataSource"
-        class="mat-elevation-z8 width-100 mtl"
+        class="mat-elevation-z6 file-table mtl mrm mlm pbl"
       >
         <!-- Position Column -->
         <ng-container matColumnDef="filename">
@@ -107,7 +107,7 @@
       </table>
     </div>
   </mat-list>
-  <mat-list class="vehicle-information mbl">
+  <mat-list class="mbl mat-elevation-z4">
     <h2 class="mll">Insurer Information</h2>
     <form [formGroup]="insurerForm">
       <div class="content-wrapper">
@@ -172,10 +172,10 @@
       </div>
     </form>
   </mat-list>
-  <mat-list class="vehicle-information mbl">
+  <mat-list>
     <mat-grid-list cols="3" rowHeight="100px">
       <mat-grid-tile>
-        <a class="width-50">
+        <a class="width-100">
           <button
             mat-raised-button
             color="accent"
@@ -183,19 +183,19 @@
             (click)="claimBackward()"
             [disabled]="claim.status === 0"
           >
-            <mat-icon>arrow_back</mat-icon>
+            Regress
           </button>
         </a>
       </mat-grid-tile>
       <mat-grid-tile>
-        <a (click)="deleteClaim()" class="width-50">
+        <a (click)="deleteClaim()" class="width-100">
           <button mat-raised-button color="warn" class="width-100">
-            <mat-icon>cancel</mat-icon>
+            DELETE CLAIM
           </button>
         </a>
       </mat-grid-tile>
       <mat-grid-tile>
-        <a class="width-50">
+        <a class="width-100">
           <button
             mat-raised-button
             color="accent"
@@ -203,7 +203,7 @@
             (click)="claimForward()"
             [disabled]="claim.status === 3"
           >
-            <mat-icon>arrow_forward</mat-icon>
+            Advance
           </button>
         </a>
       </mat-grid-tile>

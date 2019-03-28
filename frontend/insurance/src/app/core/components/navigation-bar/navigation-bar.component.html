@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <button mat-raised-button color="accent" (click)="themeButton()">
+    <button mat-button (click)="themeButton()">
       Change Theme
     </button>
     <span class="header-spacer"></span>
@@ -8,23 +8,13 @@
       Insurance Viewer
     </h1>
     <span class="header-spacer"></span>
-    <button
-      mat-raised-button
-      *ngIf="auth.isLoggedIn"
-      (click)="auth.logout()"
-      color="accent"
-    >
+    <button mat-button *ngIf="auth.isLoggedIn" (click)="auth.logout()">
       Log Out
     </button>
-    <button
-      mat-raised-button
-      *ngIf="!auth.isLoggedIn"
-      (click)="auth.login()"
-      color="accent"
-    >
+    <button mat-button *ngIf="!auth.isLoggedIn" (click)="auth.login()">
       Log In
     </button>
-    <button mat-button [routerLink]="['']" color="background">
+    <button mat-button [routerLink]="['']">
       <mat-icon>home</mat-icon>
     </button>
   </mat-toolbar-row>
