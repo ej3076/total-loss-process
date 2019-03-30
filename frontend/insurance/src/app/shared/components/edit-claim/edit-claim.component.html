@@ -1,6 +1,6 @@
 <div *ngIf="claim" class="width-100">
   <h1>VIN: {{ claim.vehicle.vin }}</h1>
-  <mat-list class="mbl mat-elevation-z4">
+  <mat-list class="mbl mat-elevation-z3">
     <h2 class="mll">Vehicle Information</h2>
     <form [formGroup]="vehicleForm">
       <div class="content-wrapper">
@@ -69,7 +69,7 @@
       </div>
     </form>
   </mat-list>
-  <mat-list class="mbl mat-elevation-z4 pbh">
+  <mat-list class="mbl mat-elevation-z3 pbh">
     <h2 class="mll">Files on Claim</h2>
     <app-files
       [claim]="claim"
@@ -107,7 +107,7 @@
       </table>
     </div>
   </mat-list>
-  <mat-list class="mbl mat-elevation-z4">
+  <mat-list class="mbl mat-elevation-z3">
     <h2 class="mll">Insurer Information</h2>
     <form [formGroup]="insurerForm">
       <div class="content-wrapper">
@@ -147,7 +147,7 @@
                 <p class="label-text">Deductible Amount ($):</p>
                 <span class="mls">
                   <input
-                    type="text"
+                    type="decimal"
                     class="raw-text-input editable-text"
                     [value]="claim.insurer.deductible"
                     formControlName="deductible"
@@ -183,7 +183,7 @@
             (click)="claimBackward()"
             [disabled]="claim.status === 0"
           >
-            Regress
+            Regress Status
           </button>
         </a>
       </mat-grid-tile>
@@ -203,7 +203,7 @@
             (click)="claimForward()"
             [disabled]="claim.status === 3"
           >
-            Advance
+            Advance Status
           </button>
         </a>
       </mat-grid-tile>

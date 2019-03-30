@@ -19,6 +19,7 @@ tr.example-element-row:not(.example-expanded-row):active {
 }
 
 .example-element-detail {
+  float: left;
   overflow: hidden;
   display: flex;
 }
@@ -55,4 +56,19 @@ tr.example-element-row:not(.example-expanded-row):active {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.left-expand {
+  width: 25%;
+  height: auto;
+}
+
+.right-expand {
+  width: 33%;
+  height: auto;
+}
+
+.center-expand {
+  width: 33%;
+  height: auto;
 }
