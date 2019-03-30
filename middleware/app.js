@@ -18,6 +18,12 @@ app.use('/keys', require('./routes/keys'));
 app.use((err, req, res, next) => {
   if (!err) return next();
   console.error(err.stack);
+  if (
+    err.message === 'Claim already exists' ||
+    err.message === 'Claim does not exist'
+  ) {
+    err.statusCode = 400;
+  }
   res.status(err.statusCode || 500).json({
     name: err.name,
     statusCode: err.statusCode,
