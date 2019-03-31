@@ -1,3 +1,75 @@
-<button mat-raised-button color="accent" class="mll" (click)="openDialog()">
+<!-- <button mat-raised-button color="accent" class="mll" (click)="openDialog()">
   Upload Files
-</button>
+</button> -->
+<div class="upload-boxes">
+  <label for="file-upload-poa" class="custom-file-upload">
+    Upload Proof Of Attorney
+  </label>
+  <input
+    type="file"
+    (change)="updateFileList($event, 'POA')"
+    multiple="multiple"
+    accept="application/pdf,image/*"
+    id="file-upload-poa"
+  />
+  <label for="file-upload-title" class="custom-file-upload">
+    Upload Title
+  </label>
+  <input
+    type="file"
+    (change)="updateFileList($event, 'TITLE')"
+    multiple="multiple"
+    accept="application/pdf,image/*"
+    id="file-upload-title"
+  />
+  <label for="file-upload-ods" class="custom-file-upload">
+    Upload Odometer Disclosure
+  </label>
+  <input
+    type="file"
+    (change)="updateFileList($event, 'ODS')"
+    multiple="multiple"
+    accept="application/pdf,image/*"
+    id="file-upload-ods"
+  />
+  <label for="file-upload-police" class="custom-file-upload">
+    Upload Police Report
+  </label>
+  <input
+    type="file"
+    (change)="updateFileList($event, 'POLICE')"
+    multiple="multiple"
+    accept="application/pdf,image/*"
+    id="file-upload-police"
+  />
+  <label for="file-upload-settle" class="custom-file-upload">
+    Upload Settlement Offer
+  </label>
+  <input
+    type="file"
+    (change)="updateFileList($event, 'SETTLEMENT')"
+    multiple="multiple"
+    accept="application/pdf,image/*"
+    id="file-upload-settle"
+  />
+  <label for="file-upload-log" class="custom-file-upload">
+    Upload Letter Of Guarantee
+  </label>
+  <input
+    type="file"
+    (change)="updateFileList($event, 'LOG')"
+    multiple="multiple"
+    accept="application/pdf,image/*"
+    id="file-upload-log"
+  />
+  <div *ngIf="fileList.length > 0" class="mll">
+    <h2>Files Ready For Upload...</h2>
+    <div *ngFor="let file of fileList" class="mtm">
+      <span>File Name: {{ file.name }}</span
+      ><br />
+      <span>File Size (in bytes): {{ file.size }}</span>
+      <mat-divider></mat-divider>
+    </div>
+    <button mat-button (click)="submitFiles()">Submit Files</button>
+  </div>
+</div>

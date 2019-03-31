@@ -17,7 +17,7 @@ export class EditClaimSharedComponent implements OnInit {
   claim!: Protos.Claim;
 
   vehicleData: VehicleData;
-  displayedColumns: string[] = ['filename', 'action'];
+  displayedColumns: string[] = ['filename', 'type', 'edit', 'download'];
   dataSource = new MatTableDataSource(this.claim ? this.claim.files : []);
 
   // Form Controls
@@ -258,9 +258,44 @@ export class EditClaimSharedComponent implements OnInit {
     );
   }
 
+  downloadFile(hash: string, name: string) {
+    this.service
+      .downloadFile(this.claim.vehicle.vin, hash, name)
+      .subscribe(blob => {
+        const url = URL.createObjectURL(new File([blob], name));
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.download = name;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+  }
+
   get gapValue() {
     return this.insurerForm.controls['gap'].value.toLowerCase() === 'yes'
       ? true
       : false;
+  }
+
+  nameOfType(type: number): string {
+    switch (type) {
+      case 1:
+        return 'Power of Attorney';
+      case 2:
+        return 'Title';
+      case 3:
+        return 'Odometer Disclosure';
+      case 4:
+        return 'Police Report';
+      case 5:
+        return 'Settlement Offer';
+      case 6:
+        return 'Letter of Guarantee';
+      default:
+        return 'Miscellaneous';
+    }
   }
 }

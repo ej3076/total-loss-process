@@ -80,7 +80,7 @@
       <table
         mat-table
         [dataSource]="dataSource"
-        class="mat-elevation-z6 file-table mtl mrm mlm pbl"
+        class="file-table mtl mrm mlm pbl"
       >
         <!-- Position Column -->
         <ng-container matColumnDef="filename">
@@ -88,9 +88,16 @@
           <td mat-cell *matCellDef="let element">{{ element.name }}</td>
         </ng-container>
 
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Category</th>
+          <td mat-cell *matCellDef="let element">
+            {{ nameOfType(element.type) }}
+          </td>
+        </ng-container>
+
         <!-- Name Column -->
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef>Edit</th>
           <td mat-cell *matCellDef="let element">
             <button
               mat-raised-button
@@ -98,6 +105,19 @@
               (click)="openDialog(element)"
             >
               Edit File
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="download">
+          <th mat-header-cell *matHeaderCellDef>Download</th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-raised-button
+              (click)="downloadFile(element.hash, element.name)"
+              color="accent"
+            >
+              Download
             </button>
           </td>
         </ng-container>
