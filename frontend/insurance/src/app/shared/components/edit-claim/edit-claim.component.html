@@ -128,12 +128,13 @@
               <mat-list-item>
                 <p class="label-text">Gap Coverage:</p>
                 <span class="mls">
-                  <input
-                    type="text"
-                    class="raw-text-input editable-text"
-                    [value]="claim.insurer.has_gap ? 'Yes' : 'No'"
+                  <mat-checkbox
+                    color="accent"
+                    [checked]="claim.insurer.has_gap"
+                    (change)="onChange()"
                     formControlName="gap"
-                  />
+                  >
+                  </mat-checkbox>
                 </span>
               </mat-list-item>
               <mat-list-item *ngIf="successfulInsurerEdit">
@@ -147,9 +148,9 @@
                 <p class="label-text">Deductible Amount ($):</p>
                 <span class="mls">
                   <input
-                    type="decimal"
+                    type="text"
                     class="raw-text-input editable-text"
-                    [value]="claim.insurer.deductible"
+                    [value]="(claim.insurer.deductible / 100).toFixed(2)"
                     formControlName="deductible"
                   />
                 </span>
@@ -190,7 +191,7 @@
       <mat-grid-tile>
         <a (click)="deleteClaim()" class="width-100">
           <button mat-raised-button color="warn" class="width-100">
-            DELETE CLAIM
+            Delete Claim
           </button>
         </a>
       </mat-grid-tile>
