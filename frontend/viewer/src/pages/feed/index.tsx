@@ -52,6 +52,9 @@ export default function Feed() {
     });
     ws.addEventListener('message', event => {
       const data = JSON.parse(event.data);
+      if (data.fork_detected) {
+        return;
+      }
       if (isCollecting && data.previous_block_id && data.block_num > 0) {
         initialFeed = [...initialFeed, data];
         ws.send(
