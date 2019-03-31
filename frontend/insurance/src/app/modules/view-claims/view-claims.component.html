@@ -1,8 +1,8 @@
-<div>
-  <div class="center-to-page width-50">
-    <a routerLink="/claims/new" class="width-100">
-      <button mat-raised-button color="accent" class="width-100 mtl ptm pbm">
-        Add A New Claim
+<div class="mtl">
+  <div class="center-to-page add-view-button">
+    <a routerLink="/claims/new">
+      <button mat-raised-button color="accent" class="width-100 ptm pbm">
+        Create New Claim
       </button>
     </a>
   </div>
@@ -20,10 +20,10 @@
       disableOptionCentering
       [value]="0"
     >
-      <mat-option [value]="0">Awaiting Settlement Option</mat-option>
-      <mat-option [value]="1">Finalize Loss</mat-option>
-      <mat-option [value]="2">At Auction</mat-option>
-      <mat-option [value]="3">Claim Resolved</mat-option>
+      <mat-option [value]="0">0 - Awaiting Settlement Option</mat-option>
+      <mat-option [value]="1">1 - Finalize Loss</mat-option>
+      <mat-option [value]="2">2 - At Auction</mat-option>
+      <mat-option [value]="3">3 - Claim Resolved</mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -32,7 +32,7 @@
     [dataSource]="dataSource"
     multiTemplateDataRows
     matSort
-    class="mat-elevation-z24"
+    class="mat-elevation-z3"
   >
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef>Status</th>
@@ -90,39 +90,39 @@
         [attr.colspan]="columnsToDisplay.length"
       >
         <div
-          class="example-element-detail"
+          class="example-element-detail width-100"
           [@detailExpand]="
             element == expandedElement ? 'expanded' : 'collapsed'
           "
         >
-          <div class="mtl mbl width-100">
-            <mat-list class="vehicle-information">
-              <div class="content-wrapper mbn">
-                <div class="row">
-                  <div class="column">
-                    <div class="one-column">
-                      <mat-list-item>
-                        <p class="label-text">
-                          Miles: {{ element.vehicle.miles }}
-                        </p>
-                      </mat-list-item>
-                      <mat-list-item>
-                        <a routerLink="/claims/{{ element.vehicle.vin }}">
-                          <button mat-raised-button color="accent">
-                            Edit Claim
-                          </button>
-                        </a>
-                      </mat-list-item>
-                    </div>
+          <div class="width-100">
+            <mat-list class="width-100" style="padding-top: 0;">
+              <div class="content-wrapper">
+                <div class="row width-100">
+                  <div class="one-column left-expand mlh">
+                    <mat-list-item>
+                      <a routerLink="/claims/{{ element.vehicle.vin }}">
+                        <button mat-raised-button color="accent">
+                          Edit Claim
+                        </button>
+                      </a>
+                    </mat-list-item>
                   </div>
-                  <div class="column">
-                    <div class="two-column">
-                      <mat-list-item>
-                        <p class="label-text">
-                          Vehicle Location: {{ element.vehicle.location }}
-                        </p>
-                      </mat-list-item>
-                    </div>
+
+                  <div class="one-column left-expand">
+                    <mat-list-item>
+                      <p class="label-text">
+                        Miles: {{ element.vehicle.miles }}
+                      </p>
+                    </mat-list-item>
+                  </div>
+
+                  <div class="one-column left-expand">
+                    <mat-list-item>
+                      <p class="label-text">
+                        Vehicle Location: {{ element.vehicle.location }}
+                      </p>
+                    </mat-list-item>
                   </div>
                 </div>
               </div>

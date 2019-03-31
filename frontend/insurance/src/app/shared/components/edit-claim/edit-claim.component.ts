@@ -160,7 +160,7 @@ export class EditClaimSharedComponent implements OnInit {
         name: this.insurerForm.controls['insurerName'].value
           ? this.insurerForm.controls['insurerName'].value
           : this.claim.insurer.name,
-        has_gap: this.insurerForm.controls['gap'].value
+        has_gap: Boolean(this.insurerForm.controls['gap'].value)
           ? this.gapValue
           : this.claim.insurer.has_gap,
         deductible: this.insurerForm.controls['deductible'].value
@@ -245,7 +245,7 @@ export class EditClaimSharedComponent implements OnInit {
 
           this.snackBar.open(
             `Claim status updated to: ${this.claim.status}`,
-            'Exit',
+            'OK',
             {
               duration: 5000,
             },

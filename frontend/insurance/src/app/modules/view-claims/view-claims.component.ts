@@ -54,7 +54,6 @@ export class ViewClaimsComponent implements OnInit {
   }
 
   sortClaims(num: any) {
-    console.log(num);
     this.defaultFilter();
 
     this.dataSource.filter = num.toString();

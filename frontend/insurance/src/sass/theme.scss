@@ -1,20 +1,49 @@
 @import '~@angular/material/theming';
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+// Define a custom typography config that overrides the font-family as well as the
+// `headlines` and `body-1` levels.
+$custom-typography: mat-typography-config(
+  $font-family: 'Roboto - Sans Serif',
+  $display-4: mat-typography-level(112px, 112px, 300),
+  $display-3: mat-typography-level(56px, 56px, 400),
+  $display-2: mat-typography-level(45px, 48px, 400),
+  $display-1: mat-typography-level(34px, 40px, 400),
+  $headline: mat-typography-level(24px, 32px, 400),
+  $title: mat-typography-level(20px, 32px, 500),
+  $subheading-2: mat-typography-level(16px, 28px, 400),
+  $subheading-1: mat-typography-level(15px, 24px, 400),
+  $body-2: mat-typography-level(14px, 24px, 500),
+  $body-1: mat-typography-level(14px, 20px, 400),
+  $caption: mat-typography-level(12px, 20px, 400),
+  $button: mat-typography-level(14px, 14px, 500),
+  $input: mat-typography-level(inherit, 1.125, 400),
+);
+
+@include mat-base-typography($custom-typography);
+
+// Override typography for a specific Angular Material components.
+@include mat-checkbox-typography($custom-typography);
+
+// Override typography for all Angular Material, including mat-base-typography and all components.
+@include angular-material-typography($custom-typography);
 
 @include mat-core();
 
+// Color Scheme - Light
 $tlp-light-primary: mat-palette($mat-blue, 900);
 $tlp-light-accent: mat-palette($mat-blue, 800);
 $tlp-light-theme: mat-light-theme($tlp-light-primary, $tlp-light-accent);
 @include angular-material-theme($tlp-light-theme);
 
+// Color Scheme - Dark
 $tlp-dark-primary: mat-palette($mat-blue, 800);
 $tlp-dark-accent: mat-palette($mat-blue, 600);
 $tlp-dark-background-color: map_get($mat-blue-grey, 900);
 
-// Create the theme object (a Sass map containing all of the palettes).
 $theme: mat-dark-theme($tlp-dark-primary, $tlp-dark-accent);
 
-// Insert custom background color
+// Color Scheme - Set Background
 $background: map-get($theme, background);
 $background: map_merge(
   $background,
@@ -29,9 +58,6 @@ $theme: map_merge(
   )
 );
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 .alternative {
   @include angular-material-theme($theme);
 }

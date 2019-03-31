@@ -1,10 +1,5 @@
 @import '../theme.scss';
 
-.vehicle-information {
-  border: 1px solid darkgray;
-  border-radius: 5px;
-}
-
 .edit-field {
   color: darkgray;
 }
@@ -37,4 +32,8 @@
 
 .editable-text {
   color: mat-color($tlp-dark-accent) !important;
+}
+
+.add-view-button {
+  width: 53%;
 }
