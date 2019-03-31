@@ -18,19 +18,19 @@ export default function Home() {
         {/* FIXME: Put something useful here  */}
         <div className={styles.text}>
           <p>
-            Dolor fugit quos omnis dicta vitae Dolor est cumque et iure
-            possimus. Aliquid repudiandae voluptates voluptatibus totam debitis
-            quod Consequatur corrupti vitae reiciendis deserunt rem vel fugiat,
-            nisi facere. Dicta! Adipisicing optio nesciunt saepe accusamus ullam
-            molestias blanditiis Vero nobis porro dolorum corporis dolor Hic
-            illum suscipit vitae voluptatibus ducimus Eum distinctio vitae
-            voluptate eaque aliquid? Accusamus odit molestias dolorem.
+            ClaimTrack is a generic "viewer" application designed to showcase
+            how multiple independent nodes can hook into and use data from a
+            single blockchain network. This application enforces simple
+            read-only access control to non-private information related to
+            "claims" that are being tracked on the Sawtooth blockchain network.
           </p>
           <p>
-            Lorem vitae maiores consectetur laboriosam temporibus nemo?
-            Inventore amet explicabo facere aspernatur accusamus odio. Sapiente
-            dicta hic nulla enim accusantium Dolore quas porro possimus deleniti
-            nesciunt? Numquam tempora libero iste?
+            Along with the general "viewer" application, this application also
+            provides a demo of how peers on the network may use "subscriptions"
+            to get realtime feedback and notifications for transactions on the
+            blockchain. This could potentially be used for sending alerts to
+            parties involved with specific claims, or for automatically
+            forwarding the claims' "status" when certain criteria are met.
           </p>
         </div>
       </Main>

@@ -1,4 +1,4 @@
-import { HTMLTable, Intent, Tag } from '@blueprintjs/core';
+import { HTMLTable } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -6,6 +6,7 @@ import { API_URL } from '../../utils/constants';
 
 import Container from '../../components/container';
 import Main from '../../components/main';
+import StatusTag from '../../components/status-tag';
 
 import styles from './claims.module.scss';
 
@@ -33,42 +34,31 @@ export default function Claims() {
           <thead>
             <tr>
               <th>VIN</th>
-              <th>Miles</th>
-              <th>Location</th>
+              <th>Insurer</th>
+              <th>Created</th>
+              <th>Modified</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {claims.map(({ status, vehicle: { location, miles, vin } }) => (
-              <tr key={vin}>
-                <td>
-                  <Link to={`/claims/${vin}`}>{vin}</Link>
-                </td>
-                <td>{miles}</td>
-                <td>{location}</td>
-                <td>
-                  <Tag large minimal intent={intentFromStatus(status)}>
-                    {status}
-                  </Tag>
-                </td>
-              </tr>
-            ))}
+            {claims.map(
+              ({ created, insurer, modified, status, vehicle: { vin } }) => (
+                <tr key={vin}>
+                  <td>
+                    <Link to={`/claims/${vin}`}>{vin}</Link>
+                  </td>
+                  <td>{insurer.name}</td>
+                  <td>{new Date(created).toLocaleString()}</td>
+                  <td>{new Date(modified).toLocaleString()}</td>
+                  <td>
+                    <StatusTag status={status} />
+                  </td>
+                </tr>
+              ),
+            )}
           </tbody>
         </HTMLTable>
       </Main>
     </Container>
   );
 }
-
-const intentFromStatus = (status: Protos.Claim['status']) => {
-  switch (status) {
-    case 1:
-      return Intent.PRIMARY;
-    case 2:
-      return Intent.WARNING;
-    case 3:
-      return Intent.SUCCESS;
-    default:
-      return Intent.NONE;
-  }
-};
