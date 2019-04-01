@@ -8,14 +8,14 @@
     <div class="upload-boxes">
       <input
         type="file"
-        (change)="updateFileList($event, selected ? selected : 'NONE')"
+        (change)="updateFileList($event)"
         accept="application/pdf,image/*"
         [multiple]="selected && selected === 'NONE' ? 'multiple' : ''"
         id="file-upload"
       />
       <div
         (dragover)="onDrag($event)"
-        (drop)="onDrop($event, selected ? selected : 'NONE')"
+        (drop)="onDrop($event)"
         class="custom-file-upload"
       >
         <label for="file-upload" class="file-upload-label">
@@ -25,7 +25,7 @@
       <button
         mat-raised-button
         color="accent"
-        (click)="submitFiles()"
+        (click)="submitFiles(selected ? selected : 'NONE')"
         class="mtl float-right"
         [disabled]="urls.length === 0 || !selected"
       >
@@ -70,9 +70,9 @@
           </object>
           <pdf-viewer
             [src]="urls[0]"
-            [page]="page"
             [original-size]="false"
             [show-all]="false"
+            [stick-to-page]="true"
             class="file-preview"
           ></pdf-viewer>
         </div>

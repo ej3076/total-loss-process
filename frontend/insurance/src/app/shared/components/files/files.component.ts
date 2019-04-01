@@ -115,6 +115,8 @@ export class FilesComponent implements OnInit {
   pdfFile: File | null;
   isPdf: boolean;
 
+  selected: string;
+
   constructor(private service: MiddlewareService, public dialog: MatDialog) {
     this.updatedClaim.emit(this.claim);
     this.files = null;
@@ -122,16 +124,17 @@ export class FilesComponent implements OnInit {
     this.fileType = 'NONE';
     this.pdfFile = null;
     this.isPdf = false;
+    this.selected = 'NONE';
   }
 
   ngOnInit() {}
 
-  updateFileList(event: Event, fileType: string = 'NONE') {
+  updateFileList(event: Event) {
     if (
       event.currentTarget instanceof HTMLInputElement &&
       event.currentTarget.files
     ) {
-      this.fileType = fileType;
+      this.urls = [];
       this.fileList = Array.from(event.currentTarget.files);
       this.files = event.currentTarget.files;
 
@@ -150,10 +153,10 @@ export class FilesComponent implements OnInit {
     }
   }
 
-  submitFiles(): void {
+  submitFiles(selectedFileType: string = 'NONE'): void {
     if (this.files && this.claim) {
       this.service
-        .addFiles(this.files, this.claim.vehicle.vin, this.fileType)
+        .addFiles(this.files, this.claim.vehicle.vin, selectedFileType)
         .subscribe(data => {
           const claim = <Protos.Claim>data;
           this.updatedClaim.emit(claim);
@@ -165,11 +168,15 @@ export class FilesComponent implements OnInit {
     }
   }
 
-  onDrop(event: any, fileType: string) {
+  onDrop(event: DragEvent) {
     event.preventDefault();
-    const files = <FileList>event.dataTransfer.files;
+
+    const files: FileList | null = event.dataTransfer
+      ? event.dataTransfer.files
+      : null;
+
     if (files) {
-      this.fileType = fileType;
+      this.urls = [];
       this.fileList = Array.from(files);
       this.files = files;
 
@@ -194,7 +201,7 @@ export class FilesComponent implements OnInit {
     }
   }
 
-  onDrag(event: any): void {
+  onDrag(event: DragEvent): void {
     event.stopPropagation();
     event.preventDefault();
   }
