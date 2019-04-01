@@ -1,6 +1,3 @@
-<!-- <button mat-raised-button color="accent" class="mll" (click)="openDialog()">
-  Upload Files
-</button> -->
 <mat-accordion>
   <mat-expansion-panel class="mat-elevation-z0">
     <mat-expansion-panel-header>
@@ -80,21 +77,6 @@
           ></pdf-viewer>
         </div>
       </ng-container>
-
-      <!-- <label for="file-upload-poa" class="custom-file-upload">
-          
-        
-        <label for="file-upload-misc" class="custom-file-upload">
-          <span *ngIf="urls.length === 0 || !(fileType === 'NONE')">Upload</span>
-          Miscellaneous Files
-        </label>
-        <input
-          type="file"
-          (change)="updateFileList($event, 'NONE')"
-          multiple="multiple"
-          accept="application/pdf,image/*"
-          id="file-upload-misc"
-        /> -->
     </div>
   </mat-expansion-panel>
 </mat-accordion>
