@@ -52,9 +52,13 @@ export class MiddlewareService {
       data.append('files[]', file);
     }
 
-    return this.http.post(`${API_BASE}/claims/${vin}/files/${fileType}`, data, {
-      headers: this.auth.headers,
-    });
+    return this.http.post(
+      `${API_BASE}/claims/${vin}/files/new/${fileType}`,
+      data,
+      {
+        headers: this.auth.headers,
+      },
+    );
   }
 
   archiveFile(filename: string, vin: string) {

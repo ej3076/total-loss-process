@@ -10,6 +10,7 @@ import {
 } from './components/files/files.component';
 import { MatDialogModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { RouterModule } from '@angular/router';
     MaterialModule,
     MatDialogModule,
     RouterModule,
+    PdfViewerModule,
   ],
   exports: [
     NewClaimComponent,

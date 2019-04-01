@@ -70,7 +70,7 @@ router.post('/:vin', authMiddleware, async (req, res, next) => {
 
 // Add files to a claim using the Detailed Claim view.
 router.post(
-  '/:vin/files/:fileType',
+  '/:vin/files/new/:fileType',
   authMiddleware,
   getFiles,
   async (req, res, next) => {

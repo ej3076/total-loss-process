@@ -1,75 +1,100 @@
 <!-- <button mat-raised-button color="accent" class="mll" (click)="openDialog()">
   Upload Files
 </button> -->
-<div class="upload-boxes">
-  <label for="file-upload-poa" class="custom-file-upload">
-    Upload Proof Of Attorney
-  </label>
-  <input
-    type="file"
-    (change)="updateFileList($event, 'POA')"
-    multiple="multiple"
-    accept="application/pdf,image/*"
-    id="file-upload-poa"
-  />
-  <label for="file-upload-title" class="custom-file-upload">
-    Upload Title
-  </label>
-  <input
-    type="file"
-    (change)="updateFileList($event, 'TITLE')"
-    multiple="multiple"
-    accept="application/pdf,image/*"
-    id="file-upload-title"
-  />
-  <label for="file-upload-ods" class="custom-file-upload">
-    Upload Odometer Disclosure
-  </label>
-  <input
-    type="file"
-    (change)="updateFileList($event, 'ODS')"
-    multiple="multiple"
-    accept="application/pdf,image/*"
-    id="file-upload-ods"
-  />
-  <label for="file-upload-police" class="custom-file-upload">
-    Upload Police Report
-  </label>
-  <input
-    type="file"
-    (change)="updateFileList($event, 'POLICE')"
-    multiple="multiple"
-    accept="application/pdf,image/*"
-    id="file-upload-police"
-  />
-  <label for="file-upload-settle" class="custom-file-upload">
-    Upload Settlement Offer
-  </label>
-  <input
-    type="file"
-    (change)="updateFileList($event, 'SETTLEMENT')"
-    multiple="multiple"
-    accept="application/pdf,image/*"
-    id="file-upload-settle"
-  />
-  <label for="file-upload-log" class="custom-file-upload">
-    Upload Letter Of Guarantee
-  </label>
-  <input
-    type="file"
-    (change)="updateFileList($event, 'LOG')"
-    multiple="multiple"
-    accept="application/pdf,image/*"
-    id="file-upload-log"
-  />
-  <div *ngIf="fileList.length > 0" class="mll">
-    <h2>Files Ready For Upload...</h2>
-    <div *ngFor="let file of fileList" class="mtm">
-      <span>File Name: {{ file.name }}</span
-      ><br />
-      <span>File Size (in bytes): {{ file.size }}</span>
-      <mat-divider></mat-divider>
+<mat-accordion>
+  <mat-expansion-panel class="mat-elevation-z0">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Upload Files
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="upload-boxes">
+      <input
+        type="file"
+        (change)="updateFileList($event, selected ? selected : 'NONE')"
+        accept="application/pdf,image/*"
+        [multiple]="selected && selected === 'NONE' ? 'multiple' : ''"
+        id="file-upload"
+      />
+      <div
+        (dragover)="onDrag($event)"
+        (drop)="onDrop($event, selected ? selected : 'NONE')"
+        class="custom-file-upload"
+      >
+        <label for="file-upload" class="file-upload-label">
+          Upload Files - click to select, or drag & drop
+        </label>
+      </div>
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="submitFiles()"
+        class="mtl float-right"
+        [disabled]="urls.length === 0 || !selected"
+      >
+        Submit Files
+      </button>
+      <button
+        mat-raised-button
+        (click)="cancelUpload()"
+        class="mtl mrl float-right"
+        *ngIf="urls.length > 0 && selected"
+      >
+        Cancel Upload
+      </button>
+      <div class="float-right mrl mtm">
+        <mat-form-field>
+          <mat-label>File Category</mat-label>
+          <mat-select [(value)]="selected">
+            <mat-option value="NONE">Miscellaneous</mat-option>
+            <mat-option value="POA">Power Of Attorney</mat-option>
+            <mat-option value="ODS">Odometer Disclosure Statement</mat-option>
+            <mat-option value="POLICE">Police Report</mat-option>
+            <mat-option value="SETTLEMENT">Settlement Offer</mat-option>
+            <mat-option value="LOG">Letter Of Guarantee</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="fileList.length > 0" class="mll">
+        <div *ngFor="let file of fileList" class="mtm">
+          <span class="float-left">File Name: {{ file.name }}</span
+          ><br />
+        </div>
+      </div>
+
+      <ng-container *ngIf="urls.length > 0 && selected !== 'NONE'">
+        <div *ngIf="!isPdf && selected" class="thumbnail">
+          <img [src]="urls[0]" class="file-preview" />
+        </div>
+        <div *ngIf="isPdf && selected" class="thumbnail">
+          <object [data]="pdfFile" type="application/pdf">
+            <embed [src]="pdfFile" type="application/pdf" />
+          </object>
+          <pdf-viewer
+            [src]="urls[0]"
+            [page]="page"
+            [original-size]="false"
+            [show-all]="false"
+            class="file-preview"
+          ></pdf-viewer>
+        </div>
+      </ng-container>
+
+      <!-- <label for="file-upload-poa" class="custom-file-upload">
+          
+        
+        <label for="file-upload-misc" class="custom-file-upload">
+          <span *ngIf="urls.length === 0 || !(fileType === 'NONE')">Upload</span>
+          Miscellaneous Files
+        </label>
+        <input
+          type="file"
+          (change)="updateFileList($event, 'NONE')"
+          multiple="multiple"
+          accept="application/pdf,image/*"
+          id="file-upload-misc"
+        /> -->
     </div>
-    <button mat-button (click)="submitFiles()">Submit Files</button>
-  </div>
-</div>
+  </mat-expansion-panel>
+</mat-accordion>
