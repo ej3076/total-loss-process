@@ -88,7 +88,7 @@ export class EditClaimSharedComponent implements OnInit {
         }
       },
       error => {
-        this.snackBar.open(`${error}`, 'OK');
+        this.snackBar.open(`${error.message}`, 'OK');
       },
     );
   }
@@ -170,7 +170,7 @@ export class EditClaimSharedComponent implements OnInit {
         }
       },
       error => {
-        this.snackBar.open(`${error}`, 'OK');
+        this.snackBar.open(`${error.message}`, 'OK');
       },
     );
     this.canSubmitVehicleChanges = false;
@@ -211,7 +211,7 @@ export class EditClaimSharedComponent implements OnInit {
         }
       },
       error => {
-        this.snackBar.open(`${error}`, 'OK');
+        this.snackBar.open(`${error.message}`, 'OK');
       },
     );
     this.canSubmitInsurerChanges = false;
@@ -227,7 +227,7 @@ export class EditClaimSharedComponent implements OnInit {
         this.router.navigate(['/']);
       },
       error => {
-        console.log(error);
+        this.snackBar.open(`${error.message}`, 'OK');
       },
     );
   }
@@ -255,7 +255,7 @@ export class EditClaimSharedComponent implements OnInit {
         }
       },
       error => {
-        this.snackBar.open(`${error}`, 'OK');
+        this.snackBar.open(`${error.message}`, 'OK');
       },
     );
   }
@@ -283,11 +283,11 @@ export class EditClaimSharedComponent implements OnInit {
         }
       },
       error => {
-        this.snackBar.open(`${error}`, 'OK');
+        this.snackBar.open(`${error.message}`, 'OK');
       },
     );
   }
-  
+
   downloadFile(hash: string, name: string) {
     this.service.downloadFile(this.claim.vehicle.vin, hash, name).subscribe(
       blob => {
@@ -302,7 +302,7 @@ export class EditClaimSharedComponent implements OnInit {
         document.body.removeChild(a);
       },
       error => {
-        this.snackBar.open(`${error}`, 'OK');
+        this.snackBar.open(`${error.message}`, 'OK');
       },
     );
   }
