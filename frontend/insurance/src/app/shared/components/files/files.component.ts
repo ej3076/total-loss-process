@@ -171,9 +171,11 @@ export class FilesComponent implements OnInit {
   onDrop(event: DragEvent) {
     event.preventDefault();
 
-    const files: FileList | null = event.dataTransfer
-      ? event.dataTransfer.files
-      : null;
+    if (!event.dataTransfer) {
+      return;
+    }
+
+    const files: FileList | null = event.dataTransfer!.files;
 
     if (files) {
       this.urls = [];
