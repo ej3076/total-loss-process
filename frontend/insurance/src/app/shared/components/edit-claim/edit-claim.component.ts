@@ -57,7 +57,7 @@ export class EditClaimSharedComponent implements OnInit {
 
       this.insurerForm = this.formBuilder.group({
         insurerName: '',
-        gap: '',
+        gap: this.claim.insurer.has_gap,
         deductible: '',
       });
 
@@ -81,7 +81,7 @@ export class EditClaimSharedComponent implements OnInit {
         }
       },
       error => {
-        this.snackBar.open(`${error}`, 'Exit');
+        this.snackBar.open(`${error}`, 'OK');
       },
     );
   }
@@ -140,15 +140,19 @@ export class EditClaimSharedComponent implements OnInit {
           this.claim.vehicle = newClaim.vehicle;
           this.claim.modified = newClaim.modified;
 
-          this.snackBar.open('Vehicle edit successful.', 'Exit', {
+          this.snackBar.open('Vehicle edit successful.', 'OK', {
             duration: 4000,
           });
         }
       },
       error => {
-        this.snackBar.open(`${error}`, 'Exit');
+        this.snackBar.open(`${error}`, 'OK');
       },
     );
+  }
+
+  onChange(): void {
+    this.claim.insurer.has_gap = !this.claim.insurer.has_gap;
   }
 
   submitInsurerEdit(): void {
@@ -160,8 +164,8 @@ export class EditClaimSharedComponent implements OnInit {
         name: this.insurerForm.controls['insurerName'].value
           ? this.insurerForm.controls['insurerName'].value
           : this.claim.insurer.name,
-        has_gap: Boolean(this.insurerForm.controls['gap'].value)
-          ? this.gapValue
+        has_gap: this.insurerForm.controls['gap'].value
+          ? this.insurerForm.controls['gap'].value
           : this.claim.insurer.has_gap,
         deductible: this.insurerForm.controls['deductible'].value
           ? +this.insurerForm.controls['deductible'].value
@@ -176,13 +180,13 @@ export class EditClaimSharedComponent implements OnInit {
           this.claim.insurer = newClaim.insurer;
           this.claim.modified = newClaim.modified;
 
-          this.snackBar.open('Insurer edit successful.', 'Exit', {
+          this.snackBar.open('Insurer edit successful.', 'OK', {
             duration: 4000,
           });
         }
       },
       error => {
-        this.snackBar.open(`${error}`, 'Exit');
+        this.snackBar.open(`${error}`, 'OK');
       },
     );
   }
@@ -217,7 +221,7 @@ export class EditClaimSharedComponent implements OnInit {
 
           this.snackBar.open(
             `Claim status updated to: ${this.claim.status}`,
-            'Exit',
+            'OK',
             {
               duration: 5000,
             },
@@ -225,7 +229,7 @@ export class EditClaimSharedComponent implements OnInit {
         }
       },
       error => {
-        this.snackBar.open(`${error}`, 'Exit');
+        this.snackBar.open(`${error}`, 'OK');
       },
     );
   }
@@ -253,11 +257,11 @@ export class EditClaimSharedComponent implements OnInit {
         }
       },
       error => {
-        this.snackBar.open(`${error}`, 'Exit');
+        this.snackBar.open(`${error}`, 'OK');
       },
     );
   }
-
+ 
   downloadFile(hash: string, name: string) {
     this.service
       .downloadFile(this.claim.vehicle.vin, hash, name)
