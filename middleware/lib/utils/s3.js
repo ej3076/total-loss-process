@@ -28,7 +28,16 @@ const s3 = new S3(
  * @param {string} hash - The file's hash from the blockchain.
  * @throws {AWSError} Error with `statusCode` 412 if there is a mismatch in hashes.
  */
-exports.getFile = (vin, name, hash) => {
+exports.getFile = async (vin, name, hash) => {
+  // NOTE: Remove lines when actually running this on aws since this is done automatically.
+  // FROM HERE
+  const { ETag } = await s3
+    .headObject({ Bucket, Key: `${vin}/${name}` })
+    .promise();
+  if (ETag !== hash) {
+    throw new Error('File hash mismatch. File has been tampered with.');
+  }
+  // TO HERE
   return s3.getObject({ Bucket, Key: `${vin}/${name}`, IfMatch: hash });
 };
 

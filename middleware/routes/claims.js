@@ -97,7 +97,7 @@ router.get('/:vin/files/:filename', authMiddleware, async (req, res, next) => {
     if (!hashQuery) {
       throw new Error('Hash query required');
     }
-    const s3request = client.getFile(
+    const s3request = await client.getFile(
       req.params.vin,
       req.params.filename,
       hashQuery,
