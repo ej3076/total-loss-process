@@ -6,18 +6,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {
   FilesComponent,
-  FileDialogComponent,
   EditFileDialogComponent,
 } from './components/files/files.component';
 import { MatDialogModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @NgModule({
   declarations: [
     NewClaimComponent,
     EditClaimSharedComponent,
     FilesComponent,
-    FileDialogComponent,
     EditFileDialogComponent,
   ],
   imports: [
@@ -27,14 +26,14 @@ import { RouterModule } from '@angular/router';
     MaterialModule,
     MatDialogModule,
     RouterModule,
+    PdfViewerModule,
   ],
   exports: [
     NewClaimComponent,
     EditClaimSharedComponent,
     FilesComponent,
-    FileDialogComponent,
     EditFileDialogComponent,
   ],
-  entryComponents: [FileDialogComponent, EditFileDialogComponent],
+  entryComponents: [EditFileDialogComponent],
 })
 export class SharedModule {}
