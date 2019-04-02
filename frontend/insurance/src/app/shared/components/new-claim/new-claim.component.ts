@@ -84,14 +84,6 @@ export class NewClaimComponent {
     );
   }
 
-  public numberValidator(event: any) {
-    const charactersAllowed = /^[0-9]*$/;
-
-    if (!charactersAllowed.test(event.target.value)) {
-      event.target.value = event.target.value.replace(/[^0-9]/g, '');
-    }
-  }
-
   public alphaNumericValidator(event: any) {
     const charactersAllowed = /^[a-zA-Z0-9]*$/;
 

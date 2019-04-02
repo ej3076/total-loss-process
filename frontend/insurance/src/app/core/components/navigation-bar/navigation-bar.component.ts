@@ -8,11 +8,14 @@ import { AppComponent } from '../../../app.component';
   styleUrls: ['./navigation-bar.component.scss'],
 })
 export class NavigationBarComponent implements OnInit {
+  darkMode = false;
+
   constructor(public auth: AuthService, public appComp: AppComponent) {}
 
   ngOnInit() {}
 
   themeButton() {
     this.appComp.changeTheme();
+    this.darkMode = !this.darkMode;
   }
 }

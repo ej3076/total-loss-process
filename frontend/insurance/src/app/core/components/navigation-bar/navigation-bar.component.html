@@ -1,12 +1,16 @@
 <mat-toolbar color="primary" class="mat-elevation-z6">
   <mat-toolbar-row>
     <button mat-button (click)="themeButton()">
-      Change Theme
+      <mat-icon *ngIf="!darkMode">brightness_3</mat-icon>
+      <mat-icon *ngIf="darkMode">brightness_high</mat-icon>
     </button>
     <span class="header-spacer"></span>
-    <h1 class="header-text pbm">
-      Insurance Viewer
-    </h1>
+    <a [routerLink]="['']" style="text-decoration: none; color:white">
+      <h1 class="header-text pbm">
+        Insurance Viewer
+      </h1>
+    </a>
+
     <span class="header-spacer"></span>
     <button mat-button *ngIf="auth.isLoggedIn" (click)="auth.logout()">
       Log Out
