@@ -287,19 +287,10 @@ export class EditClaimSharedComponent implements OnInit {
       },
     );
   }
-
-  public numberValidator(event: any) {
-    const charactersAllowed = /^[0-9]*$/;
-
-    if (!charactersAllowed.test(event.target.value)) {
-      event.target.value = event.target.value.replace(/[^0-9]/g, '');
-    }
-  }
-
+  
   downloadFile(hash: string, name: string) {
-    this.service
-      .downloadFile(this.claim.vehicle.vin, hash, name)
-      .subscribe(blob => {
+    this.service.downloadFile(this.claim.vehicle.vin, hash, name).subscribe(
+      blob => {
         const url = URL.createObjectURL(new File([blob], name));
         const a = document.createElement('a');
         a.href = url;
@@ -309,7 +300,11 @@ export class EditClaimSharedComponent implements OnInit {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-      });
+      },
+      error => {
+        this.snackBar.open(`${error}`, 'OK');
+      },
+    );
   }
 
   get gapValue() {
