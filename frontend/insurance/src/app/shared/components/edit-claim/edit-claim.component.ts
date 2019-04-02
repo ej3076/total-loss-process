@@ -261,11 +261,10 @@ export class EditClaimSharedComponent implements OnInit {
       },
     );
   }
- 
+
   downloadFile(hash: string, name: string) {
-    this.service
-      .downloadFile(this.claim.vehicle.vin, hash, name)
-      .subscribe(blob => {
+    this.service.downloadFile(this.claim.vehicle.vin, hash, name).subscribe(
+      blob => {
         const url = URL.createObjectURL(new File([blob], name));
         const a = document.createElement('a');
         a.href = url;
@@ -275,7 +274,11 @@ export class EditClaimSharedComponent implements OnInit {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-      });
+      },
+      error => {
+        this.snackBar.open(`${error}`, 'OK');
+      },
+    );
   }
 
   get gapValue() {
