@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<StatusTag /> should render appropriately 1`] = `
+<span
+  className="bp3-tag bp3-intent-primary bp3-large bp3-minimal"
+>
+  <span
+    className="bp3-text-overflow-ellipsis bp3-fill"
+  >
+    1
+  </span>
+</span>
+`;
+
+exports[`<StatusTag /> should render appropriately 2`] = `
+<span
+  className="bp3-tag bp3-intent-warning bp3-large bp3-minimal"
+>
+  <span
+    className="bp3-text-overflow-ellipsis bp3-fill"
+  >
+    2
+  </span>
+</span>
+`;
+
+exports[`<StatusTag /> should render appropriately 3`] = `
+<span
+  className="bp3-tag bp3-intent-success bp3-large bp3-minimal"
+>
+  <span
+    className="bp3-text-overflow-ellipsis bp3-fill"
+  >
+    3
+  </span>
+</span>
+`;
+
+exports[`<StatusTag /> should render appropriately 4`] = `
+<span
+  className="bp3-tag bp3-large bp3-minimal"
+>
+  <span
+    className="bp3-text-overflow-ellipsis bp3-fill"
+  >
+    4
+  </span>
+</span>
+`;
+
+exports[`<StatusTag /> should render appropriately 5`] = `
+<span
+  className="bp3-tag bp3-large bp3-minimal"
+>
+  <span
+    className="bp3-text-overflow-ellipsis bp3-fill"
+  >
+    23453
+  </span>
+</span>
+`;
+
+exports[`<StatusTag /> should render appropriately 6`] = `
+<span
+  className="bp3-tag bp3-large bp3-minimal"
+>
+  <span
+    className="bp3-text-overflow-ellipsis bp3-fill"
+  >
+    0
+  </span>
+</span>
+`;
+
+exports[`<StatusTag /> should render appropriately 7`] = `
+<span
+  className="bp3-tag bp3-large bp3-minimal"
+>
+  <span
+    className="bp3-text-overflow-ellipsis bp3-fill"
+  >
+    -123
+  </span>
+</span>
+`;
