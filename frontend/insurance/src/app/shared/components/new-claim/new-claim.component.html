@@ -80,10 +80,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field
-          class="width-100"
-          [ngClass]="name.invalid && !name.untouched ? 'pbl' : 'pbs'"
-        >
+        <mat-form-field class="width-100">
           <input matInput placeholder="Insurer Company" [formControl]="name" />
           <mat-error *ngIf="name.invalid">
             Insurance company is required.

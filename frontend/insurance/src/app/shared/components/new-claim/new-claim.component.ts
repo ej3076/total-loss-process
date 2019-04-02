@@ -19,7 +19,7 @@ export class NewClaimComponent {
   date_of_loss = new FormControl('', [Validators.required]);
   miles = new FormControl('', [Validators.required]);
   location = new FormControl('', [Validators.required]);
-  name = new FormControl('', [Validators.required]);
+  name = new FormControl({ value: 'Allstate', disabled: true });
   deductible = new FormControl('', [Validators.required]);
   has_gap = new FormControl('');
 
@@ -39,7 +39,7 @@ export class NewClaimComponent {
         location: this.location.value,
       },
       insurer: {
-        name: this.name.value,
+        name: 'Allstate',
         deductible: +this.deductible.value,
         has_gap: Boolean(this.has_gap.value),
       },
@@ -66,7 +66,6 @@ export class NewClaimComponent {
       this.vin.value &&
       this.miles.value &&
       this.location.value &&
-      this.name.value &&
       this.deductible.value &&
       this.has_gap.value
     );
@@ -78,7 +77,6 @@ export class NewClaimComponent {
       this.vin.valid &&
       this.miles.valid &&
       this.location.valid &&
-      this.name.valid &&
       this.deductible.valid &&
       this.has_gap.valid
     );

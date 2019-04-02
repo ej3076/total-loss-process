@@ -204,14 +204,6 @@
                     formControlName="insurerName"
                     [value]="claim.insurer.name"
                   />
-                  <mat-error
-                    *ngIf="
-                      insurerForm.controls['insurerName'].invalid &&
-                      !insurerForm.controls['insurerName'].untouched
-                    "
-                  >
-                    Insurance Provider is required.
-                  </mat-error>
                 </mat-form-field>
               </mat-list-item>
 

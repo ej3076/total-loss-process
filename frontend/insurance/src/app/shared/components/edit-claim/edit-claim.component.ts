@@ -58,14 +58,20 @@ export class EditClaimSharedComponent implements OnInit {
       this.getVehicleModel(this.claim.vehicle.vin);
 
       this.vehicleForm = this.formBuilder.group({
-        miles: ['', [Validators.required]],
-        location: ['', [Validators.required]],
+        miles: ['', []],
+        location: ['', []],
       });
 
       this.insurerForm = this.formBuilder.group({
-        insurerName: ['', [Validators.required]],
+        insurerName: [
+          { value: this.claim.insurer.name, disabled: true },
+          [Validators.required],
+        ],
         gap: this.claim.insurer.has_gap,
-        deductible: ['', [Validators.required]],
+        deductible: [
+          { value: this.claim.insurer.deductible },
+          [Validators.required],
+        ],
       });
 
       this.onChanges();
@@ -152,7 +158,7 @@ export class EditClaimSharedComponent implements OnInit {
           ? +this.vehicleForm.controls['miles'].value
           : +this.claim.vehicle.miles,
         location: this.vehicleForm.controls['location'].value
-          ? this.vehicleForm.controls['location'].value
+          ? <string>this.vehicleForm.controls['location'].value
           : this.claim.vehicle.location,
       },
     };
@@ -302,7 +308,11 @@ export class EditClaimSharedComponent implements OnInit {
         document.body.removeChild(a);
       },
       error => {
-        this.snackBar.open(`${error.message}`, 'OK');
+        console.log(error);
+        this.snackBar.open(
+          'File hash mismatch. File has been tampered with.',
+          'OK',
+        );
       },
     );
   }
