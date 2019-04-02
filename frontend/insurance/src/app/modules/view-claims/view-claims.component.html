@@ -99,7 +99,7 @@
             <mat-list class="width-100" style="padding-top: 0;">
               <div class="content-wrapper">
                 <div class="row width-100">
-                  <div class="one-column left-expand mlh">
+                  <div class="one-column left-expand">
                     <mat-list-item>
                       <a routerLink="/claims/{{ element.vehicle.vin }}">
                         <button mat-raised-button color="accent">
@@ -111,7 +111,7 @@
 
                   <div class="one-column left-expand">
                     <mat-list-item>
-                      <p class="label-text">
+                      <p class="label-text" style="font-weight: bolder">
                         Miles: {{ element.vehicle.miles }}
                       </p>
                     </mat-list-item>

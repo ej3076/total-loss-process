@@ -59,11 +59,11 @@ export class EditClaimSharedComponent implements OnInit {
 
       this.vehicleForm = this.formBuilder.group({
         miles: ['', [Validators.required]],
-        location: '',
+        location: ['', [Validators.required]],
       });
 
       this.insurerForm = this.formBuilder.group({
-        insurerName: '',
+        insurerName: ['', [Validators.required]],
         gap: this.claim.insurer.has_gap,
         deductible: ['', [Validators.required]],
       });
@@ -119,12 +119,29 @@ export class EditClaimSharedComponent implements OnInit {
 
   onChanges(): void {
     this.vehicleForm.valueChanges.subscribe(() => {
-      this.canSubmitVehicleChanges = true;
+      if (
+        this.vehicleForm.controls['miles'].value === this.claim.vehicle.miles ||
+        this.vehicleForm.controls['location'].value ===
+          this.claim.vehicle.location
+      ) {
+        this.canSubmitVehicleChanges = false;
+      } else {
+        this.canSubmitVehicleChanges = true;
+      }
     });
 
     this.insurerForm.valueChanges.subscribe(() => {
       this.canSubmitInsurerChanges = true;
     });
+  }
+
+  areFieldsUntouched(): boolean {
+    return !(
+      this.vehicleForm.controls['miles'].value &&
+      this.vehicleForm.controls['location'].value &&
+      this.insurerForm.controls['insurerName'].value &&
+      this.insurerForm.controls['deductible'].value
+    );
   }
 
   submitVehicleEdit(): void {
@@ -269,6 +286,14 @@ export class EditClaimSharedComponent implements OnInit {
         this.snackBar.open(`${error}`, 'OK');
       },
     );
+  }
+
+  public numberValidator(event: any) {
+    const charactersAllowed = /^[0-9]*$/;
+
+    if (!charactersAllowed.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^0-9]/g, '');
+    }
   }
 
   downloadFile(hash: string, name: string) {

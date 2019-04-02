@@ -11,6 +11,7 @@ import {
 import { MatDialogModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { NumberDirective } from './numbers-only.directive';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     EditClaimSharedComponent,
     FilesComponent,
     EditFileDialogComponent,
+    NumberDirective,
   ],
   imports: [
     CommonModule,

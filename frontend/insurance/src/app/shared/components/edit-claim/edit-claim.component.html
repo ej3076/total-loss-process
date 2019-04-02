@@ -7,7 +7,14 @@
         <div class="row">
           <div class="column">
             <div class="one-column">
-              <mat-list-item>
+              <mat-list-item
+                [ngClass]="
+                  vehicleForm.controls['miles'].invalid &&
+                  !vehicleForm.controls['miles'].untouched
+                    ? 'pbh'
+                    : 'pbm'
+                "
+              >
                 <mat-form-field class="width-100">
                   <input
                     matInput
@@ -17,7 +24,14 @@
                   />
                 </mat-form-field>
               </mat-list-item>
-              <mat-list-item>
+              <mat-list-item
+                [ngClass]="
+                  vehicleForm.controls['location'].invalid &&
+                  !vehicleForm.controls['location'].untouched
+                    ? 'pbh'
+                    : 'pbm'
+                "
+              >
                 <mat-form-field class="width-100">
                   <input
                     matInput
@@ -40,56 +54,80 @@
             </div>
           </div>
           <div class="column">
-            <div class="two-column">
-              <mat-list-item>
-                <form [formGroup]="vehicleForm">
-                  <mat-form-field class="width-100">
-                    <input
-                      matInput
-                      placeholder="Miles"
-                      formControlName="miles"
-                      [value]="claim.vehicle.miles"
-                      type="number"
-                      oninput="this.value=(parseInt(this.value)||0)"
-                    />
-                    <mat-error *ngIf="vehicleForm.controls['miles'].invalid">
-                      This is wrong.
-                    </mat-error>
-                  </mat-form-field>
-                </form>
-              </mat-list-item>
-              <mat-list-item>
-                <mat-form-field class="width-100">
-                  <input
-                    matInput
-                    placeholder="Location"
-                    formControlName="location"
-                    [value]="claim.vehicle.location"
-                  />
-                  <mat-error *ngIf="vehicleForm.controls['location'].invalid">
-                    This is wrong.
-                  </mat-error>
-                </mat-form-field>
-              </mat-list-item>
-              <mat-list-item>
-                <span class="mls">
-                  <button
-                    mat-raised-button
-                    color="accent"
-                    [disabled]="!canSubmitVehicleChanges"
-                    (click)="submitVehicleEdit()"
-                  >
-                    Submit Changes
-                  </button>
-                </span>
-              </mat-list-item>
-            </div>
+            <!--Vehicle -- Miles-->
+            <mat-list-item
+              [ngClass]="
+                vehicleForm.controls['miles'].invalid &&
+                !vehicleForm.controls['miles'].untouched
+                  ? 'pbh'
+                  : 'pbm'
+              "
+            >
+              <mat-form-field class="width-100">
+                <input
+                  matInput
+                  placeholder="Miles"
+                  formControlName="miles"
+                  [value]="claim.vehicle.miles"
+                  numbersOnly
+                />
+                <mat-error
+                  *ngIf="
+                    vehicleForm.controls['miles'].invalid &&
+                    !vehicleForm.controls['miles'].untouched
+                  "
+                >
+                  Miles is required.
+                </mat-error>
+              </mat-form-field>
+            </mat-list-item>
+
+            <!--Vehicle -- Location-->
+            <mat-list-item
+              [ngClass]="
+                vehicleForm.controls['location'].invalid &&
+                !vehicleForm.controls['location'].untouched
+                  ? 'pbh'
+                  : 'pbm'
+              "
+            >
+              <mat-form-field class="width-100">
+                <input
+                  matInput
+                  placeholder="Location"
+                  formControlName="location"
+                  [value]="claim.vehicle.location"
+                />
+                <mat-error
+                  *ngIf="
+                    vehicleForm.controls['location'].invalid &&
+                    !vehicleForm.controls['location'].untouched
+                  "
+                >
+                  Location is required.
+                </mat-error>
+              </mat-form-field>
+            </mat-list-item>
+
+            <!--Vehicle -- Submit-->
+            <mat-list-item class="pbm">
+              <span class="mls">
+                <button
+                  mat-raised-button
+                  color="accent"
+                  [disabled]="!canSubmitVehicleChanges"
+                  (click)="submitVehicleEdit()"
+                >
+                  Submit Changes
+                </button>
+              </span>
+            </mat-list-item>
           </div>
         </div>
       </div>
     </form>
   </mat-list>
-  <mat-list class="mbl mat-elevation-z3 pbh">
+  <mat-list class="mbl mat-elevation-z3">
     <h2 class="mll">Attachments</h2>
     <app-files
       [claim]="claim"
@@ -100,7 +138,7 @@
       <table
         mat-table
         [dataSource]="dataSource"
-        class="file-table mtl mrm mlm pbl"
+        class="file-table mtl mrm mlm pbh"
       >
         <!-- Position Column -->
         <ng-container matColumnDef="filename">
@@ -119,11 +157,7 @@
         <ng-container matColumnDef="edit">
           <th mat-header-cell *matHeaderCellDef>Edit</th>
           <td mat-cell *matCellDef="let element">
-            <button
-              mat-raised-button
-              color="accent"
-              (click)="openDialog(element)"
-            >
+            <button mat-button color="accent" (click)="openDialog(element)">
               Edit File
             </button>
           </td>
@@ -133,7 +167,7 @@
           <th mat-header-cell *matHeaderCellDef>Download</th>
           <td mat-cell *matCellDef="let element">
             <button
-              mat-raised-button
+              mat-button
               (click)="downloadFile(element.hash, element.name)"
               color="accent"
             >
@@ -153,8 +187,16 @@
       <div class="content-wrapper">
         <div class="row">
           <div class="column">
-            <div class="one-column">
-              <mat-list-item>
+            <div class="two-column">
+              <!--Insurer -- insurerName-->
+              <mat-list-item
+                [ngClass]="
+                  insurerForm.controls['insurerName'].invalid &&
+                  !insurerForm.controls['insurerName'].untouched
+                    ? 'pbh'
+                    : 'pbm'
+                "
+              >
                 <mat-form-field class="width-100">
                   <input
                     matInput
@@ -163,24 +205,43 @@
                     [value]="claim.insurer.name"
                   />
                   <mat-error
-                    *ngIf="insurerForm.controls['insurerName'].invalid"
+                    *ngIf="
+                      insurerForm.controls['insurerName'].invalid &&
+                      !insurerForm.controls['insurerName'].untouched
+                    "
                   >
-                    This is wrong.
+                    Insurance Provider is required.
                   </mat-error>
                 </mat-form-field>
               </mat-list-item>
-              <mat-list-item>
+
+              <!--Insurer -- Deductible-->
+              <mat-list-item
+                [ngClass]="
+                  insurerForm.controls['deductible'].invalid &&
+                  !insurerForm.controls['deductible'].untouched
+                    ? 'pbh'
+                    : 'pbm'
+                "
+              >
                 <mat-form-field class="width-100">
                   <input
                     matInput
                     placeholder="Deductible Amount"
                     formControlName="deductible"
                     [value]="claim.insurer.deductible"
-                    type="number"
-                    oninput="this.value=(parseInt(this.value)||0)"
+                    numbersOnly
+                    class="deductible"
                   />
-                  <mat-error *ngIf="insurerForm.controls['deductible'].invalid">
-                    This is wrong.
+                  <span matPrefix>$</span>
+                  <span matSuffix>.00</span>
+                  <mat-error
+                    *ngIf="
+                      insurerForm.controls['deductible'].invalid &&
+                      !insurerForm.controls['deductible'].untouched
+                    "
+                  >
+                    Deductible Amount is required.
                   </mat-error>
                 </mat-form-field>
               </mat-list-item>
@@ -191,7 +252,15 @@
           </div>
           <div class="column">
             <div class="two-column">
-              <mat-list-item>
+              <!--Insurer -- GAP-->
+              <mat-list-item
+                [ngClass]="
+                  insurerForm.controls['insurerName'].invalid &&
+                  !insurerForm.controls['insurerName'].untouched
+                    ? 'pbh'
+                    : 'pbm'
+                "
+              >
                 <p class="label-text">Gap Coverage:</p>
                 <span class="mls">
                   <mat-checkbox
@@ -203,6 +272,8 @@
                   </mat-checkbox>
                 </span>
               </mat-list-item>
+
+              <!--Insurer -- Submit-->
               <mat-list-item>
                 <span class="mls">
                   <button
@@ -222,7 +293,7 @@
     </form>
   </mat-list>
   <mat-list>
-    <mat-grid-list cols="3" rowHeight="100px">
+    <mat-grid-list cols="3" rowHeight="100px" style="margin: 0">
       <mat-grid-tile>
         <a class="width-100">
           <button
