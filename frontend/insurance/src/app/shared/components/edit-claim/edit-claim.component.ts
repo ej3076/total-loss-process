@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { EditFileDialogComponent } from '../files/files.component';
 import { MatDialog, MatTableDataSource, MatSnackBar } from '@angular/material';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MiddlewareService } from '../../../core/services/middleware/middleware.service';
 import { Router } from '@angular/router';
 import { VinInfoService } from '../../../core/services/vin-info/vin-info.service';
@@ -34,8 +34,15 @@ export class EditClaimSharedComponent implements OnInit {
     private snackBar: MatSnackBar,
     private router: Router,
   ) {
-    this.vehicleForm = this.formBuilder.group({});
-    this.insurerForm = this.formBuilder.group({});
+    this.vehicleForm = this.formBuilder.group({
+      miles: ['', [Validators.required]],
+      location: ['', [Validators.required]],
+    });
+    this.insurerForm = this.formBuilder.group({
+      insurerName: ['', [Validators.required]],
+      gap: [''],
+      deductible: ['', Validators.required],
+    });
 
     this.vehicleData = {
       model: '',
@@ -51,14 +58,14 @@ export class EditClaimSharedComponent implements OnInit {
       this.getVehicleModel(this.claim.vehicle.vin);
 
       this.vehicleForm = this.formBuilder.group({
-        miles: '',
+        miles: ['', [Validators.required]],
         location: '',
       });
 
       this.insurerForm = this.formBuilder.group({
         insurerName: '',
         gap: this.claim.insurer.has_gap,
-        deductible: '',
+        deductible: ['', [Validators.required]],
       });
 
       this.onChanges();
@@ -124,9 +131,9 @@ export class EditClaimSharedComponent implements OnInit {
     const claim = {
       vehicle: {
         vin: this.claim.vehicle.vin,
-        miles: this.vehicleForm.controls['miles'].value
+        miles: +this.vehicleForm.controls['miles'].value
           ? +this.vehicleForm.controls['miles'].value
-          : this.claim.vehicle.miles,
+          : +this.claim.vehicle.miles,
         location: this.vehicleForm.controls['location'].value
           ? this.vehicleForm.controls['location'].value
           : this.claim.vehicle.location,
@@ -149,6 +156,7 @@ export class EditClaimSharedComponent implements OnInit {
         this.snackBar.open(`${error}`, 'OK');
       },
     );
+    this.canSubmitVehicleChanges = false;
   }
 
   onChange(): void {
@@ -189,6 +197,7 @@ export class EditClaimSharedComponent implements OnInit {
         this.snackBar.open(`${error}`, 'OK');
       },
     );
+    this.canSubmitInsurerChanges = false;
   }
 
   deleteClaim(): void {
@@ -261,7 +270,7 @@ export class EditClaimSharedComponent implements OnInit {
       },
     );
   }
- 
+
   downloadFile(hash: string, name: string) {
     this.service
       .downloadFile(this.claim.vehicle.vin, hash, name)

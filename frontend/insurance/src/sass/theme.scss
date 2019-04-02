@@ -32,12 +32,12 @@ $custom-typography: mat-typography-config(
 
 // Color Scheme - Light
 $tlp-light-primary: mat-palette($mat-blue, 900);
-$tlp-light-accent: mat-palette($mat-blue, 800);
+$tlp-light-accent: mat-palette($mat-blue, 900);
 $tlp-light-theme: mat-light-theme($tlp-light-primary, $tlp-light-accent);
 @include angular-material-theme($tlp-light-theme);
 
 // Color Scheme - Dark
-$tlp-dark-primary: mat-palette($mat-blue, 800);
+$tlp-dark-primary: mat-palette($mat-blue, 600);
 $tlp-dark-accent: mat-palette($mat-blue, 600);
 $tlp-dark-background-color: map_get($mat-blue-grey, 900);
 

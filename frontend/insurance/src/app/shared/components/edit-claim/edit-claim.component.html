@@ -8,48 +8,76 @@
           <div class="column">
             <div class="one-column">
               <mat-list-item>
-                <p class="label-text">Miles:</p>
-                <span class="mls">
-                  <input
-                    type="text"
-                    class="raw-text-input editable-text"
-                    [value]="claim.vehicle.miles"
-                    formControlName="miles"
-                  />
-                </span>
+                <form>
+                  <mat-form-field class="width-100">
+                    <input
+                      matInput
+                      placeholder="Model"
+                      [value]="vehicleData.model"
+                      [disabled]="true"
+                    />
+                  </mat-form-field>
+                </form>
               </mat-list-item>
               <mat-list-item>
-                <p class="label-text">Model:</p>
-                <span class="mls" md-colors="{color: 'primary'}">
-                  {{ vehicleData.model }}
-                </span>
+                <form>
+                  <mat-form-field class="width-100">
+                    <input
+                      matInput
+                      placeholder="Model Year"
+                      [value]="vehicleData.modelYear"
+                      [disabled]="true"
+                    />
+                  </mat-form-field>
+                </form>
               </mat-list-item>
               <mat-list-item>
-                <p class="label-text">Model Year:</p>
-                <span class="mls">
-                  {{ vehicleData.modelYear }}
-                </span>
+                <form>
+                  <mat-form-field class="width-100">
+                    <input
+                      matInput
+                      placeholder="Base Price"
+                      [value]="vehicleData.basePrice"
+                      [disabled]="true"
+                    />
+                  </mat-form-field>
+                </form>
               </mat-list-item>
             </div>
           </div>
           <div class="column">
             <div class="two-column">
               <mat-list-item>
-                <p class="label-text">Vehicle Location:</p>
-                <span class="mls">
-                  <input
-                    type="text"
-                    class="raw-text-input editable-text"
-                    [value]="claim.vehicle.location"
-                    formControlName="location"
-                  />
-                </span>
+                <form [formGroup]="vehicleForm">
+                  <mat-form-field class="width-100">
+                    <input
+                      matInput
+                      placeholder="Miles"
+                      formControlName="miles"
+                      [value]="claim.vehicle.miles"
+                      type="number"
+                      oninput="this.value=(parseInt(this.value)||0)"
+                    />
+                    <mat-error *ngIf="vehicleForm.controls['miles'].invalid">
+                      This is wrong.
+                    </mat-error>
+                  </mat-form-field>
+                </form>
               </mat-list-item>
               <mat-list-item>
-                <p class="label-text">Base Price:</p>
-                <span class="mls">
-                  {{ vehicleData.basePrice }}
-                </span>
+                <form [formGroup]="vehicleForm">
+                  <mat-form-field class="width-100">
+                    <input
+                      matInput
+                      placeholder="Location"
+                      formControlName="location"
+                      [value]="claim.vehicle.location"
+                    />
+                    <mat-error *ngIf="vehicleForm.controls['location'].invalid">
+                      This is wrong.
+                    </mat-error>
+                  </mat-form-field>
+                </form>
               </mat-list-item>
               <mat-list-item>
                 <span class="mls">
@@ -135,16 +163,48 @@
           <div class="column">
             <div class="one-column">
               <mat-list-item>
-                <p class="label-text">Insurance Provider:</p>
-                <span class="mls">
-                  <input
-                    type="text"
-                    class="raw-text-input editable-text"
-                    [value]="claim.insurer.name"
-                    formControlName="insurerName"
-                  />
-                </span>
+                <form [formGroup]="insurerForm">
+                  <mat-form-field class="width-100">
+                    <input
+                      matInput
+                      placeholder="Insurance Provider"
+                      formControlName="insurerName"
+                      [value]="claim.insurer.name"
+                    />
+                    <mat-error
+                      *ngIf="insurerForm.controls['insurerName'].invalid"
+                    >
+                      This is wrong.
+                    </mat-error>
+                  </mat-form-field>
+                </form>
               </mat-list-item>
+              <mat-list-item>
+                <form [formGroup]="insurerForm">
+                  <mat-form-field class="width-100">
+                    <input
+                      matInput
+                      placeholder="Deductible Amount"
+                      formControlName="deductible"
+                      [value]="claim.insurer.deductible"
+                      type="number"
+                      oninput="this.value=(parseInt(this.value)||0)"
+                    />
+                    <mat-error
+                      *ngIf="insurerForm.controls['deductible'].invalid"
+                    >
+                      This is wrong.
+                    </mat-error>
+                  </mat-form-field>
+                </form>
+              </mat-list-item>
+              <mat-list-item *ngIf="successfulInsurerEdit">
+                <p style="color:green">Insurer Update Success</p>
+              </mat-list-item>
+            </div>
+          </div>
+          <div class="column">
+            <div class="two-column">
               <mat-list-item>
                 <p class="label-text">Gap Coverage:</p>
                 <span class="mls">
@@ -155,24 +215,6 @@
                     formControlName="gap"
                   >
                   </mat-checkbox>
-                </span>
-              </mat-list-item>
-              <mat-list-item *ngIf="successfulInsurerEdit">
-                <p style="color:green">Insurer Update Success</p>
-              </mat-list-item>
-            </div>
-          </div>
-          <div class="column">
-            <div class="two-column">
-              <mat-list-item>
-                <p class="label-text">Deductible Amount ($):</p>
-                <span class="mls">
-                  <input
-                    type="decimal"
-                    class="raw-text-input editable-text"
-                    [value]="(claim.insurer.deductible / 100).toFixed(2)"
-                    formControlName="deductible"
-                  />
                 </span>
               </mat-list-item>
               <mat-list-item>
