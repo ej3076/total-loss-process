@@ -1,4 +1,4 @@
-import { Card, Callout, HTMLTable, Intent } from '@blueprintjs/core';
+import { HTMLTable } from '@blueprintjs/core';
 import { match } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 
@@ -7,6 +7,7 @@ import { API_URL, BLANK_CLAIM } from '../../utils/constants';
 
 import Container from '../../components/container';
 import Main from '../../components/main';
+import StatusTag from '../../components/status-tag';
 
 import styles from './single-claim.module.scss';
 
@@ -37,12 +38,53 @@ export default function SingleClaim({ match }: Props) {
     <Container>
       <Main className={styles.main}>
         <h1 className={styles.title}>{match.params.vin}</h1>
-        <Callout intent={Intent.WARNING} title="Work in Progress">
-          This page will be updated once the claim fields get figured out.
-        </Callout>
-        <Card className={styles.card}>
-          <pre>{JSON.stringify(claim, null, 4)}</pre>
-        </Card>
+        <HTMLTable striped>
+          <thead>
+            <tr>
+              <th>Created</th>
+              <th>Modified</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{new Date(claim.created).toLocaleTimeString()}</td>
+              <td>{new Date(claim.modified).toLocaleTimeString()}</td>
+              <td>
+                <StatusTag status={claim.status} />
+              </td>
+            </tr>
+          </tbody>
+        </HTMLTable>
+        <h2>Vehicle Information</h2>
+        <HTMLTable striped>
+          <tbody>
+            <tr>
+              <td>
+                <strong>VIN</strong>
+              </td>
+              <td>{claim.vehicle.vin}</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Date of Loss</strong>
+              </td>
+              <td>{new Date(claim.date_of_loss).toLocaleDateString()}</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Miles</strong>
+              </td>
+              <td>{Intl.NumberFormat().format(claim.vehicle.miles)}</td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Current Location</strong>
+              </td>
+              <td>{claim.vehicle.location}</td>
+            </tr>
+          </tbody>
+        </HTMLTable>
         <h2>Vehicle Options</h2>
         <HTMLTable striped>
           <tbody>

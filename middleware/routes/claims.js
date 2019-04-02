@@ -69,16 +69,25 @@ router.post('/:vin', authMiddleware, async (req, res, next) => {
 });
 
 // Add files to a claim using the Detailed Claim view.
-router.post('/:vin/files', authMiddleware, getFiles, async (req, res, next) => {
-  try {
-    const client = new ClaimClient(req.privateKey);
-    const response = await client.addFiles(req.params.vin, req.files);
-    console.log(response);
-    res.send(response);
-  } catch (err) {
-    return next(err);
-  }
-});
+router.post(
+  '/:vin/files/new/:fileType',
+  authMiddleware,
+  getFiles,
+  async (req, res, next) => {
+    try {
+      const client = new ClaimClient(req.privateKey);
+      const response = await client.addFiles(
+        req.params.vin,
+        req.files,
+        req.params.fileType,
+      );
+      console.log(response);
+      res.send(response);
+    } catch (err) {
+      return next(err);
+    }
+  },
+);
 
 // Get a single file from S3.
 router.get('/:vin/files/:filename', authMiddleware, async (req, res, next) => {

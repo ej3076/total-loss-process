@@ -13,10 +13,7 @@ type MinimalClaim = DeepPartial<Protos.Claim> & { vehicle: { vin: string } };
   providedIn: 'root',
 })
 export class MiddlewareService {
-  constructor(
-    private http: HttpClient,
-    private auth: AuthService
-  ) {}
+  constructor(private http: HttpClient, private auth: AuthService) {}
 
   getClaims() {
     return this.http.get<Protos.Claim[]>(`${API_BASE}/claims`);
@@ -33,29 +30,35 @@ export class MiddlewareService {
   }
 
   addClaim(claim: MinimalClaim) {
-    return this.http
-      .post<Protos.Claim>(`${API_BASE}/claims`, claim, {
-        headers: this.auth.headers,
-      });
+    return this.http.post<Protos.Claim>(`${API_BASE}/claims`, claim, {
+      headers: this.auth.headers,
+    });
   }
 
   editClaim(claim: MinimalClaim) {
-    return this.http
-      .post<Protos.Claim>(`${API_BASE}/claims/${claim.vehicle.vin}`, claim, {
+    return this.http.post<Protos.Claim>(
+      `${API_BASE}/claims/${claim.vehicle.vin}`,
+      claim,
+      {
         headers: this.auth.headers,
-      });
+      },
+    );
   }
 
-  addFiles(files: FileList, vin: string) {
+  addFiles(files: FileList, vin: string, fileType: string) {
     const data = new FormData();
 
     for (const file of [...files]) {
       data.append('files[]', file);
     }
 
-    return this.http.post(`${API_BASE}/claims/${vin}/files`, data, {
-      headers: this.auth.headers,
-    });
+    return this.http.post(
+      `${API_BASE}/claims/${vin}/files/new/${fileType}`,
+      data,
+      {
+        headers: this.auth.headers,
+      },
+    );
   }
 
   archiveFile(filename: string, vin: string) {
@@ -90,11 +93,15 @@ export class MiddlewareService {
 
   editFileName(vin: string, oldFileName: string, newFileName: string) {
     const body = {
-      name: newFileName
+      name: newFileName,
     };
 
-    return this.http.post(`${API_BASE}/claims/${vin}/files/${oldFileName}`, body, {
-      headers: this.auth.headers
-    });
+    return this.http.post(
+      `${API_BASE}/claims/${vin}/files/${oldFileName}`,
+      body,
+      {
+        headers: this.auth.headers,
+      },
+    );
   }
 }
