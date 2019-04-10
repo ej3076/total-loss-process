@@ -14,8 +14,6 @@ export class VinInfoService {
   constructor(private http: HttpClient) {}
 
   getVinData(vin: string) {
-    // FIXME: The input should be transformed to uppercase automatically and
-    // this should not be needed.
     const normalizedVin = vin.toUpperCase();
     const existingVins = JSON.parse(
       window.localStorage.getItem('vin-data') || '{}',
@@ -27,6 +25,7 @@ export class VinInfoService {
       .get<VinApi>(`${API_BASE}/DecodeVinValues/${normalizedVin}?format=json`)
       .pipe(
         tap(data => {
+          console.log(data);
           window.localStorage.setItem(
             'vin-data',
             JSON.stringify({ ...existingVins, [normalizedVin]: data }),
