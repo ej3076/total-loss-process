@@ -25,7 +25,6 @@ export class VinInfoService {
       .get<VinApi>(`${API_BASE}/DecodeVinValues/${normalizedVin}?format=json`)
       .pipe(
         tap(data => {
-          console.log(data);
           window.localStorage.setItem(
             'vin-data',
             JSON.stringify({ ...existingVins, [normalizedVin]: data }),

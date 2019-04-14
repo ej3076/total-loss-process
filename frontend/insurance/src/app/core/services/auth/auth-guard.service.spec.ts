@@ -3,9 +3,6 @@ import { TestBed, async } from '@angular/core/testing';
 import { AuthGuardService } from './auth-guard.service';
 import { AuthService } from './auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
-
-class MockRouter extends Router {}
 
 describe('AuthGuard', () => {
   beforeEach(async(() => {

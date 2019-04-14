@@ -21,7 +21,6 @@ export class EditClaimComponent implements OnInit {
       this.service.getClaim(this.vin).subscribe(data => {
         if (data) {
           this.claim = data;
-          console.log(this.claim);
         }
       });
     });
