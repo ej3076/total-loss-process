@@ -17,7 +17,7 @@ jobs:
             if [ ! -d ./node_modules ]; then
               npm ci
             fi
-            npm run test:prod-headless
+            npm run test:prod
             npm run build
       - save_cache:
           paths:
