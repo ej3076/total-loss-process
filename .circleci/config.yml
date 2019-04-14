@@ -157,6 +157,7 @@ workflows:
   build_and_test:
     jobs:
       - utils
+      - frontend-insurance
       - frontend-viewer
       - middleware:
           requires:
