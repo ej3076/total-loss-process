@@ -4,10 +4,11 @@ import { ViewClaimsComponent } from './view-claims.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatTableModule, MatSortModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
-import { HttpClient, HttpHandler } from '@angular/common/http';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MiddlewareService } from '../../core/services/middleware/middleware.service';
 
 describe('ViewClaimsComponent', () => {
   let component: ViewClaimsComponent;
@@ -21,8 +22,9 @@ describe('ViewClaimsComponent', () => {
         RouterTestingModule,
         MatSortModule,
         BrowserAnimationsModule,
+        HttpClientTestingModule,
       ],
-      providers: [HttpClient, HttpHandler, AuthService],
+      providers: [AuthService, MiddlewareService],
       declarations: [ViewClaimsComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();

@@ -1,6 +1,6 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
-process.env.CHROME_BIN = '/usr/bin/google-chrome'; // DEV: comment this line out for local unit tests
+// process.env.CHROME_BIN = '/usr/bin/google-chrome'; // DEV: comment this line out for local unit tests
 
 module.exports = function(config) {
   config.set({
@@ -14,9 +14,6 @@ module.exports = function(config) {
       require('@angular-devkit/build-angular/plugins/karma'),
     ],
     client: {
-      jasmine: {
-        random: false,
-      },
       clearContext: false, // leave Jasmine Spec Runner output visible in browser
     },
     coverageIstanbulReporter: {
