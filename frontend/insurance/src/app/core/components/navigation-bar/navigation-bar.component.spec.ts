@@ -35,6 +35,7 @@ describe('NavigationBarComponent', () => {
   });
 
   it('should change the color theme', () => {
+    component.darkMode = false;
     component.themeButton();
 
     expect(component.darkMode).toBeTruthy();
