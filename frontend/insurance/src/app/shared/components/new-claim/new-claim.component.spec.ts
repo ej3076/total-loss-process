@@ -14,6 +14,7 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('NewClaimComponent', () => {
   let component: NewClaimComponent;
@@ -35,6 +36,7 @@ describe('NewClaimComponent', () => {
       ],
       providers: [HttpClient, HttpHandler, AuthService],
       declarations: [NewClaimComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
