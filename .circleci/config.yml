@@ -3,7 +3,7 @@ jobs:
   frontend-insurance:
     working_directory: ~/total-loss-process
     docker:
-      - image: circleci/node:11
+      - image: circleci/node:11-browsers
     environment:
       CHROME_BIN: /usr/bin/google-chrome
     steps:
@@ -19,6 +19,7 @@ jobs:
             if [ ! -d ./node_modules ]; then
               npm ci
             fi
+            npm rebuild
             npm run test-prod-headless
             npm run build
       - save_cache:
