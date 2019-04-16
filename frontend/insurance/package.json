@@ -7,7 +7,7 @@
     "build": "ng build --prod",
     "test": "ng test",
     "test-prod": "ng test --watch=false --no-progress --browsers=ChromeNoSandbox",
-    "test-prod-headless": "ng test --watch=false --no-progress --browsers=ChromeNoSandboxHeadless",
+    "test-prod-headless": "ng test --watch=false --no-progress --code-coverage --browsers=ChromeNoSandboxHeadless",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
