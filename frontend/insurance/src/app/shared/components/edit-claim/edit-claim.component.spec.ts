@@ -9,7 +9,7 @@ import {
   MatDialogModule,
   MatSnackBarModule,
 } from '@angular/material';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { AuthService } from '../../../core/services/auth/auth.service';
@@ -32,7 +32,7 @@ describe('EditClaimSharedComponent', () => {
       ],
       declarations: [EditClaimSharedComponent],
       providers: [MatDialog, HttpClient, HttpHandler, AuthService],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
