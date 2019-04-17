@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from '../../../app.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('NavigationBarComponent', () => {
   let component: NavigationBarComponent;
@@ -21,6 +22,7 @@ describe('NavigationBarComponent', () => {
       ],
       providers: [AuthService, AppComponent],
       declarations: [NavigationBarComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
