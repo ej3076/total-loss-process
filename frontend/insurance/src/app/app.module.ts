@@ -24,18 +24,18 @@ import { EditClaimModule } from './modules/edit-claim/edit-claim.module';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
     CommonModule,
     CoreModule,
     SharedModule,
-    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
     MatToolbarModule,
     ViewClaimsModule,
-    EditClaimModule
+    EditClaimModule,
   ],
   bootstrap: [AppComponent],
 })

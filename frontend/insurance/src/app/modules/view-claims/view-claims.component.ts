@@ -46,7 +46,6 @@ export class ViewClaimsComponent implements OnInit {
 
         this.dataSource.sort = this.sort;
       },
-
       error => {
         console.log(error);
       },

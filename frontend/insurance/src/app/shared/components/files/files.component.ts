@@ -75,19 +75,23 @@ export class EditFileDialogComponent {
         this.data.file.name,
         this.newFileName.value + this.fileExtension,
       )
-      .subscribe(data => {
-        console.log(data);
-        const claim = <Protos.Claim>data;
-        const file = claim.files.find(
-          fileData =>
-            fileData.name === this.newFileName.value + this.fileExtension,
-        );
-        if (file) {
-          this.data.file.name = file.name;
-          this.newFileName.setValue('');
-          this.claim.emit(<Protos.Claim>claim);
-        }
-      });
+      .subscribe(
+        data => {
+          const claim = <Protos.Claim>data;
+          const file = claim.files.find(
+            (fileData: Protos.File) =>
+              fileData.name === this.newFileName.value + this.fileExtension,
+          );
+          if (file) {
+            this.data.file.name = file.name;
+            this.newFileName.setValue('');
+            this.claim.emit(<Protos.Claim>claim);
+          }
+        },
+        error => {
+          console.log(error);
+        },
+      );
   }
 }
 
@@ -175,7 +179,7 @@ export class FilesComponent implements OnInit {
       return;
     }
 
-    const files: FileList | null = event.dataTransfer!.files;
+    const files: FileList = event.dataTransfer.files;
 
     if (files) {
       this.urls = [];

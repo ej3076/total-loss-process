@@ -1,5 +1,36 @@
 version: 2
 jobs:
+  frontend-insurance:
+    working_directory: ~/total-loss-process
+    docker:
+      - image: circleci/node:11-browsers
+    environment:
+      CHROME_BIN: /usr/bin/google-chrome
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - insurance-v1-{{ checksum "frontend/insurance/package-lock.json" }}
+            - insurance-v1-
+      - run:
+          name: Test
+          working_directory: ~/total-loss-process/frontend/insurance
+          command: |
+            if [ ! -d ./node_modules ]; then
+              npm ci
+            fi
+            npm rebuild
+            npm run test-prod-headless
+            npm run build
+      - save_cache:
+          paths:
+            - ~/total-loss-process/frontend/insurance/node_modules
+          key: insurance-v1-{{ checksum "frontend/insurance/package-lock.json" }}
+      - store_test_results:
+          path: frontend/insurance/test-results
+      - store_artifacts:
+          path: frontend/insurance/test-results
+
   frontend-viewer:
     working_directory: ~/total-loss-process
     docker:
@@ -129,6 +160,7 @@ workflows:
   build_and_test:
     jobs:
       - utils
+      - frontend-insurance
       - frontend-viewer
       - middleware:
           requires:
