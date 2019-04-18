@@ -114,7 +114,6 @@ router.get('/:vin/files/:filename', authMiddleware, async (req, res, next) => {
       .on('error', err => next(err))
       .pipe(res);
   } catch (err) {
-    console.log(err);
     if (err.message.startsWith('Error: File hash mismatch')) {
       return res.sendStatus(500).send(err.message);
     }

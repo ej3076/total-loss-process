@@ -308,7 +308,6 @@ export class EditClaimSharedComponent implements OnInit {
         document.body.removeChild(a);
       },
       error => {
-        console.log(error);
         this.snackBar.open(
           'File hash mismatch. File has been tampered with.',
           'OK',
