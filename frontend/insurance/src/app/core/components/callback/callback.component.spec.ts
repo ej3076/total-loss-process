@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CallbackComponent } from './callback.component';
 import { AuthService } from '../../services/auth/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('CallbackComponent', () => {
   let component: CallbackComponent;
@@ -13,6 +14,7 @@ describe('CallbackComponent', () => {
       declarations: [CallbackComponent],
       imports: [RouterTestingModule],
       providers: [AuthService],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
