@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ViewClaimsComponent } from './view-claims.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatTableModule, MatSortModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
@@ -26,7 +26,7 @@ describe('ViewClaimsComponent', () => {
       ],
       providers: [AuthService, MiddlewareService],
       declarations: [ViewClaimsComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
